@@ -611,17 +611,30 @@ function trainDefaults() {
       E("Leg extension", 3, 12, 15, "60 s", "Pause at the top of every rep."),
       E("Seated calf raise", 4, 12, 15, "60 s", "Get a full stretch at the bottom."),
       E("Cable crunch", 3, 10, 15, "60 s", "Round the spine and pull the ribs toward the hips.")
-    ])
+    ]),
+    GS()
   ] };
+}
+function GS() {
+  const E = (n, s, lo, hi, rest, tip) => ({ n, s, lo, hi, rest, tip });
+  return { id: "gs", name: "Glutes & shoulders", day: "Sat", focus: "Optional fifth day: glutes, shoulders and arms, lighter weights and higher reps", ex: [
+    E("Hip thrust", 4, 10, 12, "2 min", "Lighter than Friday. Pause two seconds at the top of every rep."),
+    E("Dumbbell Romanian deadlift", 3, 10, 12, "90 s", "Slow on the way down, feel the stretch in the hamstrings and glutes."),
+    E("Cable glute kickback", 3, 12, 15, "60 s", "Reps are per leg. Keep the hips square and squeeze at the top."),
+    E("Hip abduction machine", 3, 15, 20, "60 s", "Lean forward slightly to target the upper glutes."),
+    E("Machine shoulder press", 3, 10, 12, "90 s", "Stop just short of lockout."),
+    E("Cable lateral raise", 3, 15, 20, "45 s", "Light weight, slow lowering."),
+    E("Rear delt fly", 3, 15, 20, "45 s", "Lead with the elbows and pause at the back.")
+  ].map((e, i) => Object.assign({ id: "gs" + i }, e)) };
 }
 function defaults() {
   return {
     v: 1,
-    planVersion: 3,
+    planVersion: 4,
     tab: "training",
     keepProtein: !0,
-    profile: { sex: "f", lb: 115, ft: 5, inch: 2, age: 35, act: 1.55, goal: 250 },
-    targets: { training: { kcal: 2160, protein: 115 }, rest: { kcal: 1930, protein: 115 } },
+    profile: { sex: "f", lb: 115, ft: 5, inch: 2, age: 35, act: 1.4, wpw: 5, burn: 275, goal: 250 },
+    targets: { training: { kcal: 2160, protein: 115 }, rest: { kcal: 1890, protein: 115 } },
     customFoods: [],
     plans: {
       training: [
@@ -634,7 +647,7 @@ function defaults() {
       rest: [
         M("Breakfast", "", [["sourdough", 1], ["egg", 2], ["avocado", 50], ["kimchi", 100], ["blueberries", 100]]),
         M("Lunch", "", [["rice", 170], ["chicken_thigh", 100], ["sauerkraut", 100], ["olive_oil", 5]]),
-        M("Afternoon", "", [["greek_yogurt", 170], ["berries", 100], ["almond_butter", 10], ["oats", 40]]),
+        M("Afternoon", "", [["greek_yogurt", 170], ["berries", 100], ["almond_butter", 10], ["oats", 30]]),
         M("Dinner", "Salmon twice a week covers your omega-3s", [["yam", 200], ["salmon", 110], ["slaw", 130], ["salsa", 60], ["guac", 30]]),
         M("Evening", "", [["cottage", 100], ["pineapple", 100]])
       ]
@@ -739,12 +752,20 @@ function normalize(s) {
     o.plans[k] = o.plans[k].filter((m) => m && Array.isArray(m.items)).map((m) => ({ name: m.name || "", note: m.note || "", items: m.items.filter((it) => it && it.food) }));
   }), Array.isArray(o.weeks) || (o.weeks = D.weeks), o.weeks = o.weeks.filter((w) => w && Array.isArray(w.days) && w.days.length === 7), o.activity = Object.assign({}, D.activity, s.activity), (!Array.isArray(o.activity.days) || o.activity.days.length !== 7) && (o.activity.days = D.activity.days), o.grocery = Object.assign({}, D.grocery, s.grocery), (!o.grocery.checked || typeof o.grocery.checked != "object") && (o.grocery.checked = {}), o.swap = Object.assign({}, D.swap, s.swap), Array.isArray(o.customFoods) || (o.customFoods = []), o.keepProtein = o.keepProtein !== !1, o.profile = Object.assign({}, D.profile, s.profile);
   const t = s.train && typeof s.train == "object" ? s.train : {};
-  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, (s.planVersion || 1) < 3) {
+  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, delete o.__v4, (s.planVersion || 1) === 3) {
+    if (o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()])), o.profile = Object.assign({}, D.profile, s.profile, { act: { 1.45: 1.3, 1.55: 1.4, 1.6: 1.4, 1.7: 1.5, 1.75: 1.5 }[s.profile && s.profile.act] || 1.4, wpw: 5, burn: 275 }), o.targets.rest && o.targets.rest.kcal === 1930) {
+      o.targets.rest.kcal = 1890;
+      const af = o.plans.rest.find((m) => m.name === "Afternoon"), oat = af && af.items.find((i) => i.food === "oats" && i.qty === 40);
+      oat && (oat.qty = 30);
+    }
+    o.planVersion = 4, o.__v4 = !0;
+  }
+  if ((s.planVersion || 1) < 3) {
     try {
-      s.plans && localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 3 })));
+      s.plans && localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 4 })));
     } catch (e) {
     }
-    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 3, o.__migrated = !0;
+    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 4, o.__migrated = !0, o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()]));
   }
   return o;
 }
@@ -868,7 +889,7 @@ const VIEWS = { train: viewTrain, meals: viewMeals, swap: viewSwap, body: viewBo
 function renderView() {
   VIEWS[ui.tab] || (ui.tab = "meals"), $("#view").innerHTML = VIEWS[ui.tab](), drawCharts(), window.__st && setStatus(window.__st[0], window.__st[1]);
   const ch = $(".chips");
-  if (ch && ui.tab === "body") {
+  if (ch && (ui.tab === "body" || ui.tab === "train")) {
     const on = ch.querySelector('[aria-pressed="true"]');
     on && (ch.scrollLeft = on.offsetLeft - 16);
   }
@@ -908,12 +929,13 @@ function changeFood(newId) {
 }
 const macroTiles = (m, per) => '<div class="tile"><b>'.concat(fmt(m.k), '</b><span>kcal</span></div><div class="tile"><b>').concat(fmt(m.p, 1), '</b><span>g protein</span></div><div class="tile"><b>').concat(fmt(m.c, 1), '</b><span>g carbs</span></div><div class="tile"><b>').concat(fmt(m.f, 1), "</b><span>g fat</span></div>");
 function recCalc(p) {
-  const kg = (p.lb || 0) * 0.4536, cm = ((p.ft || 0) * 12 + (p.inch || 0)) * 2.54, bmr = 10 * kg + 6.25 * cm - 5 * (p.age || 0) + (p.sex === "f" ? -161 : 5), maint = bmr * (+p.act || 1.6), avg = maint + (+p.goal || 0), r10 = (x) => Math.round(x / 10) * 10;
-  return { bmr, maint, training: r10(avg + 100), rest: r10(avg - 133), protein: Math.round((p.lb || 0) * 1 / 5) * 5, avg };
+  const kg = (p.lb || 0) * 0.4536, cm = ((p.ft || 0) * 12 + (p.inch || 0)) * 2.54, bmr = 10 * kg + 6.25 * cm - 5 * (p.age || 0) + (p.sex === "f" ? -161 : 5), base = bmr * (+p.act || 1.4), burn = +p.burn || 0, wpw = Math.min(7, +p.wpw || 0), goal = +p.goal || 0, r10 = (x) => Math.round(x / 10) * 10, avg = base + burn * wpw / 7 + goal;
+  return { bmr, base, burn, wpw, training: r10(base + burn + goal), rest: r10(base + goal), protein: Math.round((p.lb || 0) * 1 / 5) * 5, avg, maint: base + burn * wpw / 7 };
 }
 function recHTML(r) {
-  return '<div class="rec-top"><span>Maintenance is about <b>'.concat(fmt(Math.round(r.maint / 10) * 10), " kcal</b>. A weekly average of ").concat(fmt(Math.round(r.avg / 10) * 10), " kcal puts you in a ").concat(state.profile.goal > 0 ? "surplus" : "steady state", '.</span></div>\n    <div class="rec-grid"><div><span>Training days</span><b>').concat(fmt(r.training), "</b><small>kcal</small></div><div><span>Rest days</span><b>").concat(fmt(r.rest), "</b><small>kcal</small></div><div><span>Protein</span><b>").concat(fmt(r.protein), "</b><small>g a day</small></div></div>");
+  return '<div class="rec-top"><span>On a rest day you burn about <b>'.concat(fmt(r10x(r.base)), " kcal</b>, and each workout adds about ").concat(fmt(r.burn), ". With ").concat(r.wpw, " ").concat(plural(r.wpw, "workout"), " a week your average is ").concat(fmt(r10x(r.maint)), " kcal, so these targets put you ").concat(state.profile.goal > 0 ? "about ".concat(fmt(state.profile.goal), " kcal a day over") : "right at", ' maintenance.</span></div>\n    <div class="rec-grid"><div><span>Training days</span><b>').concat(fmt(r.training), "</b><small>kcal</small></div><div><span>Rest days</span><b>").concat(fmt(r.rest), "</b><small>kcal</small></div><div><span>Protein</span><b>").concat(fmt(r.protein), "</b><small>g a day</small></div></div>");
 }
+const r10x = (x) => Math.round(x / 10) * 10;
 function fitPlan(k) {
   const T = state.targets[k].kcal;
   if (!T) return;
@@ -968,13 +990,13 @@ function viewTrain() {
   return '<section class="card wk-strip-card">\n      <div class="wk-strip">'.concat(DOW.map((d, i) => {
     const pw = P.find((x) => x.day === d), dn = doneDates[i], isToday = i === ((/* @__PURE__ */ new Date()).getDay() + 6) % 7, dw = dn ? P.find((x) => x.id === dn) : null;
     return '<div class="ws-d '.concat(isToday ? "today" : "", " ").concat(dn ? "done" : "", '"><span class="ws-l">').concat(d, '</span><span class="ws-c">').concat(dn ? svg("check", 16) : "", '</span><span class="ws-n">').concat(esc(dw ? dw.name : pw ? pw.name : "Rest"), "</span></div>");
-  }).join(""), '</div>\n      <p class="card-d">').concat(thisWeek, ' of 4 workouts done this week. Lifting days use your Training day meals; the other days use Rest day meals.</p>\n    </section>\n    <div class="chips" role="group" aria-label="Workouts">').concat(P.map((x) => '<button type="button" class="chip" data-act="pickWk" data-id="'.concat(x.id, '" aria-pressed="').concat(x.id === w.id, '">').concat(esc(x.name), "</button>")).join(""), '</div>\n    <div class="train-grid">\n    <section class="card week-card">\n      <header class="week-h"><div><h3>').concat(esc(w.name), '</h3><p class="meal-m"><span>').concat(esc(w.focus), '</span></p><p class="meal-m"><span>').concat(w.ex.length, " exercises</span><span>").concat(totalSets, " sets</span><span>about ").concat(Math.round(totalSets * 2.6 / 5) * 5, ' min</span></p></div></header>\n      <ul class="rows">').concat(w.ex.map((ex) => {
+  }).join(""), '</div>\n      <p class="card-d">').concat(thisWeek, " of ").concat(P.length, ' workouts done this week. Lifting days use your Training day meals; the other days use Rest day meals.</p>\n    </section>\n    <div class="chips" role="group" aria-label="Workouts">').concat(P.map((x) => '<button type="button" class="chip" data-act="pickWk" data-id="'.concat(x.id, '" aria-pressed="').concat(x.id === w.id, '">').concat(esc(x.name), "</button>")).join(""), '</div>\n    <div class="train-grid">\n    <section class="card week-card">\n      <header class="week-h"><div><h3>').concat(esc(w.name), '</h3><p class="meal-m"><span>').concat(esc(w.focus), '</span></p><p class="meal-m"><span>').concat(w.ex.length, " exercises</span><span>").concat(totalSets, " sets</span><span>about ").concat(Math.round(totalSets * 2.6 / 5) * 5, ' min</span></p></div></header>\n      <ul class="rows">').concat(w.ex.map((ex) => {
     const n = loggedCount(ex), last = state.train.last[ex.id], top = last && last.sets.length ? last.sets.reduce((a, b) => (b.w || 0) > (a.w || 0) ? b : a) : null;
     return '<li><button type="button" class="row ex-row '.concat(n >= ex.s ? "complete" : "", '" data-act="openEx" data-id="').concat(ex.id, '">\n          <span class="ex-main"><span class="ex-n">').concat(esc(ex.n), '</span><span class="ex-m"><span>').concat(ex.s, " \xD7 ").concat(ex.lo, "\u2013").concat(ex.hi, "</span><span>rest ").concat(esc(ex.rest), "</span>").concat(top ? "<span>last ".concat(fmt(top.w), " lb \xD7 ").concat(top.r, "</span>") : "", '</span></span>\n          <span class="ex-p">').concat(n >= ex.s ? svg("check", 18) : "".concat(n, "/").concat(ex.s), "</span>").concat(svg("chev", 18), "</button></li>");
-  }).join(""), '</ul>\n      <div class="wk-foot"><p class="small">').concat(logged, " of ").concat(totalSets, ' sets logged</p><button type="button" class="btn primary" data-act="finishWk">Finish workout</button></div>\n    </section>\n    <section class="card guide">\n      <h3 class="card-t">How to grow on this plan</h3>\n      <p><b>Progress every week.</b> Each exercise has a rep range, like 6\u20138. Use a weight you can lift for the bottom of the range with one or two reps left in the tank. When you hit the top of the range on every set, add weight next time: 5 lb for upper body, 10 lb for lower body.</p>\n      <p><b>Warm up.</b> Five minutes of easy cardio, then two or three lighter sets of your first exercise before the work sets.</p>\n      <p><b>Recover.</b> Keep a rest day after Lower A, aim for 7\u20139 hours of sleep, and take an easier week every 6\u20138 weeks by cutting sets in half.</p>\n      <p><b>Any 4 days work</b> as long as the order stays Upper A, Lower A, Upper B, Lower B with at least one rest day in the middle.</p>\n    </section>\n    </div>');
+  }).join(""), '</ul>\n      <div class="wk-foot"><p class="small">').concat(logged, " of ").concat(totalSets, ' sets logged</p><button type="button" class="btn primary" data-act="finishWk">Finish workout</button></div>\n    </section>\n    <section class="card guide">\n      <h3 class="card-t">How to grow on this plan</h3>\n      <p><b>Progress every week.</b> Each exercise has a rep range, like 6\u20138. Use a weight you can lift for the bottom of the range with one or two reps left in the tank. When you hit the top of the range on every set, add weight next time: 5 lb for upper body, 10 lb for lower body.</p>\n      <p><b>Warm up.</b> Five minutes of easy cardio, then two or three lighter sets of your first exercise before the work sets.</p>\n      <p><b>Recover.</b> Keep a rest day after Lower A, aim for 7\u20139 hours of sleep, and take an easier week every 6\u20138 weeks by cutting sets in half.</p>\n      <p><b>The fifth day is a bonus.</b> Do Glutes &amp; shoulders on weeks you feel recovered. If your sleep, energy or lifts slip, skip it and keep the four main days.</p>\n      <p><b>Any days work</b> as long as the order stays Upper A, Lower A, Upper B, Lower B with a rest day in the middle.</p>\n    </section>\n    </div>');
 }
 function exSheetSets(ex) {
-  const sets = setsOf(ex), up = ex.id[0] === "u", last = state.train.last[ex.id];
+  const sets = setsOf(ex), up = ex.id[0] !== "l", last = state.train.last[ex.id];
   return sets.map((st, i) => '<div class="set-line"><span class="set-n">'.concat(i + 1, "</span>").concat(stepBox("sw-" + i, "setW", st.w, up ? 5 : 10, { label: "Set ".concat(i + 1, " weight"), size: "xs", unit: "lb", start: last && last.sets[i] && last.sets[i].w || i > 0 && sets[i - 1].w || "" })).concat(stepBox("sr-" + i, "setR", st.r, 1, { label: "Set ".concat(i + 1, " reps"), size: "xs", unit: "reps", start: ex.lo }), "</div>")).join("");
 }
 function viewSwap() {
@@ -1164,12 +1186,12 @@ const SHEETS = {
   },
   targets() {
     const p = state.profile, r = recCalc(p), T = state.targets, opt = (v, cur, l) => '<option value="'.concat(v, '" ').concat(String(v) === String(cur) ? "selected" : "", ">").concat(l, "</option>");
-    return "".concat(head("Calories & protein", "Targets"), '\n      <h4 class="sec">Your details</h4>\n      <div class="field"><span class="f-l">Sex</span><div class="seg">').concat([["m", "Male"], ["f", "Female"]].map(([v, l]) => '<button type="button" data-act="profSex" data-val="'.concat(v, '" aria-pressed="').concat(p.sex === v, '">').concat(l, "</button>")).join(""), '</div></div>\n      <div class="grid2f">\n        <div class="field"><span class="f-l">Body weight</span>').concat(stepBox("pW", "prof", p.lb, 1, { unit: "lb", label: "Body weight", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Age</span>').concat(stepBox("pA", "prof", p.age, 1, { label: "Age", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Height, feet</span>').concat(stepBox("pF", "prof", p.ft, 1, { min: 3, max: 7, unit: "ft", label: "Height feet", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Height, inches</span>').concat(stepBox("pI", "prof", p.inch, 1, { min: 0, max: 11, unit: "in", label: "Height inches", size: "md" }), '</div>\n      </div>\n      <label class="field"><span class="f-l">Daily activity outside workouts</span><select class="inp" data-f="profAct">\n        ').concat(opt(1.45, p.act, "Mostly sitting, under 6,000 steps")).concat(opt(1.55, p.act, "Moderately active, 6,000\u201310,000 steps")).concat(opt(1.7, p.act, "Very active, 10,000+ steps or a physical job"), '</select></label>\n      <label class="field"><span class="f-l">Goal</span><select class="inp" data-f="profGoal">\n        ').concat(opt(250, p.goal, "Clean bulk, +250 kcal (about \xBD lb a week)")).concat(opt(400, p.goal, "Faster bulk, +400 kcal")).concat(opt(0, p.goal, "Maintain and recomp"), '</select></label>\n      <div class="rec" id="recBox">').concat(recHTML(r), '</div>\n      <button type="button" class="btn primary wide" data-act="useRec">Use these targets</button>\n      <h4 class="sec">Targets in use</h4>\n      <div class="grid2f">\n        <div class="field"><span class="f-l">Training day kcal</span>').concat(stepBox("tTK", "tgt", T.training.kcal, 50, { label: "Training day calories", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Training day protein</span>').concat(stepBox("tTP", "tgt", T.training.protein, 5, { unit: "g", label: "Training day protein", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Rest day kcal</span>').concat(stepBox("tRK", "tgt", T.rest.kcal, 50, { label: "Rest day calories", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Rest day protein</span>').concat(stepBox("tRP", "tgt", T.rest.protein, 5, { unit: "g", label: "Rest day protein", size: "md" }), '</div>\n      </div>\n      <div class="field"><button type="button" class="btn ghost wide" data-act="fitPlans">Fit both meal plans to these targets</button>\n        <p class="hint">Scales rice, oats, yams and other carbs up or down. Protein and fats stay the same.</p></div>\n      <label class="field switch-row"><span><b>Keep protein when swapping</b><span class="small">Switching one protein for another adjusts the amount so protein stays the same.</span></span><input type="checkbox" class="sw" data-f="keepP" ').concat(state.keepProtein ? "checked" : "", '></label>\n      <div class="sh-actions"><span></span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+    return "".concat(head("Calories & protein", "Targets"), '\n      <h4 class="sec">Your details</h4>\n      <div class="field"><span class="f-l">Sex</span><div class="seg">').concat([["m", "Male"], ["f", "Female"]].map(([v, l]) => '<button type="button" data-act="profSex" data-val="'.concat(v, '" aria-pressed="').concat(p.sex === v, '">').concat(l, "</button>")).join(""), '</div></div>\n      <div class="grid2f">\n        <div class="field"><span class="f-l">Body weight</span>').concat(stepBox("pW", "prof", p.lb, 1, { unit: "lb", label: "Body weight", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Age</span>').concat(stepBox("pA", "prof", p.age, 1, { label: "Age", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Height, feet</span>').concat(stepBox("pF", "prof", p.ft, 1, { min: 3, max: 7, unit: "ft", label: "Height feet", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Height, inches</span>').concat(stepBox("pI", "prof", p.inch, 1, { min: 0, max: 11, unit: "in", label: "Height inches", size: "md" }), '</div>\n      </div>\n      <label class="field"><span class="f-l">Daily steps, not counting workouts</span><select class="inp" data-f="profAct">\n        ').concat(opt(1.3, p.act, "Under 6,000 steps")).concat(opt(1.4, p.act, "6,000\u201310,000 steps")).concat(opt(1.5, p.act, "10,000+ steps or a physical job"), '</select></label>\n      <div class="grid2f">\n        <div class="field"><span class="f-l">Workouts a week</span>').concat(stepBox("pK", "prof", p.wpw, 1, { min: 0, max: 7, label: "Workouts a week", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Burned per workout</span>').concat(stepBox("pB", "prof", p.burn, 25, { unit: "kcal", label: "Calories burned per workout", size: "md" }), '</div>\n      </div>\n      <label class="field"><span class="f-l">Goal</span><select class="inp" data-f="profGoal">\n        ').concat(opt(250, p.goal, "Clean bulk, +250 kcal (about \xBD lb a week)")).concat(opt(400, p.goal, "Faster bulk, +400 kcal")).concat(opt(0, p.goal, "Maintain and recomp"), '</select></label>\n      <div class="rec" id="recBox">').concat(recHTML(r), '</div>\n      <button type="button" class="btn primary wide" data-act="useRec">Use these targets</button>\n      <h4 class="sec">Targets in use</h4>\n      <div class="grid2f">\n        <div class="field"><span class="f-l">Training day kcal</span>').concat(stepBox("tTK", "tgt", T.training.kcal, 50, { label: "Training day calories", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Training day protein</span>').concat(stepBox("tTP", "tgt", T.training.protein, 5, { unit: "g", label: "Training day protein", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Rest day kcal</span>').concat(stepBox("tRK", "tgt", T.rest.kcal, 50, { label: "Rest day calories", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Rest day protein</span>').concat(stepBox("tRP", "tgt", T.rest.protein, 5, { unit: "g", label: "Rest day protein", size: "md" }), '</div>\n      </div>\n      <div class="field"><button type="button" class="btn ghost wide" data-act="fitPlans">Fit both meal plans to these targets</button>\n        <p class="hint">Scales rice, oats, yams and other carbs up or down. Protein and fats stay the same.</p></div>\n      <label class="field switch-row"><span><b>Keep protein when swapping</b><span class="small">Switching one protein for another adjusts the amount so protein stays the same.</span></span><input type="checkbox" class="sw" data-f="keepP" ').concat(state.keepProtein ? "checked" : "", '></label>\n      <div class="sh-actions"><span></span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
   },
   ex() {
     const w = state.train.plan.find((x) => x.ex.some((e) => e.id === sheet.id));
     if (!w) return null;
-    const ex = w.ex.find((e) => e.id === sheet.id), last = state.train.last[ex.id], up = ex.id[0] === "u";
+    const ex = w.ex.find((e) => e.id === sheet.id), last = state.train.last[ex.id], up = ex.id[0] !== "l";
     let tip = "";
     if (last && last.sets.length) {
       const allTop = last.sets.length >= ex.s && last.sets.every((x) => (x.r || 0) >= ex.hi), top = Math.max(...last.sets.map((x) => x.w || 0));
@@ -1273,7 +1295,7 @@ document.addEventListener("input", (e) => {
       break;
     }
     case "prof": {
-      const m = { pW: "lb", pA: "age", pF: "ft", pI: "inch" }[t.id];
+      const m = { pW: "lb", pA: "age", pF: "ft", pI: "inch", pK: "wpw", pB: "burn" }[t.id];
       state.profile[m] = num(v), $("#recBox").innerHTML = recHTML(recCalc(state.profile));
       break;
     }
@@ -1583,7 +1605,7 @@ document.addEventListener("input", (e) => {
       } catch (err) {
       }
       if (!bk) return;
-      bk.planVersion = 3, withUndo("Your previous data is back", () => {
+      bk.planVersion = 4, withUndo("Your previous data is back", () => {
         state = normalize(bk), ui.week = null, renderView();
       });
       return;
@@ -1597,7 +1619,7 @@ document.addEventListener("input", (e) => {
   scheduleSave();
 });
 function afterLoad() {
-  state.__migrated && (delete state.__migrated, scheduleSave(), showToast("Plans updated for 5'2\", 115 lb", !0, "restoreBackup"));
+  state.__v4 && (delete state.__v4, scheduleSave(), showToast("Added an optional 5th workout and updated your targets", !1)), state.__migrated && (delete state.__migrated, scheduleSave(), showToast("Plans updated for 5'2\", 115 lb", !0, "restoreBackup"));
 }
 try {
   load().then(afterLoad);
