@@ -1,0 +1,1228 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C1411">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JTan Fitness">
+<title>JTan's Fitness Planner</title>
+<script>
+(function(){ var t = null; try{ t = localStorage.getItem('jtan-theme'); }catch(e){}
+  document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark'); })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFEA; --surface:#FAFAF7; --surface2:#ECEEE8; --raise:#FFFFFF; --track:#DCE0D8;
+  --ink:#13221D; --ink2:#46534D; --muted:#78827B; --line:#DADED6;
+  --gold:#9A7841; --on-gold:#FFFDF8; --gold-soft:rgba(154,120,65,.13);
+  --warn:#9A3E35; --good:#3D6A54; --pc:#2F5A4B; --cc:#B8955A; --fc:#7E5A4B;
+  --bar:rgba(250,250,247,.86); --bar-solid:#FAFAF7;
+  --rail:#17302A; --rail-ink:#EFEBE1; --rail-muted:#A2B4AB; --rail-gold:#CDAE76;
+  --serif:"Cormorant Garamond","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Manrope","Segoe UI",-apple-system,system-ui,Helvetica,Arial,sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0C1411; --surface:#131D19; --surface2:#1A2621; --raise:#22302A; --track:#26352E;
+  --ink:#EDE9DF; --ink2:#C0C5BD; --muted:#8A948D; --line:#24322C;
+  --gold:#CDAE76; --on-gold:#15201B; --gold-soft:rgba(205,174,118,.14);
+  --warn:#E0998F; --good:#8FBDA1; --pc:#6FA48D; --cc:#CDAE76; --fc:#BC8F7B;
+  --bar:rgba(15,24,20,.84); --bar-solid:#0F1814; --rail:#0F1A16; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0C1411; --surface:#131D19; --surface2:#1A2621; --raise:#22302A; --track:#26352E;
+  --ink:#EDE9DF; --ink2:#C0C5BD; --muted:#8A948D; --line:#24322C;
+  --gold:#CDAE76; --on-gold:#15201B; --gold-soft:rgba(205,174,118,.14);
+  --warn:#E0998F; --good:#8FBDA1; --pc:#6FA48D; --cc:#CDAE76; --fc:#BC8F7B;
+  --bar:rgba(15,24,20,.84); --bar-solid:#0F1814; --rail:#0F1A16; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:calc(64px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+body.locked{overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none !important}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+svg{flex:none}
+.up{color:var(--warn)} .down{color:var(--good)}
+.small{font-size:12.5px;color:var(--muted)}
+.small:empty{display:none}
+
+/* ---------- shell (phone first) ---------- */
+.shim{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--bar-solid);z-index:30}
+.rail{display:none}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:12px;height:58px;padding:0 10px 0 16px;background:var(--bar);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid var(--line)}
+.topbar h1{font-family:var(--serif);font-weight:600;font-size:25px;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
+.mono{width:34px;height:34px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--gold);flex:none}
+.save-status{display:inline-flex;align-items:center;gap:7px;font-size:12.5px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex:none}
+.topbar .st-t{display:none}
+.topbar .save-status{padding:0 6px}
+.icon-btn{all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--muted);flex:none;-webkit-tap-highlight-color:transparent}
+.icon-btn:active{background:var(--surface2)}
+.icon-btn:focus-visible{outline:2px solid var(--gold)}
+[data-theme="dark"] .tt-moon,[data-theme="light"] .tt-sun{display:none}
+
+main{display:flex;flex-direction:column;gap:14px;padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px));outline:none;min-width:0}
+.pad-x{padding:0 2px}
+.lede{color:var(--ink2);font-size:14.5px;margin:0;max-width:60ch}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;background:var(--bar);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabbar .nav-b{all:unset;cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0 3px;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.01em;-webkit-tap-highlight-color:transparent;border-radius:12px}
+.tabbar .nav-b .l{display:none}
+.tabbar .nav-b[aria-current="page"]{color:var(--gold)}
+.tabbar .nav-b:focus-visible{outline:2px solid var(--gold)}
+
+/* ---------- building blocks ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.card-t{font-family:var(--serif);font-weight:600;font-size:21px;margin:0;line-height:1.2}
+.card-d{color:var(--ink2);font-size:13.5px;margin:4px 0 12px}
+.empty{color:var(--muted);text-align:center;padding:20px;margin:0}
+.seg{display:flex;background:var(--surface2);border-radius:13px;padding:3px;gap:3px}
+.seg button{all:unset;cursor:pointer;flex:1;text-align:center;padding:9px 8px;border-radius:10px;font-weight:600;font-size:14px;color:var(--ink2);-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--raise);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.16)}
+.seg button:focus-visible{outline:2px solid var(--gold)}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:14px;font-weight:600;font-size:15px;text-align:center;-webkit-tap-highlight-color:transparent}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.btn.primary{background:var(--gold);color:var(--on-gold)}
+.btn.ghost{border:1px solid var(--line);color:var(--ink);background:var(--surface)}
+.btn.danger-ghost{border:1px solid var(--line);color:var(--warn)}
+.btn.armed{border-color:var(--warn);background:var(--gold-soft)}
+.btn.sm{min-height:38px;padding:0 13px;font-size:14px;border-radius:12px;gap:6px}
+.btn.wide{width:100%}
+.btn[disabled]{opacity:.35;cursor:default}
+.link{all:unset;cursor:pointer;color:var(--gold);font-weight:600;font-size:14px;padding:8px 2px}
+.link:focus-visible{outline:2px solid var(--gold)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--gold-soft);color:var(--gold)}
+.tag.sm{font-size:10.5px;padding:1px 7px;vertical-align:1px}
+.bar{height:5px;border-radius:5px;background:var(--track);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:5px}
+.ring{position:relative;flex:none;display:grid;place-items:center}
+.ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 14px}
+.ring-c b{font-family:var(--serif);font-size:31px;font-weight:600;line-height:1}
+.ring-c span{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.2}
+
+/* steppers */
+.stepbox{display:flex;align-items:center;gap:10px}
+.stp{all:unset;cursor:pointer;flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--raise);font-size:22px;line-height:1;color:var(--ink);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.stp:active{background:var(--gold-soft);border-color:var(--gold)}
+.stp:focus-visible{outline:2px solid var(--gold)}
+.sb-mid{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:6px;height:54px;border-radius:14px;background:var(--surface2);padding:0 12px}
+.sb-in{all:unset;flex:1 1 0;min-width:0;width:100%;text-align:center;font-family:var(--serif);font-size:30px;font-weight:600;color:var(--ink)}
+.sb-in::placeholder{color:var(--muted)}
+.sb-mid.wu .sb-in{text-align:right}
+.sb-unit{flex:1 1 0;min-width:0;font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-out{font-family:var(--serif);font-size:30px;font-weight:600}
+.sb-mid:focus-within{box-shadow:inset 0 0 0 1.5px var(--gold)}
+.stepbox.sm{gap:8px}
+.stepbox.sm .stp{width:38px;height:38px;font-size:19px}
+.stepbox.sm .sb-mid{flex:none;width:58px;height:40px;padding:0 6px;border-radius:11px}
+.stepbox.sm .sb-in{font-size:21px}
+
+/* form fields */
+.field{display:block;margin:0 0 16px}
+.f-l{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:7px}
+.inp{width:100%;font-size:16px;color:var(--ink);background:var(--surface2);border:1px solid transparent;border-radius:13px;padding:12px 14px;min-height:50px}
+select.inp{-webkit-appearance:none;appearance:none;padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A948D' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;text-overflow:ellipsis}
+textarea.inp{resize:vertical;min-height:76px;line-height:1.4}
+.inp:focus{outline:none;border-color:var(--gold)}
+.hint{font-size:12.5px;color:var(--muted);margin:7px 2px 0}
+.grid2f{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:2px 0 14px}
+.tile{background:var(--surface2);border-radius:13px;padding:10px 4px;text-align:center}
+.tile b{display:block;font-family:var(--serif);font-size:23px;font-weight:600;line-height:1.1}
+.tile span{font-size:11px;color:var(--muted)}
+.notice{background:var(--gold-soft);border-radius:13px;padding:11px 13px;font-size:13.5px;margin:0 0 14px}
+.switch-row{display:flex;justify-content:space-between;align-items:center;gap:14px;background:var(--surface2);border-radius:13px;padding:12px 14px;cursor:pointer}
+.switch-row b{display:block;font-size:14.5px}
+.switch-row .small{display:block;margin-top:2px}
+input.sw{-webkit-appearance:none;appearance:none;flex:none;width:50px;height:30px;border-radius:30px;background:var(--track);position:relative;margin:0;cursor:pointer;transition:background .2s}
+input.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+input.sw:checked{background:var(--gold)}
+input.sw:checked::after{transform:translateX(20px)}
+
+/* ---------- meals ---------- */
+.meals-layout,.meals-list,.meals-side{display:flex;flex-direction:column;gap:14px}
+.side-note{display:none}
+.sum-top{display:flex;gap:18px;align-items:center}
+.sum-macros{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
+.ml-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;color:var(--ink2)}
+.ml-top b{font-size:15px;color:var(--ink);white-space:nowrap}
+.ml-top small{font-weight:500;color:var(--muted);font-size:12px}
+.sum-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:8px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink2)}
+.meal{padding:0;overflow:hidden}
+.meal-h,.week-h{display:flex;align-items:flex-start;gap:8px;padding:14px 6px 10px 16px}
+.meal-tt,.week-h>div{flex:1;min-width:0}
+.meal-tt h3,.week-h h3{font-family:var(--serif);font-weight:600;font-size:23px;margin:0;line-height:1.15}
+.meal-m{display:flex;flex-wrap:wrap;gap:2px 12px;margin:3px 0 0;font-size:12.5px;color:var(--muted)}
+.meal-m b{color:var(--ink);font-weight:700}
+.meal-k{text-align:right;padding-top:2px}
+.meal-k b{display:block;font-family:var(--serif);font-size:25px;font-weight:600;line-height:1}
+.meal-k span{font-size:11.5px;color:var(--muted)}
+.meal-h .icon-btn,.week-h .icon-btn{margin-top:-6px}
+.meal-note{margin:-2px 16px 10px;font-family:var(--serif);font-style:italic;color:var(--gold);font-size:16.5px;line-height:1.35}
+.items,.rows,.opt-list,.gro-cat ul,.food-cat ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.item,.row,.food-row,.opt{all:unset;box-sizing:border-box;width:100%;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.item{display:flex;align-items:center;gap:10px;padding:11px 8px 11px 16px;border-bottom:1px solid var(--line)}
+.item:active,.row:active,.food-row:active,.opt:active,.add-row:active{background:var(--surface2)}
+.item:focus-visible,.row:focus-visible,.food-row:focus-visible,.opt:focus-visible,.add-row:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.i-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.i-name{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.i-amt{font-size:13px;color:var(--muted)}
+.i-k{text-align:right;display:flex;flex-direction:column;line-height:1.25}
+.i-k b{font-weight:700}
+.i-k span{font-size:12px;color:var(--muted);white-space:nowrap}
+.item>svg,.row svg,.r-ico{color:var(--muted)}
+.add-row{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:8px;padding:14px 16px;color:var(--gold);font-weight:600;font-size:14.5px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* ---------- swap ---------- */
+.swap-grid{display:flex;flex-direction:column}
+.swap-card .stepbox{margin-top:12px}
+.flip{all:unset;cursor:pointer;align-self:center;width:46px;height:46px;border-radius:50%;background:var(--gold);color:var(--on-gold);display:grid;place-items:center;margin:-11px 0;position:relative;z-index:2;box-shadow:0 0 0 5px var(--bg);-webkit-tap-highlight-color:transparent}
+.flip svg{transform:rotate(90deg)}
+.flip:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ans{padding:14px}
+.ans .big{font-family:var(--serif);font-size:46px;font-weight:600;line-height:1;margin:10px 0 0}
+.ans .big small{font-size:18px;color:var(--muted);margin-left:3px}
+.ans p{font-size:13px;color:var(--ink2);margin:6px 0 0}
+.ans .small{display:block;margin-top:2px}
+.opt-list{margin:0 -16px -16px}
+.opt{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 12px;padding:11px 16px;border-bottom:1px solid var(--line)}
+.opt-list li:last-child .opt{border-bottom:none}
+.o-n{font-weight:500;grid-row:1} .o-g{grid-row:1;text-align:right;font-weight:700}
+.o-g small{font-weight:500;font-size:11.5px;color:var(--muted);margin-left:6px}
+.o-k{grid-row:2;font-size:12.5px;color:var(--muted)} .o-d{grid-row:2;font-size:12.5px;text-align:right}
+.opt.on{background:var(--gold-soft)}
+
+/* ---------- body ---------- */
+#swapOut,#groOut,.body-grid,.body-log{display:flex;flex-direction:column;gap:14px}
+.week-h .link{margin-right:10px}
+.stats4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;min-width:0}
+.st-l{font-size:12.5px;color:var(--muted);font-weight:600}
+.stat b{font-family:var(--serif);font-size:31px;font-weight:600;line-height:1.15}
+.stat b small{font-family:var(--sans);font-size:12px;color:var(--muted);margin-left:3px;font-weight:500}
+.st-s{font-size:12px;color:var(--ink2)}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.chart-head .seg{width:190px}
+.charts .pane{display:none}
+.charts[data-show="weight"] .pane[data-c="weight"],.charts[data-show="sleep"] .pane[data-c="sleep"]{display:block}
+.pane h4{display:none}
+.pane .card-d{margin:6px 0 0}
+.chart-box{min-height:150px}
+.chart{display:block;width:100%;height:auto}
+.chart text{font-family:var(--sans);font-size:10.5px;fill:var(--muted)}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px;scroll-behavior:smooth}
+.chips::-webkit-scrollbar{display:none}
+.chip{all:unset;flex:none;cursor:pointer;padding:9px 15px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--ink2);display:inline-flex;gap:6px;align-items:center;-webkit-tap-highlight-color:transparent}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.add{color:var(--gold);border-style:dashed}
+.chip:focus-visible{outline:2px solid var(--gold)}
+.week-card{padding:0;overflow:hidden}
+.row{display:grid;grid-template-columns:42px minmax(0,1fr) minmax(0,1fr) auto;align-items:center;gap:8px;padding:12px 8px 12px 16px;border-bottom:1px solid var(--line)}
+.rows li:last-child .row{border-bottom:none}
+.r-day{font-weight:700}
+.r-a,.r-b{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.r-a b,.r-b b{font-weight:600;font-size:15.5px}
+.r-a small,.r-b small{font-size:11.5px;color:var(--muted)}
+.r-a.short b{color:var(--warn)}
+.r-ico{display:flex;align-items:center;gap:2px}
+.has-note{color:var(--gold);display:grid}
+.mini{display:block;height:4px;border-radius:4px;background:var(--track);margin-top:5px;width:90%;overflow:hidden}
+.mini i{display:block;height:100%;background:var(--gold);border-radius:4px}
+.mini i.hit{background:var(--pc)}
+
+/* ---------- steps ---------- */
+.steps-hero{display:flex;gap:16px;align-items:center}
+.hero-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:9px}
+.hs span{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.hs b{font-size:14.5px;font-weight:600}
+.hs b small{color:var(--muted);font-weight:500;font-size:12px}
+.steps-grid{display:flex;flex-direction:column;gap:14px}
+.steps-grid .card-t{margin-bottom:8px}
+.steps-hero .ring-c b{font-size:27px}
+
+/* ---------- lists ---------- */
+.set-card{padding:2px 16px}
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-weight:500}
+.set-row:last-child{border-bottom:none}
+.gro-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.gro-bar p{margin:0;font-size:13.5px;color:var(--ink2)}
+.gro-bar p b{font-family:var(--serif);font-size:21px;color:var(--ink)}
+.gro-act{display:flex;gap:8px}
+.gro-groups,.food-groups{display:flex;flex-direction:column;gap:14px}
+.gro-cat,.food-cat{padding:14px 0 0;overflow:hidden}
+.gro-cat .card-t,.food-cat .card-t{padding:0 16px 8px}
+.check{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.gro-cat li:last-child .check,.food-cat li:last-child .food-row{border-bottom:none}
+.c-n{display:flex;flex-direction:column;font-weight:500;line-height:1.25;min-width:0}
+.c-n small{font-weight:400;font-size:12px;color:var(--muted)}
+.c-a{font-weight:700;text-align:right;white-space:nowrap}
+.check.done .c-n,.check.done .c-a{opacity:.42;text-decoration:line-through}
+.tick{-webkit-appearance:none;appearance:none;width:24px;height:24px;border:1.6px solid var(--gold);border-radius:8px;margin:0;display:grid;place-items:center;cursor:pointer;background:transparent}
+.tick:checked{background:var(--gold)}
+.tick:checked::after{content:"";width:6px;height:11px;border:solid var(--on-gold);border-width:0 2.2px 2.2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.search-row{display:flex;gap:10px;align-items:center}
+.search{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 12px;min-height:48px;color:var(--muted)}
+.search:focus-within{border-color:var(--gold)}
+.search input{all:unset;flex:1;min-width:0;font-size:16px;color:var(--ink)}
+.food-row{display:flex;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line)}
+.fr-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.fr-n{font-weight:500}
+.fr-m{display:flex;gap:12px;font-size:12.5px;color:var(--muted)}
+.fr-k{text-align:right;display:flex;flex-direction:column;line-height:1.1}
+.fr-k b{font-family:var(--serif);font-size:22px;font-weight:600}
+.fr-k span{font-size:11px;color:var(--muted)}
+.danger-card .card-d{margin-bottom:12px}
+
+/* ---------- sheet ---------- */
+.sheet-root{position:fixed;inset:0;z-index:50}
+.sheet-bg{position:absolute;inset:0;background:rgba(4,9,7,.55);opacity:0;transition:opacity .25s}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:calc(100% - 44px - env(safe-area-inset-top,0px));display:flex;flex-direction:column;background:var(--surface);border-radius:24px 24px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.35);transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet-root.open .sheet{transform:none}
+.sheet-root.open .sheet-bg{opacity:1}
+.grab{width:40px;height:5px;border-radius:5px;background:var(--line);margin:8px auto 0;flex:none}
+.sheet-in{overflow-y:auto;padding:4px 18px 14px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sh-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:8px 0 14px}
+.sh-head h2{font-family:var(--serif);font-weight:600;font-size:27px;margin:0;line-height:1.1;outline:none}
+.sh-head .icon-btn{margin:-4px -8px 0 0}
+.sh-sub{margin:0 0 3px;font-size:12.5px;color:var(--muted);font-weight:600}
+.sh-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;bottom:-14px;background:var(--surface);padding:12px 0 14px;margin:4px 0 -14px;border-top:1px solid var(--line)}
+.sh-actions .btn.primary{min-width:118px}
+.pn{display:flex;gap:8px}
+@media (prefers-reduced-motion:reduce){.sheet,.sheet-bg{transition:none}}
+
+.fallback{padding:8px 4px}
+.fallback h2{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.05;margin:0 0 12px}
+.fallback p{color:var(--ink2);max-width:52ch}
+
+@media (hover:hover){
+  .item:hover,.row:hover,.food-row:hover,.opt:hover,.add-row:hover{background:var(--surface2)}
+  .btn.ghost:hover,.btn.danger-ghost:hover{background:var(--surface2)}
+  .btn.primary:hover{filter:brightness(1.06)}
+  .stp:hover{border-color:var(--gold)}
+  .icon-btn:hover{background:var(--surface2);color:var(--ink)}
+  .chip:not([aria-pressed="true"]):hover{border-color:var(--gold)}
+}
+
+/* ---------- laptop ---------- */
+@media (min-width:900px){
+  .shim,.tabbar{display:none}
+  .app{display:grid;grid-template-columns:244px minmax(0,1fr);min-height:100vh}
+  .rail{display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh;padding:28px 16px 22px;background:var(--rail);color:var(--rail-ink)}
+  .brand{display:flex;gap:12px;align-items:center;padding:0 8px}
+  .rail .mono{width:44px;height:44px;font-size:20px;border-color:var(--rail-gold);color:var(--rail-gold)}
+  .brand-name{font-family:var(--serif);font-size:23px;line-height:1.05;font-weight:600}
+  .brand-name em{display:block;font-style:italic;font-weight:500;color:var(--rail-muted);font-size:16px}
+  .railnav{display:flex;flex-direction:column;gap:3px}
+  .railnav .nav-b{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;color:var(--rail-muted);font-size:14.5px;font-weight:500}
+  .railnav .nav-b .s{display:none}
+  .railnav .nav-b:hover{color:var(--rail-ink);background:rgba(255,255,255,.05)}
+  .railnav .nav-b[aria-current="page"]{color:var(--rail-ink);background:rgba(255,255,255,.08)}
+  .railnav .nav-b[aria-current="page"] svg{color:var(--rail-gold)}
+  .railnav .nav-b:focus-visible{outline:2px solid var(--rail-gold)}
+  .rail-foot{margin-top:auto;display:flex;flex-direction:column;gap:12px;padding:0 8px;color:var(--rail-muted)}
+  .rail .dot{background:var(--rail-gold)}
+  .theme-switch{display:inline-flex;align-self:flex-start;padding:3px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.2);gap:2px}
+  .theme-switch button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--rail-muted)}
+  .theme-switch button[aria-pressed="true"]{background:var(--rail-gold);color:#15201B}
+  .theme-switch button:focus-visible{outline:2px solid var(--rail-gold)}
+  .topbar{position:static;height:auto;padding:40px 44px 4px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:none}
+  .topbar .mono,.topbar .theme-toggle,.topbar .save-status{display:none}
+  .topbar h1{font-size:48px;font-weight:500;line-height:1.05}
+  main{padding:18px 44px 64px;max-width:1200px;gap:18px}
+  .pad-x>.seg{max-width:380px}
+  .card{border-radius:18px}
+  .meals-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px;align-items:start}
+  .meals-side{position:sticky;top:24px}
+  .side-note{display:block;color:var(--muted);font-size:13.5px;margin:0 4px}
+  .swap-grid{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:16px;align-items:center}
+  .flip{margin:0;box-shadow:none}
+  .flip svg{transform:none}
+  .answers{gap:18px}
+  .ans{padding:20px 22px}
+  .ans .big{font-size:58px}
+  .opt-list{display:grid;grid-template-columns:1fr 1fr}
+  .opt-list li:nth-child(odd) .opt{border-right:1px solid var(--line)}
+  .opt-list li:nth-last-child(2):nth-child(odd) .opt{border-bottom:none}
+  .stats4{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .stat{padding:16px 18px}
+  .stat b{font-size:36px}
+  .body-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;align-items:start}
+  .chart-head .seg{display:none}
+  .charts{display:grid;grid-template-columns:1fr;gap:22px}
+  .chart-card{position:sticky;top:24px}
+  .charts .pane{display:block !important}
+  .pane h4{display:block;margin:0 0 8px;font-size:13px;color:var(--muted);font-weight:600}
+  .chart-card{padding:20px 22px}
+  .chips{margin:0;padding:2px 0;flex-wrap:wrap;overflow:visible}
+  .steps-hero{gap:36px;padding:22px 28px}
+  .hero-side{display:grid;grid-template-columns:repeat(2,minmax(0,auto));gap:16px 48px;justify-content:start}
+  .hs b{font-size:16px}
+  .steps-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+  .steps-grid>.card:first-child{padding:20px 22px}
+  main>.btn.wide{width:auto;align-self:flex-start}
+  .meals-list>.btn.wide{width:auto;align-self:flex-start}
+  .set-card{max-width:440px}
+  .search-row{max-width:620px}
+  .gro-bar{max-width:none}
+  .gro-groups,.food-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;align-items:start}
+  .danger-card{max-width:520px}
+  .sheet{left:50%;right:auto;top:50%;bottom:auto;width:min(480px,92vw);max-height:86vh;border-radius:22px;transform:translate(-50%,-47%);opacity:0;transition:transform .22s ease,opacity .22s ease;padding-bottom:0}
+  .sheet-root.open .sheet{transform:translate(-50%,-50%);opacity:1}
+  .grab{display:none}
+  .sheet-in{padding:10px 24px 18px}
+  .sh-actions{bottom:-18px;margin-bottom:-18px;padding-bottom:18px}
+}
+@media (min-width:900px) and (max-width:1100px){
+  .app{grid-template-columns:212px minmax(0,1fr)}
+  .meals-layout{grid-template-columns:300px minmax(0,1fr)}
+  .topbar{padding:32px 32px 4px} main{padding:16px 32px 56px}
+}
+</style>
+</head>
+<body>
+<div class="shim" aria-hidden="true"></div>
+<div class="app">
+  <aside class="rail">
+    <div class="brand"><div class="mono">JT</div><div class="brand-name">JTan's <em>fitness planner</em></div></div>
+    <nav id="railnav" class="railnav" aria-label="Sections"></nav>
+    <div class="rail-foot">
+      <div class="theme-switch" role="group" aria-label="Appearance">
+        <button type="button" data-theme-set="light" aria-pressed="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>Light</button>
+        <button type="button" data-theme-set="dark" aria-pressed="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Dark</button>
+      </div>
+      <span class="save-status"><span class="dot" aria-hidden="true"></span><span class="st-t">Opening…</span></span>
+    </div>
+  </aside>
+  <div class="main-col">
+    <header class="topbar">
+      <div class="mono">JT</div>
+      <h1 id="screenTitle">JTan's Fitness Planner</h1>
+      <span class="save-status" title="Opening"><span class="dot" aria-hidden="true"></span><span class="st-t">Opening…</span></span>
+      <button type="button" class="icon-btn theme-toggle" data-theme-toggle aria-label="Switch between light and dark mode">
+        <svg class="tt-sun" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+        <svg class="tt-moon" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+      </button>
+    </header>
+    <main id="view" tabindex="-1">
+      <div class="fallback">
+        <h2>Opening your planner</h2>
+        <p>If this page stays here, it's being shown in a preview that can't run interactive pages, such as the iPhone Files app or a Mail attachment preview.</p>
+        <p>Open the planner's link in Safari instead, or tap Share, then Open in Safari.</p>
+      </div>
+    </main>
+  </div>
+</div>
+<nav id="tabbar" class="tabbar" aria-label="Sections"></nav>
+<div id="sheetRoot" class="sheet-root" hidden></div>
+<script>
+window.__showErr = function(err){
+  var v = document.getElementById('view'); if(!v) return;
+  v.innerHTML = '<div class="fallback"><h2>Something stopped the planner</h2><p>' + String(err && err.message || err).replace(/[<>&]/g,'') + '</p><p>Try refreshing, or open the link in Safari.</p></div>';
+};
+window.addEventListener('error', function(e){ if(!window.__booted) window.__showErr(e.error || e.message); });
+</script>
+<script>var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty, __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    __hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0 && (target[prop] = source[prop]);
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source))
+      exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop) && (target[prop] = source[prop]);
+  return target;
+};
+const BASE_FOODS = [
+  // proteins
+  { id: "chicken_thigh", name: "Chicken thigh, skinless", cat: "protein", k: 209, p: 25.9, c: 0, f: 10.9, src: "USDA, roasted meat only" },
+  { id: "chicken_breast", name: "Chicken breast, skinless", cat: "protein", k: 165, p: 31, c: 0, f: 3.6, src: "USDA, roasted meat only" },
+  { id: "turkey_breast", name: "Turkey breast", cat: "protein", k: 147, p: 30.1, c: 0, f: 2.1, src: "USDA, roasted meat only" },
+  { id: "ground_turkey", name: "Ground turkey 93/7", cat: "protein", k: 213, p: 27.1, c: 0, f: 11.6, src: "USDA, pan-browned" },
+  { id: "beef_flank", name: "Beef flank steak, lean", cat: "protein", k: 192, p: 27.7, c: 0, f: 8.2, src: "USDA, broiled" },
+  { id: "ground_beef", name: "Ground beef 93/7", cat: "protein", k: 209, p: 29.1, c: 0, f: 9.5, src: "USDA, pan-browned" },
+  { id: "pork_tender", name: "Pork tenderloin", cat: "protein", k: 143, p: 26.2, c: 0, f: 3.5, src: "USDA, roasted" },
+  { id: "salmon", name: "Salmon, Atlantic farmed", cat: "protein", k: 206, p: 22.1, c: 0, f: 12.4, src: "USDA, dry heat" },
+  { id: "tilapia", name: "Tilapia", cat: "protein", k: 128, p: 26.2, c: 0, f: 2.7, src: "USDA, dry heat" },
+  { id: "cod", name: "Cod, Atlantic", cat: "protein", k: 105, p: 22.8, c: 0, f: 0.9, src: "USDA, dry heat" },
+  { id: "shrimp", name: "Shrimp", cat: "protein", k: 99, p: 24, c: 0.2, f: 0.3, src: "USDA, cooked" },
+  { id: "tuna", name: "Tuna, canned in water", cat: "protein", k: 116, p: 25.5, c: 0, f: 0.8, src: "USDA, drained" },
+  { id: "egg", name: "Egg, large", cat: "protein", k: 155, p: 12.6, c: 1.1, f: 10.6, src: "USDA, hard-boiled", unit: { label: "egg", g: 50 } },
+  { id: "egg_white", name: "Egg whites", cat: "protein", k: 52, p: 10.9, c: 0.7, f: 0.2, src: "USDA" },
+  { id: "greek_yogurt", name: "Greek yogurt, nonfat plain", cat: "protein", k: 59, p: 10.2, c: 3.6, f: 0.4, src: "USDA" },
+  { id: "whey_iso", name: "Whey isolate", cat: "protein", k: 367, p: 83.3, c: 3.3, f: 1.7, src: "Typical label, 30 g scoop", unit: { label: "scoop", g: 30 } },
+  { id: "tofu", name: "Tofu, firm", cat: "protein", k: 144, p: 17.3, c: 2.8, f: 8.7, src: "USDA" },
+  // carbs
+  { id: "oats", name: "Rolled oats (dry weight)", cat: "carb", k: 379, p: 13.2, c: 67.7, f: 6.5, src: "USDA, dry" },
+  { id: "rice", name: "White rice", cat: "carb", k: 130, p: 2.7, c: 28.2, f: 0.3, src: "USDA, cooked" },
+  { id: "rice_cake", name: "Rice cake, plain", cat: "carb", k: 387, p: 8.2, c: 81.5, f: 2.8, src: "USDA", unit: { label: "cake", g: 9 } },
+  { id: "yam", name: "Yam / sweet potato", cat: "carb", k: 90, p: 2, c: 20.7, f: 0.2, src: "USDA, baked in skin" },
+  { id: "sourdough", name: "Sourdough bread", cat: "carb", k: 272, p: 10.8, c: 51.9, f: 3, src: "USDA, ~50 g slice", unit: { label: "slice", g: 50 } },
+  { id: "hummus", name: "Hummus", cat: "carb", k: 166, p: 7.9, c: 14.3, f: 9.6, src: "USDA, commercial" },
+  { id: "honey", name: "Honey", cat: "carb", k: 304, p: 0.3, c: 82.4, f: 0, src: "USDA" },
+  // fats
+  { id: "almond_butter", name: "Almond butter", cat: "fat", k: 614, p: 21, c: 18.8, f: 55.5, src: "USDA, 1 tbsp \u2248 16 g" },
+  { id: "chia", name: "Chia seeds", cat: "fat", k: 486, p: 16.5, c: 42.1, f: 30.7, src: "USDA" },
+  { id: "avocado", name: "Avocado", cat: "fat", k: 160, p: 2, c: 8.5, f: 14.7, src: "USDA" },
+  { id: "guac", name: "Guacamole", cat: "fat", k: 155, p: 2, c: 8.5, f: 14, src: "Typical label" },
+  // veg
+  { id: "sauerkraut", name: "Sauerkraut", cat: "veg", k: 19, p: 0.9, c: 4.3, f: 0.1, src: "USDA" },
+  { id: "kimchi", name: "Kimchi", cat: "veg", k: 15, p: 1.1, c: 2.4, f: 0.5, src: "USDA" },
+  { id: "pickle", name: "Dill pickle, medium", cat: "veg", k: 12, p: 0.5, c: 2.4, f: 0.2, src: "USDA, ~65 g each", unit: { label: "pickle", g: 65 } },
+  { id: "slaw", name: "Coleslaw mix, undressed", cat: "veg", k: 25, p: 1.3, c: 5.8, f: 0.1, src: "USDA, raw cabbage" },
+  { id: "salsa", name: "Salsa", cat: "veg", k: 36, p: 1.5, c: 6.6, f: 0.2, src: "USDA, jarred" },
+  { id: "cucumber", name: "Cucumber, medium", cat: "veg", k: 15, p: 0.7, c: 3.6, f: 0.1, src: "USDA, ~201 g each", unit: { label: "cucumber", g: 201 } },
+  { id: "tomato", name: "Tomato", cat: "veg", k: 18, p: 0.9, c: 3.9, f: 0.2, src: "USDA" },
+  // fruit
+  { id: "berries", name: "Frozen mixed berries", cat: "fruit", k: 50, p: 0.7, c: 12, f: 0.4, src: "USDA, unsweetened" },
+  { id: "blueberries", name: "Blueberries", cat: "fruit", k: 57, p: 0.7, c: 14.5, f: 0.3, src: "USDA" },
+  { id: "banana", name: "Banana, medium", cat: "fruit", k: 89, p: 1.1, c: 22.8, f: 0.3, src: "USDA, ~118 g each", unit: { label: "banana", g: 118 } },
+  { id: "pineapple", name: "Pineapple", cat: "fruit", k: 50, p: 0.5, c: 13.1, f: 0.1, src: "USDA" }
+], CATS = { protein: "Protein", carb: "Carbs", fat: "Fats", veg: "Vegetables", fruit: "Fruit", other: "Other" }, DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], ACT_DAYS = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
+function M(name, note, items) {
+  return { name, note, items: items.map(([food2, qty]) => ({ food: food2, qty })) };
+}
+function wk(label, rows) {
+  return { label, days: rows.map(([h, m, w]) => ({ h, m, w, note: "" })) };
+}
+function defaults() {
+  return {
+    v: 1,
+    tab: "training",
+    keepProtein: !0,
+    targets: { training: { kcal: 2600, protein: 160 }, rest: { kcal: 2350, protein: 160 } },
+    customFoods: [],
+    plans: {
+      training: [
+        M("Meal 1", "Make overnight oats", [["oats", 40], ["whey_iso", 1], ["almond_butter", 20], ["chia", 10], ["berries", 100]]),
+        M("Meal 2", "", [["rice", 160], ["chicken_thigh", 160], ["sauerkraut", 100]]),
+        M("Meal 3", "Pre-workout. Spread 1.5 tbsp almond butter and banana on each cake, drizzle honey and pink salt", [["rice_cake", 3], ["almond_butter", 72], ["pickle", 2], ["banana", 1], ["honey", 7]]),
+        M("Meal 4", "Post-workout meal", [["yam", 230], ["chicken_thigh", 160], ["slaw", 130], ["salsa", 60], ["pineapple", 70]]),
+        M("Snack", "", [["hummus", 120], ["cucumber", 2]])
+      ],
+      rest: [
+        M("Meal 1", "", [["sourdough", 1], ["egg", 2], ["avocado", 60], ["kimchi", 100], ["blueberries", 80]]),
+        M("Meal 2", "", [["rice", 140], ["chicken_thigh", 160], ["sauerkraut", 100]]),
+        M("Meal 3", "100 g shredded chicken per cake, topped with tomato and cucumber", [["rice_cake", 2], ["chicken_breast", 200], ["tomato", 100], ["cucumber", 0.5]]),
+        M("Meal 4", "Make a salad and add taco seasoning", [["yam", 170], ["chicken_breast", 170], ["guac", 50], ["slaw", 130], ["salsa", 60]]),
+        M("Meal 5", "", [["greek_yogurt", 140], ["whey_iso", 1], ["almond_butter", 20], ["berries", 100]])
+      ]
+    },
+    weeks: [
+      wk("Week 1", [[9, 0, 156.2], [9, 0, 156.4], [8, 0, 157.4], [7, 0, 156.8], [8, 0, 157], [9, 0, 156.2], [9, 0, 152.2]]),
+      wk("Week 2", [[8, 0, 155.2], [8, 0, 156.6], [8, 0, 155.4], [6, 0, 156.2], [7, 0, 154.6], [6, 0, 155.2], [8, 0, 157.2]]),
+      wk("Week 3", [[7, 0, 154.8], [8, 0, 155.4], [6, 30, 154.4], [7, 0, 154], [8, 0, 152.6], [7, 0, 153], [9, 0, 155.8]]),
+      wk("Week 4", [[8, 0, 153.6], [8, 0, 153.8], [6, 0, 153.2], [8, 0, 153.4], [8, 0, 153.2], [8, 0, 154.2], [7, 0, 154.6]]),
+      wk("Week 5", [[8, 0, 155.6], [7, 0, 155.8], [6, 0, 155.6], [9, 0, 154.8], [8, 0, 153.4], [9, 0, 152.8], [8, 0, 153.6]])
+    ],
+    activity: {
+      daily: 1e4,
+      weekly: 7e4,
+      burn: 1900,
+      days: [[28275, 2807], [33632, 380], [39209, 1233], [34297, 2e3], [1570, null], [2440, null], [null, null]].map(([s, c]) => ({ steps: s, cardio: c }))
+    },
+    grocery: { training: 4, rest: 3, checked: {} },
+    swap: { from: "chicken_breast", grams: 90, to: "beef_flank" }
+  };
+}
+let state = defaults();
+const $ = (s, el = document) => el.querySelector(s), esc = (s) => String(s != null ? s : "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]), fmt = (n, d = 0) => n == null || !isFinite(n) ? "\u2014" : Number(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }), num = (v) => {
+  if (v === "" || v == null) return null;
+  const n = parseFloat(v);
+  return isFinite(n) ? n : null;
+}, roundTo = (x, step) => Math.max(step, Math.round(x / step) * step), allFoods = () => BASE_FOODS.concat(state.customFoods || []), food = (id) => allFoods().find((f) => f.id === id), unitText = (f) => f ? f.unit ? "".concat(f.unit.label, " (").concat(f.unit.g, " g)") : "g" : "", plural = (n, w) => "".concat(w).concat(Math.abs(n - 1) < 1e-9 ? "" : "s");
+function itemMac(it) {
+  const f = food(it.food), q = it.qty || 0;
+  if (!f) return { g: 0, k: 0, p: 0, c: 0, f: 0 };
+  const g = f.unit ? q * f.unit.g : q, r = g / 100;
+  return { g, k: f.k * r, p: f.p * r, c: f.c * r, f: f.f * r };
+}
+function sumMac(list) {
+  return list.reduce((a, b) => ({ g: a.g + b.g, k: a.k + b.k, p: a.p + b.p, c: a.c + b.c, f: a.f + b.f }), { g: 0, k: 0, p: 0, c: 0, f: 0 });
+}
+const mealMac = (m) => sumMac(m.items.map(itemMac)), dayMac = (plan) => sumMac(plan.map(mealMac));
+let dbRef = null, saveTimer = null, storageMode = "none";
+function setStatus(t) {
+  document.querySelectorAll(".save-status").forEach((el) => {
+    el.innerHTML = '<span class="dot" aria-hidden="true"></span><span class="st-t">'.concat(esc(t), "</span>"), el.title = t;
+  });
+}
+function persistable() {
+  const _a = state, { tab } = _a;
+  return __objRest(_a, ["tab"]);
+}
+function scheduleSave() {
+  clearTimeout(saveTimer), setStatus("Saving\u2026"), saveTimer = setTimeout(saveNow, 700);
+}
+async function saveNow() {
+  const data = JSON.stringify(persistable());
+  let ok = !1;
+  if (dbRef)
+    try {
+      await dbRef.set({ json: data, savedAt: Date.now() }), ok = !0;
+    } catch (e) {
+      dbRef = null;
+    }
+  try {
+    localStorage.setItem("jtan-planner", data), ok = !0;
+  } catch (e) {
+  }
+  setStatus(ok ? "All changes saved" : "Changes kept for this visit");
+}
+function merge(saved) {
+  if (!saved || typeof saved != "object") return;
+  const d = defaults();
+  state = Object.assign(d, saved, { tab: state.tab });
+}
+async function load() {
+  try {
+    const raw = localStorage.getItem("jtan-planner");
+    raw && (merge(JSON.parse(raw)), storageMode = "local");
+  } catch (e) {
+  }
+  render(), setStatus(storageMode === "local" ? "All changes saved" : "Ready");
+  try {
+    if (!window.claude || !window.claude.use) return;
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if (!db || !user) return;
+    const id = await user.id();
+    if (!id) return;
+    dbRef = db.collection("data/users/" + id).doc("planner");
+    const snap = await dbRef.get();
+    if (snap.exists) {
+      const d = snap.data();
+      d && d.json && (merge(JSON.parse(d.json)), render());
+    }
+    setStatus("All changes saved");
+  } catch (e) {
+    dbRef = null;
+  }
+}
+function foodOptions(sel) {
+  const groups = {};
+  return allFoods().forEach((f) => {
+    (groups[f.cat] = groups[f.cat] || []).push(f);
+  }), Object.keys(CATS).filter((c) => groups[c]).map((c) => '<optgroup label="'.concat(CATS[c], '">').concat(groups[c].map((f) => '<option value="'.concat(f.id, '" ').concat(f.id === sel ? "selected" : "", ">").concat(esc(f.name), "</option>")).join(""), "</optgroup>")).join("");
+}
+function groceryTotals() {
+  const g = state.grocery, map = {};
+  return [["training", g.training || 0], ["rest", g.rest || 0]].forEach(([k, n]) => {
+    state.plans[k].forEach((m) => m.items.forEach((it) => {
+      const f = food(it.food);
+      if (!f) return;
+      const e = map[f.id] = map[f.id] || { f, g: 0, k: 0 }, mm = itemMac(it);
+      e.g += mm.g * n, e.k += mm.k * n;
+    }));
+  }), Object.values(map);
+}
+function groceryText() {
+  return groceryTotals().sort((a, b) => a.f.cat.localeCompare(b.f.cat)).map((e) => "".concat(e.f.name, ": ").concat(e.f.unit ? fmt(e.g / e.f.unit.g, 1) + " " + plural(Math.round(e.g / e.f.unit.g * 10) / 10, e.f.unit.label) : fmt(e.g) + " g")).join("\n");
+}
+function weekStats(w) {
+  const ws = w.days.map((d) => d.w).filter((v) => v != null), ss = w.days.filter((d) => d.h != null || d.m != null).map((d) => (d.h || 0) + (d.m || 0) / 60);
+  return { avgW: ws.length ? ws.reduce((a, b) => a + b, 0) / ws.length : null, avgS: ss.length ? ss.reduce((a, b) => a + b, 0) / ss.length : null, lowW: ws.length ? Math.min(...ws) : null };
+}
+function changeHTML(cur, prev, compact) {
+  if (cur == null || prev == null) return '<span class="small">'.concat(compact ? "Start" : "First week", "</span>");
+  const p = (cur - prev) / prev * 100;
+  return '<span class="'.concat(p > 0 ? "up" : "down", '">').concat(p > 0 ? "\u25B2" : "\u25BC", " ").concat(fmt(Math.abs(p), 1), "%</span>").concat(compact ? "" : ' <span class="small">('.concat(cur - prev > 0 ? "+" : "\u2212").concat(fmt(Math.abs(cur - prev), 1), " lb)</span>"));
+}
+function actCalc() {
+  const a = state.activity, steps = a.days.reduce((s, d) => s + (d.steps || 0), 0), cardio = a.days.reduce((s, d) => s + (d.cardio || 0), 0), logged = a.days.filter((d) => d.steps != null).length, hit = a.days.filter((d) => (d.steps || 0) >= a.daily).length;
+  return { steps, cardio, logged, hit, avg7: steps / 7, avgLogged: logged ? steps / logged : null };
+}
+const hm = (h) => {
+  if (h == null) return "\u2014";
+  const m = Math.round(h * 60);
+  return "".concat(Math.floor(m / 60), "h ").concat(String(m % 60).padStart(2, "0"), "m");
+};
+let ui = { tab: "meals", day: "training", list: "grocery", week: null, chart: "weight" };
+try {
+  Object.assign(ui, JSON.parse(localStorage.getItem("jtan-ui") || "{}"));
+} catch (e) {
+}
+function saveUI() {
+  try {
+    localStorage.setItem("jtan-ui", JSON.stringify(ui));
+  } catch (e) {
+  }
+}
+const IC = {
+  meals: '<path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M8 7.5c0-1.5 1-2 1-3.5M12 7.5c0-1.5 1-2 1-3.5M16 7.5c0-1.5 1-2 1-3.5"/>',
+  swap: '<path d="M4 8h15l-4-4M20 16H5l4 4"/>',
+  body: '<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M8 10a5.5 5.5 0 0 1 8 0"/><path d="M12 10.5l1.6-2.2"/>',
+  steps: '<path d="M3 12h4l3-7 4 14 3-7h4"/>',
+  lists: '<path d="M10 6h10M10 12h10M10 18h10"/><path d="M4 6l1.2 1.2L7.5 5M4 12l1.2 1.2L7.5 11M4 18l1.2 1.2L7.5 17"/>',
+  chev: '<path d="M9.5 6l6 6-6 6"/>',
+  more: '<circle cx="5.5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.4" fill="currentColor" stroke="none"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  close: '<path d="M6 6l12 12M18 6L6 18"/>',
+  note: '<path d="M4 20h4L19 9l-4-4L4 16v4z"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>',
+  left: '<path d="M14.5 6l-6 6 6 6"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>'
+}, svg = (n, s = 22) => '<svg width="'.concat(s, '" height="').concat(s, '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">').concat(IC[n], "</svg>"), TABS = [
+  { id: "meals", s: "Meals", l: "Meal plans", icon: "meals" },
+  { id: "swap", s: "Swap", l: "Protein swap", icon: "swap" },
+  { id: "body", s: "Body", l: "Sleep & weight", icon: "body" },
+  { id: "steps", s: "Steps", l: "Steps & cardio", icon: "steps" },
+  { id: "lists", s: "Lists", l: "Grocery & foods", icon: "lists" }
+], fmtQ = (q) => q == null ? "" : Number.isInteger(q) ? String(q) : fmt(q, q * 10 % 1 ? 2 : 1);
+function amtText(it) {
+  const f = food(it.food), q = it.qty || 0;
+  return f && f.unit ? "".concat(fmtQ(q), " ").concat(plural(q, f.unit.label)) : "".concat(fmtQ(q), " g");
+}
+function seg(name, opts, cur) {
+  return '<div class="seg" role="group">'.concat(opts.map(([v, l]) => '<button type="button" data-act="seg" data-name="'.concat(name, '" data-val="').concat(v, '" aria-pressed="').concat(v === cur, '">').concat(l, "</button>")).join(""), "</div>");
+}
+function ring(pct, size, stroke, over) {
+  const r = (size - stroke) / 2, c = 2 * Math.PI * r, d = c * Math.max(0, Math.min(pct, 100)) / 100, h = size / 2;
+  return '<svg class="ring-svg" width="'.concat(size, '" height="').concat(size, '" viewBox="0 0 ').concat(size, " ").concat(size, '" aria-hidden="true"><circle cx="').concat(h, '" cy="').concat(h, '" r="').concat(r, '" fill="none" stroke="var(--track)" stroke-width="').concat(stroke, '"/><circle cx="').concat(h, '" cy="').concat(h, '" r="').concat(r, '" fill="none" stroke="').concat(over ? "var(--warn)" : "var(--gold)", '" stroke-width="').concat(stroke, '" stroke-linecap="round" stroke-dasharray="').concat(d.toFixed(1), " ").concat(c.toFixed(1), '" transform="rotate(-90 ').concat(h, " ").concat(h, ')"/></svg>');
+}
+function stepBox(id, f, val, step, opts = {}) {
+  const { min = 0, max = "", start = "", unit = "", dec = 0, label = "", size = "" } = opts, bump = (d) => '<button type="button" class="stp" data-act="bump" data-for="'.concat(id, '" data-dir="').concat(d, '" data-step="').concat(step, '" data-min="').concat(min, '" data-max="').concat(max, '" data-start="').concat(start, '" data-dec="').concat(dec, '" aria-label="').concat(d < 0 ? "Decrease" : "Increase", " ").concat(esc(label), '">').concat(d < 0 ? "\u2212" : "+", "</button>");
+  return '<div class="stepbox '.concat(size, '">').concat(bump(-1), '<div class="sb-mid ').concat(unit ? "wu" : "", '"><input id="').concat(id, '" class="sb-in" type="number" inputmode="').concat(dec ? "decimal" : "numeric", '" step="any" value="').concat(val != null ? val : "", '" placeholder="\u2014" data-f="').concat(f, '" aria-label="').concat(esc(label), '">').concat(unit ? '<span class="sb-unit" id="'.concat(id, '-u">').concat(unit, "</span>") : "", "</div>").concat(bump(1), "</div>");
+}
+const head = (title, sub) => '<div class="sh-head"><div>'.concat(sub ? '<p class="sh-sub">'.concat(sub, "</p>") : "", '<h2 id="sheetTitle" tabindex="-1">').concat(title, '</h2></div><button type="button" class="icon-btn" data-act="closeSheet" aria-label="Close">').concat(svg("close", 20), "</button></div>");
+function renderNav() {
+  const html = TABS.map((t2) => '<button type="button" class="nav-b" data-tab="'.concat(t2.id, '" ').concat(ui.tab === t2.id ? 'aria-current="page"' : "", ">").concat(svg(t2.icon), '<span class="s">').concat(t2.s, '</span><span class="l">').concat(t2.l, "</span></button>")).join("");
+  $("#tabbar").innerHTML = html, $("#railnav").innerHTML = html;
+  const t = TABS.find((x) => x.id === ui.tab);
+  $("#screenTitle").textContent = t ? t.l : "";
+}
+const VIEWS = { meals: viewMeals, swap: viewSwap, body: viewBody, steps: viewSteps, lists: viewLists };
+function renderView() {
+  VIEWS[ui.tab] || (ui.tab = "meals"), $("#view").innerHTML = VIEWS[ui.tab](), drawCharts();
+  const ch = $(".chips");
+  if (ch && ui.tab === "body") {
+    const on = ch.querySelector('[aria-pressed="true"]');
+    on && (ch.scrollLeft = on.offsetLeft - 16);
+  }
+}
+function render() {
+  window.__booted = !0, renderNav(), renderView();
+}
+function macroLine(label, val, target, color, sub) {
+  const pct = target ? val / target * 100 : 0;
+  return '<div class="mline"><div class="ml-top"><span>'.concat(label, "</span><b>").concat(fmt(val), "<small> ").concat(sub, '</small></b></div><div class="bar"><i style="width:').concat(Math.min(100, pct), "%;background:").concat(color, '"></i></div></div>');
+}
+function sumCard(t, tgt) {
+  const kp = tgt.kcal ? t.k / tgt.kcal * 100 : 0, tot = t.p * 4 + t.c * 4 + t.f * 9 || 1, left = tgt.kcal ? t.k > tgt.kcal ? '<span class="up">'.concat(fmt(t.k - tgt.kcal), " kcal over</span>") : "".concat(fmt(tgt.kcal - t.k), " kcal left") : "No calorie target";
+  return '<div class="sum-top">\n      <div class="ring">'.concat(ring(kp, 128, 10, kp > 105), '<div class="ring-c"><b>').concat(fmt(t.k), "</b><span>of ").concat(fmt(tgt.kcal), ' kcal</span></div></div>\n      <div class="sum-macros">\n        ').concat(macroLine("Protein", t.p, tgt.protein, "var(--pc)", "/ ".concat(fmt(tgt.protein), " g")), "\n        ").concat(macroLine("Carbs", t.c, tot / 400, "var(--cc)", "g, ".concat(fmt(t.c * 4 / tot * 100), "%")), "\n        ").concat(macroLine("Fat", t.f, tot / 900, "var(--fc)", "g, ".concat(fmt(t.f * 9 / tot * 100), "%")), '\n      </div>\n    </div>\n    <div class="sum-foot"><span>').concat(left, '</span><button type="button" class="link" data-act="openTargets">Edit targets</button></div>');
+}
+function mealCard(k, m, mi) {
+  const t = mealMac(m);
+  return '<section class="card meal">\n    <header class="meal-h">\n      <div class="meal-tt"><h3>'.concat(esc(m.name) || "Untitled meal", '</h3><p class="meal-m"><span>').concat(fmt(t.p), " g protein</span><span>").concat(fmt(t.c), " g carbs</span><span>").concat(fmt(t.f), ' g fat</span></p></div>\n      <div class="meal-k"><b>').concat(fmt(t.k), '</b><span>kcal</span></div>\n      <button type="button" class="icon-btn" data-act="openMeal" data-mi="').concat(mi, '" aria-label="Edit ').concat(esc(m.name), '">').concat(svg("more", 20), "</button>\n    </header>\n    ").concat(m.note ? '<p class="meal-note">'.concat(esc(m.note), "</p>") : "", '\n    <ul class="items">').concat(m.items.map((it, ii) => {
+    const f = food(it.food), mm = itemMac(it);
+    return '<li><button type="button" class="item" data-act="openItem" data-mi="'.concat(mi, '" data-ii="').concat(ii, '">\n        <span class="i-main"><span class="i-name">').concat(esc(f ? f.name : "Unknown food"), '</span><span class="i-amt">').concat(amtText(it), '</span></span>\n        <span class="i-k"><b>').concat(fmt(mm.k), "</b><span>").concat(fmt(mm.p, 1), " g protein</span></span>").concat(svg("chev", 18), "</button></li>");
+  }).join(""), '</ul>\n    <button type="button" class="add-row" data-act="addItem" data-mi="').concat(mi, '">').concat(svg("plus", 18), "Add food</button>\n  </section>");
+}
+function viewMeals() {
+  const k = ui.day, plan = state.plans[k], tgt = state.targets[k];
+  return '<div class="pad-x">'.concat(seg("day", [["training", "Training day"], ["rest", "Rest day"]], k), '</div>\n  <div class="meals-layout">\n    <div class="meals-side"><section class="card sum-card">').concat(sumCard(dayMac(plan), tgt), '</section>\n      <p class="side-note">').concat(k === "training" ? "Lifting days, with pre- and post-workout meals." : "Lighter days with more fats and greens.", ' Tap any food to change it.</p></div>\n    <div class="meals-list">').concat(plan.map((m, mi) => mealCard(k, m, mi)).join(""), '\n      <button type="button" class="btn ghost wide" data-act="addMeal">').concat(svg("plus", 18), "Add a meal</button></div>\n  </div>");
+}
+function changeFood(newId) {
+  const it = state.plans[sheet.k][sheet.mi].items[sheet.ii], old = food(it.food), nw = food(newId);
+  if (!nw) return;
+  const oldMac = itemMac(it);
+  if (it.food = newId, sheet.notice = "", state.keepProtein && old && old.cat === "protein" && nw.cat === "protein" && nw.p > 0 && oldMac.p > 0) {
+    const g = oldMac.g * old.p / nw.p;
+    it.qty = nw.unit ? roundTo(g / nw.unit.g, 0.5) : roundTo(g, 5);
+    const nm = itemMac(it);
+    sheet.notice = "Protein kept at ".concat(fmt(nm.p), " g. That's ").concat(nm.k >= oldMac.k ? "+" : "\u2212").concat(fmt(Math.abs(nm.k - oldMac.k)), " kcal compared with ").concat(old.name.toLowerCase(), ".");
+  } else (!old || !!old.unit != !!nw.unit) && (it.qty = nw.unit ? 1 : 100);
+}
+const macroTiles = (m, per) => '<div class="tile"><b>'.concat(fmt(m.k), '</b><span>kcal</span></div><div class="tile"><b>').concat(fmt(m.p, 1), '</b><span>g protein</span></div><div class="tile"><b>').concat(fmt(m.c, 1), '</b><span>g carbs</span></div><div class="tile"><b>').concat(fmt(m.f, 1), "</b><span>g fat</span></div>");
+function viewSwap() {
+  const s = state.swap, P = allFoods().filter((f) => f.cat === "protein"), from = food(s.from) || P[0], to = food(s.to) || P[1], opts = (sel) => P.map((f) => '<option value="'.concat(f.id, '" ').concat(f.id === sel ? "selected" : "", ">").concat(esc(f.name), "</option>")).join("");
+  return '<p class="lede pad-x">Find how much of another protein to cook so you get the same protein, or the same calories.</p>\n  <div class="swap-grid">\n    <section class="card swap-card"><label class="f-l" for="sw-from">Instead of</label>\n      <select id="sw-from" class="inp" data-f="swFrom">'.concat(opts(from.id), "</select>\n      ").concat(stepBox("swGrams", "swGrams", s.grams, 5, { unit: "g cooked", label: "Cooked grams", size: "lg" }), '\n    </section>\n    <button type="button" class="flip" data-act="swFlip" aria-label="Switch the two proteins" title="Switch the two proteins">').concat(svg("swap", 20), '</button>\n    <section class="card swap-card"><label class="f-l" for="sw-to">Eat</label>\n      <select id="sw-to" class="inp" data-f="swTo">').concat(opts(to.id), '</select>\n      <p class="hint">Or tap any option below.</p>\n    </section>\n  </div>\n  <div id="swapOut">').concat(swapOut(from, to, s.grams), "</div>");
+}
+function swapOut(from, to, grams) {
+  grams = grams || 0;
+  const fp = from.p * grams / 100, fk = from.k * grams / 100, gP = to.p ? fp / to.p * 100 : 0, gK = to.k ? fk / to.k * 100 : 0, sign = (n) => (n >= 0 ? "+" : "\u2212") + fmt(Math.abs(n)), unitNote = (f, g) => f.unit ? '<span class="small">about '.concat(fmt(g / f.unit.g, 1), " ").concat(plural(Math.round(g / f.unit.g * 10) / 10, f.unit.label), "</span>") : "", rows = allFoods().filter((f) => f.cat === "protein" && f.p > 0 && f.id !== from.id).map((f) => {
+    const g = fp / f.p * 100;
+    return { f, g, k: f.k * g / 100 };
+  }).sort((a, b) => a.k - b.k);
+  return '<div class="answers">\n    <section class="card ans"><span class="tag">Same protein</span><div class="big">'.concat(fmt(gP), "<small>g</small></div>").concat(unitNote(to, gP), "\n      <p>").concat(esc(to.name), " for ").concat(fmt(fp, 1), ' g protein. <span class="').concat(to.k * gP / 100 - fk > 0 ? "up" : "down", '">').concat(sign(to.k * gP / 100 - fk), ' kcal</span></p></section>\n    <section class="card ans"><span class="tag">Same calories</span><div class="big">').concat(fmt(gK), "<small>g</small></div>").concat(unitNote(to, gK), "\n      <p>").concat(esc(to.name), " for ").concat(fmt(fk), ' kcal. <span class="').concat(to.p * gK / 100 - fp < 0 ? "up" : "down", '">').concat(sign(to.p * gK / 100 - fp), ' g protein</span></p></section>\n  </div>\n  <section class="card">\n    <h3 class="card-t">Every option for ').concat(fmt(grams), " g ").concat(esc(from.name.toLowerCase()), '</h3>\n    <p class="card-d">Each amount gives ').concat(fmt(fp, 1), " g protein. Leanest first. ").concat(esc(from.name), " itself is ").concat(fmt(fk), ' kcal.</p>\n    <ul class="opt-list">').concat(rows.map((r) => '<li><button type="button" class="opt '.concat(r.f.id === to.id ? "on" : "", '" data-act="pickTo" data-id="').concat(r.f.id, '">\n      <span class="o-n">').concat(esc(r.f.name), '</span><span class="o-g">').concat(fmt(r.g), " g").concat(r.f.unit ? "<small>".concat(fmt(r.g / r.f.unit.g, 1), " ").concat(plural(Math.round(r.g / r.f.unit.g * 10) / 10, r.f.unit.label), "</small>") : "", '</span>\n      <span class="o-k">').concat(fmt(r.k), ' kcal</span><span class="o-d ').concat(r.k - fk > 0 ? "up" : "down", '">').concat(sign(r.k - fk), " kcal</span></button></li>")).join(""), "</ul>\n  </section>");
+}
+function refreshSwap() {
+  const s = state.swap;
+  $("#swapOut").innerHTML = swapOut(food(s.from), food(s.to), s.grams);
+}
+const sleepH = (d) => d.h == null && d.m == null ? null : (d.h || 0) + (d.m || 0) / 60;
+function curWeek() {
+  const n = state.weeks.length;
+  return (ui.week == null || ui.week >= n || ui.week < 0) && (ui.week = n - 1), ui.week;
+}
+function viewBody() {
+  const st = state.weeks.map(weekStats), last = st.length - 1, first = st.find((s) => s.avgW != null), lows = st.map((s) => s.lowW).filter((v) => v != null), alls = st.map((s) => s.avgS).filter((v) => v != null), since = first && st[last] && st[last].avgW != null ? st[last].avgW - first.avgW : null, wi = curWeek(), w = state.weeks[wi], tile = (l, v, u, sub) => '<div class="stat"><span class="st-l">'.concat(l, "</span><b>").concat(v).concat(u ? "<small>".concat(u, "</small>") : "", '</b><span class="st-s">').concat(sub, "</span></div>");
+  return '<div class="stats4">\n      '.concat(tile("This week", fmt(st[last] && st[last].avgW, 1), "lb", changeHTML(st[last] && st[last].avgW, st[last - 1] && st[last - 1].avgW, !0) + " vs last week"), "\n      ").concat(tile("Since week 1", since == null ? "\u2014" : (since > 0 ? "+" : "\u2212") + fmt(Math.abs(since), 1), "lb", "weekly averages"), "\n      ").concat(tile("Lowest", fmt(lows.length ? Math.min(...lows) : null, 1), "lb", "single weigh-in"), "\n      ").concat(tile("Avg sleep", hm(alls.length ? alls.reduce((a, b) => a + b, 0) / alls.length : null), "", "this week ".concat(hm(st[last] && st[last].avgS))), '\n    </div>\n    <div class="body-grid"><div class="body-log">\n    <div class="chips" role="group" aria-label="Weeks">').concat(state.weeks.map((x, i) => '<button type="button" class="chip" data-act="pickWeek" data-wi="'.concat(i, '" aria-pressed="').concat(i === wi, '">').concat(esc(x.label) || "Week " + (i + 1), "</button>")).join(""), '<button type="button" class="chip add" data-act="addWeek">').concat(svg("plus", 16), "New week</button></div>\n    ").concat(w ? weekCard(w, wi) : '<p class="empty">Start a new week to log sleep and weight.</p>', '</div>\n    <section class="card chart-card">\n      <div class="chart-head"><h3 class="card-t">Trend</h3>').concat(seg("chart", [["weight", "Weight"], ["sleep", "Sleep"]], ui.chart), '</div>\n      <div class="charts" data-show="').concat(ui.chart, '">\n        <div class="pane" data-c="weight"><h4>Weight</h4><div id="wChart" class="chart-box"></div><p class="card-d">Dots are weigh-ins. Gold lines are weekly averages.</p></div>\n        <div class="pane" data-c="sleep"><h4>Sleep</h4><div id="sChart" class="chart-box"></div><p class="card-d">Green reached 7 hours. Dashed line is 8 hours.</p></div>\n      </div>\n    </section>\n    </div>');
+}
+function weekCard(w, wi) {
+  const s = weekStats(w), prev = wi > 0 ? weekStats(state.weeks[wi - 1]).avgW : null;
+  return '<section class="card week-card">\n    <header class="week-h"><div><h3>'.concat(esc(w.label) || "Week " + (wi + 1), '</h3>\n      <p class="meal-m"><span><b>').concat(fmt(s.avgW, 1), "</b> lb avg</span><span>").concat(changeHTML(s.avgW, prev, !0), "</span><span><b>").concat(hm(s.avgS), '</b> sleep</span></p></div>\n      <button type="button" class="icon-btn" data-act="openWeek" aria-label="Edit ').concat(esc(w.label), '">').concat(svg("more", 20), '</button></header>\n    <ul class="rows">').concat(w.days.map((d, di) => {
+    const sl = sleepH(d);
+    return '<li><button type="button" class="row day-row" data-act="openDay" data-di="'.concat(di, '">\n        <span class="r-day">').concat(DAYS[di].slice(0, 3), '</span>\n        <span class="r-a ').concat(sl != null && sl < 7 ? "short" : "", '"><b>').concat(sl == null ? "\u2014" : hm(sl), '</b><small>sleep</small></span>\n        <span class="r-b"><b>').concat(d.w == null ? "\u2014" : fmt(d.w, 1), '</b><small>lb</small></span>\n        <span class="r-ico">').concat(d.note ? '<span class="has-note" title="Has a note">'.concat(svg("note", 15), "</span>") : "").concat(svg("chev", 18), "</span>\n      </button></li>");
+  }).join(""), "</ul>\n  </section>");
+}
+function viewSteps() {
+  const a = state.activity, c = actCalc(), pct = a.weekly ? c.steps / a.weekly * 100 : 0, past = (done, goal, u) => goal ? done >= goal ? '<span class="down">'.concat(fmt(done - goal), " ").concat(u, " past goal</span>") : "".concat(fmt(goal - done), " ").concat(u, " to go") : "No goal set";
+  return '<section class="card steps-hero">\n      <div class="ring">'.concat(ring(pct, 136, 10, !1), '<div class="ring-c"><b>').concat(fmt(c.steps), "</b><span>of ").concat(fmt(a.weekly), ' steps</span></div></div>\n      <div class="hero-side">\n        <div class="hs"><span>Week</span><b>').concat(past(c.steps, a.weekly, "steps"), '</b></div>\n        <div class="hs"><span>Daily average</span><b>').concat(fmt(c.avg7), '</b></div>\n        <div class="hs"><span>Cardio burned</span><b>').concat(fmt(c.cardio), " <small>/ ").concat(fmt(a.burn), ' kcal</small></b></div>\n        <div class="hs"><span>Days at ').concat(fmt(a.daily), "</span><b>").concat(c.hit, ' <small>of 7</small></b></div>\n      </div>\n    </section>\n    <div class="steps-grid">\n      <section class="card week-card">\n        <header class="week-h"><div><h3>This week</h3><p class="meal-m"><span>Friday to Thursday</span></p></div><button type="button" class="link" data-act="openGoals">Edit goals</button></header>\n        <ul class="rows">').concat(a.days.map((d, i) => {
+    const p = a.daily && d.steps != null ? Math.min(100, d.steps / a.daily * 100) : 0;
+    return '<li><button type="button" class="row step-row" data-act="openStepsDay" data-i="'.concat(i, '">\n            <span class="r-day">').concat(ACT_DAYS[i].slice(0, 3), '</span>\n            <span class="r-a"><b>').concat(d.steps == null ? "\u2014" : fmt(d.steps), '</b><small>steps</small><span class="mini"><i class="').concat(d.steps >= a.daily ? "hit" : "", '" style="width:').concat(p, '%"></i></span></span>\n            <span class="r-b"><b>').concat(d.cardio == null ? "\u2014" : fmt(d.cardio), '</b><small>kcal</small></span>\n            <span class="r-ico">').concat(svg("chev", 18), "</span></button></li>");
+  }).join(""), '</ul>\n      </section>\n      <section class="card step-chart"><h3 class="card-t">Steps by day</h3><div id="stepChart" class="chart-box"></div></section>\n    </div>\n    <button type="button" class="btn ghost wide" data-act="clearAct">Clear for a new week</button>');
+}
+function viewLists() {
+  return '<div class="pad-x">'.concat(seg("list", [["grocery", "Grocery list"], ["foods", "Food library"]], ui.list), "</div>") + (ui.list === "foods" ? viewFoods() : viewGrocery());
+}
+function viewGrocery() {
+  const g = state.grocery;
+  return '<section class="card set-card">\n      <div class="set-row"><span>Training days</span>'.concat(stepBox("gTrain", "gTrain", g.training, 1, { max: 7, label: "Training days", size: "sm" }), '</div>\n      <div class="set-row"><span>Rest days</span>').concat(stepBox("gRest", "gRest", g.rest, 1, { max: 7, label: "Rest days", size: "sm" }), '</div>\n    </section>\n    <div id="groOut">').concat(groceryBody(), "</div>");
+}
+function groceryBody() {
+  const list = groceryTotals();
+  if (!list.length) return '<p class="empty">Set at least one day above to build your list.</p>';
+  const chk = state.grocery.checked || (state.grocery.checked = {}), tk = list.reduce((a, e) => a + e.k, 0), days = (state.grocery.training || 0) + (state.grocery.rest || 0), got = list.filter((e) => chk[e.f.id]).length;
+  let html = '<div class="gro-bar"><p><b>'.concat(got, "</b> of ").concat(list.length, ' ticked off<br><span class="small">').concat(days, " ").concat(plural(days, "day"), " of food, about ").concat(fmt(tk), ' kcal</span></p>\n    <div class="gro-act"><button type="button" class="btn ghost sm" data-act="copyList">').concat(svg("copy", 16), "Copy</button>").concat(got ? '<button type="button" class="btn ghost sm" data-act="clearTicks">Clear ticks</button>' : "", '</div></div>\n    <p class="small pad-x" id="copyMsg" role="status" aria-live="polite"></p><div class="gro-groups">');
+  return Object.keys(CATS).forEach((c) => {
+    const items = list.filter((e) => e.f.cat === c).sort((a, b) => b.g - a.g);
+    items.length && (html += '<section class="card gro-cat"><h3 class="card-t">'.concat(CATS[c], "</h3><ul>").concat(items.map((e) => {
+      const amt = e.f.unit ? "".concat(fmt(e.g / e.f.unit.g, 1), " ").concat(plural(Math.round(e.g / e.f.unit.g * 10) / 10, e.f.unit.label)) : e.g >= 1e3 ? "".concat(fmt(e.g / 1e3, 2), " kg") : "".concat(fmt(e.g), " g"), on = !!chk[e.f.id];
+      return '<li><label class="check '.concat(on ? "done" : "", '"><input type="checkbox" class="tick" data-f="gChk" data-id="').concat(e.f.id, '" ').concat(on ? "checked" : "", '><span class="c-n">').concat(esc(e.f.name), "<small>").concat(fmt(e.g / 453.6, 2), ' lb</small></span><span class="c-a">').concat(amt, "</span></label></li>");
+    }).join(""), "</ul></section>"));
+  }), html + "</div>";
+}
+function viewFoods() {
+  let html = '<div class="search-row"><label class="search">'.concat(svg("search", 18), '<input type="search" placeholder="Search foods" data-f="libQ" aria-label="Search foods"></label>\n    <button type="button" class="btn primary sm" data-act="openNewFood">').concat(svg("plus", 16), 'Add food</button></div>\n    <p class="small pad-x">Values per 100 g as eaten. USDA FoodData Central averages unless noted.</p><div class="food-groups">');
+  return Object.keys(CATS).forEach((c) => {
+    const items = allFoods().filter((f) => f.cat === c);
+    items.length && (html += '<section class="card food-cat" data-cat="'.concat(c, '"><h3 class="card-t">').concat(CATS[c], "</h3><ul>").concat(items.map((f) => '<li data-name="'.concat(esc(f.name.toLowerCase()), '"><button type="button" class="food-row" data-act="openFood" data-id="').concat(f.id, '">\n      <span class="fr-main"><span class="fr-n">').concat(esc(f.name)).concat(f.custom ? ' <span class="tag sm">Yours</span>' : "", '</span><span class="fr-m"><span>P ').concat(fmt(f.p, 1), "</span><span>C ").concat(fmt(f.c, 1), "</span><span>F ").concat(fmt(f.f, 1), '</span></span></span>\n      <span class="fr-k"><b>').concat(fmt(f.k), "</b><span>kcal</span></span></button></li>")).join(""), "</ul></section>"));
+  }), html + '</div><p class="empty" id="libEmpty" hidden>No foods match. Add it as your own food.</p>\n  <section class="card danger-card"><h3 class="card-t">Start over</h3><p class="card-d">Put every meal, target and log back to the original plan. Foods you added are removed too.</p><button type="button" class="btn danger-ghost" data-act="reset">Restore original plan</button></section>';
+}
+function filterLib(q) {
+  q = (q || "").trim().toLowerCase();
+  let any = !1;
+  document.querySelectorAll(".food-cat").forEach((sec) => {
+    let vis = 0;
+    sec.querySelectorAll("li[data-name]").forEach((li) => {
+      const s = !q || li.dataset.name.indexOf(q) > -1;
+      li.hidden = !s, s && vis++;
+    }), sec.hidden = !vis, vis && (any = !0);
+  });
+  const e = $("#libEmpty");
+  e && (e.hidden = any);
+}
+function weightChart(W) {
+  const pts = [];
+  state.weeks.forEach((w, wi) => w.days.forEach((d, di) => pts.push({ wi, di, w: d.w })));
+  const H = W < 520 ? 200 : 230, L = 34, R = 8, T = 12, B = 24, n = pts.length, ws = pts.map((p) => p.w).filter((v) => v != null);
+  if (!ws.length) return '<p class="empty">Log a weigh-in to see your trend.</p>';
+  const lo = Math.floor(Math.min(...ws) - 0.5), hi = Math.ceil(Math.max(...ws) + 0.5), span = (W - L - R) / Math.max(1, n - 1), x = (i) => L + (n === 1 ? 0 : i * span), y = (v) => T + (hi - v) * (H - T - B) / (hi - lo || 1);
+  let g = "";
+  const stepY = Math.max(1, Math.round((hi - lo) / 4));
+  for (let v = lo; v <= hi; v += stepY) g += '<line x1="'.concat(L, '" x2="').concat(W - R, '" y1="').concat(y(v), '" y2="').concat(y(v), '" stroke="var(--line)"/><text x="').concat(L - 6, '" y="').concat(y(v) + 4, '" text-anchor="end">').concat(v, "</text>");
+  state.weeks.forEach((w, wi) => {
+    const i0 = wi * 7, i1 = Math.min(i0 + 6, n - 1), a = weekStats(w).avgW;
+    g += '<text x="'.concat((x(i0) + x(i1)) / 2, '" y="').concat(H - 6, '" text-anchor="middle">').concat((W - L - R) / state.weeks.length < 64 ? "W" + (wi + 1) : esc(w.label), "</text>"), a != null && (g += '<line x1="'.concat(x(i0), '" x2="').concat(x(i1), '" y1="').concat(y(a), '" y2="').concat(y(a), '" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round"/>'));
+  });
+  let path = "", on = !1;
+  return pts.forEach((p, i) => {
+    if (p.w == null) {
+      on = !1;
+      return;
+    }
+    path += "".concat(on ? "L" : "M").concat(x(i).toFixed(1), ",").concat(y(p.w).toFixed(1), " "), on = !0;
+  }), g += '<path d="'.concat(path, '" fill="none" stroke="var(--ink2)" stroke-width="1.3"/>'), pts.forEach((p, i) => {
+    p.w != null && (g += '<circle cx="'.concat(x(i), '" cy="').concat(y(p.w), '" r="2.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.2"><title>').concat(esc(state.weeks[p.wi].label), ", ").concat(DAYS[p.di], ": ").concat(p.w, " lb</title></circle>"));
+  }), '<svg class="chart" viewBox="0 0 '.concat(W, " ").concat(H, '" role="img" aria-label="Daily weight with weekly averages">').concat(g, "</svg>");
+}
+function sleepChart(W) {
+  const pts = [];
+  state.weeks.forEach((w, wi) => w.days.forEach((d, di) => pts.push({ wi, di, s: sleepH(d) })));
+  const H = W < 520 ? 170 : 200, L = 34, R = 8, T = 10, B = 24, n = pts.length, max = 10;
+  if (!n) return "";
+  const bw = (W - L - R) / n, y = (v) => T + (max - v) * (H - T - B) / max;
+  let g = '<line x1="'.concat(L, '" x2="').concat(W - R, '" y1="').concat(y(8), '" y2="').concat(y(8), '" stroke="var(--gold)" stroke-dasharray="4 4"/><text x="').concat(L - 6, '" y="').concat(y(8) + 4, '" text-anchor="end">8h</text><text x="').concat(L - 6, '" y="').concat(y(4) + 4, '" text-anchor="end">4h</text>');
+  return state.weeks.forEach((w, wi) => {
+    g += '<text x="'.concat(L + (wi * 7 + 3.5) * bw, '" y="').concat(H - 6, '" text-anchor="middle">').concat((W - L - R) / state.weeks.length < 64 ? "W" + (wi + 1) : esc(w.label), "</text>");
+  }), pts.forEach((p, i) => {
+    if (p.s == null) return;
+    const v = Math.min(p.s, max);
+    g += '<rect x="'.concat(L + i * bw + bw * 0.18, '" y="').concat(y(v), '" width="').concat(bw * 0.64, '" height="').concat(y(0) - y(v), '" rx="1.5" fill="').concat(p.s >= 7 ? "var(--pc)" : "var(--fc)", '"><title>').concat(esc(state.weeks[p.wi].label), ", ").concat(DAYS[p.di], ": ").concat(hm(p.s), "</title></rect>");
+  }), '<svg class="chart" viewBox="0 0 '.concat(W, " ").concat(H, '" role="img" aria-label="Nightly sleep">').concat(g, "</svg>");
+}
+function stepChart(W) {
+  const a = state.activity, H = W < 520 ? 180 : 210, L = 34, R = 8, T = 14, B = 24, n = 7, max = Math.max(a.daily || 0, ...a.days.map((d) => d.steps || 0)) * 1.12 || 1, bw = (W - L - R) / n, y = (v) => T + (max - v) * (H - T - B) / max;
+  let g = "";
+  return [0, max / 2].forEach((v) => {
+    g += '<text x="'.concat(L - 6, '" y="').concat(y(v) + 4, '" text-anchor="end">').concat(v >= 1e3 ? fmt(v / 1e3) + "k" : fmt(v), "</text>");
+  }), a.days.forEach((d, i) => {
+    const v = d.steps || 0;
+    g += '<rect x="'.concat(L + i * bw + bw * 0.22, '" y="').concat(y(v), '" width="').concat(bw * 0.56, '" height="').concat(y(0) - y(v), '" rx="2" fill="').concat(v >= a.daily ? "var(--pc)" : "var(--track)", '"><title>').concat(ACT_DAYS[i], ": ").concat(fmt(v), ' steps</title></rect><text x="').concat(L + i * bw + bw / 2, '" y="').concat(H - 6, '" text-anchor="middle">').concat(ACT_DAYS[i].slice(0, 3), "</text>");
+  }), a.daily && (g += '<line x1="'.concat(L, '" x2="').concat(W - R, '" y1="').concat(y(a.daily), '" y2="').concat(y(a.daily), '" stroke="var(--gold)" stroke-dasharray="4 4" stroke-width="1.5"/><text x="').concat(W - R, '" y="').concat(y(a.daily) - 6, '" text-anchor="end">Goal ').concat(fmt(a.daily), "</text>")), '<svg class="chart" viewBox="0 0 '.concat(W, " ").concat(H, '" role="img" aria-label="Steps per day against daily goal">').concat(g, "</svg>");
+}
+function drawCharts() {
+  [["wChart", weightChart], ["sChart", sleepChart], ["stepChart", stepChart]].forEach(([id, fn]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const w = el.clientWidth;
+    w > 120 && (el.innerHTML = fn(Math.round(w)));
+  });
+}
+let rzT, lastW = window.innerWidth;
+window.addEventListener("resize", () => {
+  clearTimeout(rzT), rzT = setTimeout(() => {
+    window.innerWidth !== lastW && (lastW = window.innerWidth, drawCharts());
+  }, 150);
+});
+let sheet = null, sheetOpener = null;
+const SHEETS = {
+  item() {
+    const m = state.plans[sheet.k][sheet.mi], it = m && m.items[sheet.ii];
+    if (!it) return null;
+    const f = food(it.food);
+    return "".concat(head(sheet.isNew ? "Add food" : "Edit food", esc(m.name)), '\n      <label class="field"><span class="f-l">Food</span><select class="inp" data-f="itemFood">').concat(foodOptions(it.food), '</select></label>\n      <div class="field"><span class="f-l">Amount').concat(f && f.unit ? ' <span class="small">(1 '.concat(esc(f.unit.label), " is about ").concat(f.unit.g, " g)</span>") : "", "</span>\n        ").concat(stepBox("itemQty", "itemQty", it.qty, f && f.unit ? 0.5 : 5, { unit: f && f.unit ? plural(it.qty || 0, f.unit.label) : "g", dec: f && f.unit ? 1 : 0, label: "Amount", size: "lg" }), '</div>\n      <div class="tiles" id="itemTiles">').concat(macroTiles(itemMac(it)), "</div>\n      ").concat(sheet.notice ? '<p class="notice" role="status">'.concat(esc(sheet.notice), "</p>") : "", '\n      <div class="sh-actions"><button type="button" class="btn danger-ghost" data-act="itemRemove">Remove</button><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+  },
+  meal() {
+    const m = state.plans[ui.day][sheet.mi];
+    return m ? "".concat(head("Edit meal", ui.day === "training" ? "Training day" : "Rest day"), '\n      <label class="field"><span class="f-l">Name</span><input class="inp" value="').concat(esc(m.name), '" data-f="mealName"></label>\n      <label class="field"><span class="f-l">Prep note</span><textarea class="inp" rows="3" data-f="mealNote" placeholder="How to make it">').concat(esc(m.note), '</textarea></label>\n      <div class="sh-actions"><button type="button" class="btn danger-ghost" data-act="mealDelete">Remove meal</button><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>') : null;
+  },
+  targets() {
+    const t = state.targets[ui.day];
+    return "".concat(head("Daily targets", ui.day === "training" ? "Training day" : "Rest day"), '\n      <div class="field"><span class="f-l">Calories</span>').concat(stepBox("tgtK", "tgtK", t.kcal, 50, { unit: "kcal", label: "Calorie target", size: "lg" }), '</div>\n      <div class="field"><span class="f-l">Protein</span>').concat(stepBox("tgtP", "tgtP", t.protein, 5, { unit: "g", label: "Protein target", size: "lg" }), '</div>\n      <label class="field switch-row"><span><b>Keep protein when swapping</b><span class="small">Switching one protein for another adjusts the amount so protein stays the same.</span></span><input type="checkbox" class="sw" data-f="keepP" ').concat(state.keepProtein ? "checked" : "", '></label>\n      <div class="sh-actions"><span></span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+  },
+  day() {
+    const w = state.weeks[curWeek()];
+    if (!w) return null;
+    const d = w.days[sheet.di], sl = sleepH(d);
+    let lastW2 = null;
+    for (let i = sheet.di - 1; i >= 0 && lastW2 == null; i--) lastW2 = w.days[i].w;
+    return lastW2 == null && state.weeks.forEach((x) => x.days.forEach((y) => {
+      y.w != null && (lastW2 = y.w);
+    })), "".concat(head(DAYS[sheet.di], esc(w.label)), '\n      <div class="field"><span class="f-l">Sleep</span><div class="stepbox lg"><button type="button" class="stp" data-act="sleepStep" data-dir="-1" aria-label="15 minutes less">\u2212</button><div class="sb-mid"><output id="sleepOut" class="sb-out">').concat(sl == null ? "\u2014" : hm(sl), '</output></div><button type="button" class="stp" data-act="sleepStep" data-dir="1" aria-label="15 minutes more">+</button></div><p class="hint">Changes in 15-minute steps.</p></div>\n      <div class="field"><span class="f-l">Morning weight</span>').concat(stepBox("dayW", "dayW", d.w != null ? Number(d.w).toFixed(1) : "", 0.1, { unit: "lb", dec: 1, start: lastW2 != null ? Number(lastW2).toFixed(1) : "", label: "Weight", size: "lg" }), '</div>\n      <label class="field"><span class="f-l">Note</span><textarea class="inp" rows="2" data-f="dayNote" placeholder="Late meal, travel, hard session\u2026">').concat(esc(d.note), '</textarea></label>\n      <div class="sh-actions"><div class="pn"><button type="button" class="btn ghost sm" data-act="dayNav" data-dir="-1" ').concat(sheet.di === 0 ? "disabled" : "", ">").concat(svg("left", 16), 'Prev</button><button type="button" class="btn ghost sm" data-act="dayNav" data-dir="1" ').concat(sheet.di === 6 ? "disabled" : "", ">Next").concat(svg("chev", 16), '</button></div><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+  },
+  week() {
+    const wi = curWeek(), w = state.weeks[wi];
+    return w ? "".concat(head("Edit week"), '\n      <label class="field"><span class="f-l">Week name</span><input class="inp" value="').concat(esc(w.label), '" data-f="weekName"></label>\n      <div class="sh-actions"><button type="button" class="btn danger-ghost" data-act="weekDelete">Remove week</button><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>') : null;
+  },
+  stepsDay() {
+    const d = state.activity.days[sheet.i];
+    return "".concat(head(ACT_DAYS[sheet.i], "Steps & cardio"), '\n      <div class="field"><span class="f-l">Steps</span>').concat(stepBox("stepsV", "stepsV", d.steps, 500, { label: "Steps", size: "lg" }), '</div>\n      <div class="field"><span class="f-l">Cardio burned</span>').concat(stepBox("cardioV", "cardioV", d.cardio, 50, { unit: "kcal", label: "Cardio calories", size: "lg" }), '</div>\n      <div class="sh-actions"><div class="pn"><button type="button" class="btn ghost sm" data-act="stepsNav" data-dir="-1" ').concat(sheet.i === 0 ? "disabled" : "", ">").concat(svg("left", 16), 'Prev</button><button type="button" class="btn ghost sm" data-act="stepsNav" data-dir="1" ').concat(sheet.i === 6 ? "disabled" : "", ">Next").concat(svg("chev", 16), '</button></div><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+  },
+  goals() {
+    const a = state.activity;
+    return "".concat(head("Goals", "Steps & cardio"), '\n      <div class="field"><span class="f-l">Daily steps</span>').concat(stepBox("gD", "goalDaily", a.daily, 500, { label: "Daily step goal", size: "lg" }), '</div>\n      <div class="field"><span class="f-l">Weekly steps</span>').concat(stepBox("gW", "goalWeekly", a.weekly, 5e3, { label: "Weekly step goal", size: "lg" }), '</div>\n      <div class="field"><span class="f-l">Weekly cardio burn</span>').concat(stepBox("gB", "goalBurn", a.burn, 100, { unit: "kcal", label: "Weekly cardio goal", size: "lg" }), '</div>\n      <div class="sh-actions"><span></span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+  },
+  food() {
+    const f = food(sheet.id);
+    return f ? "".concat(head(esc(f.name), CATS[f.cat] + " per 100 g"), '\n      <div class="tiles">').concat(macroTiles(f), '</div>\n      <p class="card-d">Source: ').concat(esc(f.src)).concat(f.unit ? ". One ".concat(esc(f.unit.label), " is about ").concat(f.unit.g, " g, so ").concat(fmt(f.k * f.unit.g / 100), " kcal and ").concat(fmt(f.p * f.unit.g / 100, 1), " g protein each.") : ".", '</p>\n      <div class="sh-actions">').concat(f.custom ? '<button type="button" class="btn danger-ghost" data-act="foodDelete">Delete food</button>' : "<span></span>", '<button type="button" class="btn primary" data-act="closeSheet">Done</button></div>\n      <p class="small" id="foodMsg" role="status" aria-live="polite"></p>') : null;
+  },
+  newFood() {
+    return "".concat(head("Add your own food", "Values per 100 g from the label"), '\n      <label class="field"><span class="f-l">Name</span><input class="inp" id="nf-name" autocomplete="off"></label>\n      <label class="field"><span class="f-l">Group</span><select class="inp" id="nf-cat">').concat(Object.entries(CATS).map(([k, v]) => '<option value="'.concat(k, '">').concat(v, "</option>")).join(""), '</select></label>\n      <div class="grid2f">\n        <label class="field"><span class="f-l">Calories</span><input class="inp" id="nf-k" type="number" inputmode="decimal"></label>\n        <label class="field"><span class="f-l">Protein g</span><input class="inp" id="nf-p" type="number" inputmode="decimal"></label>\n        <label class="field"><span class="f-l">Carbs g</span><input class="inp" id="nf-c" type="number" inputmode="decimal"></label>\n        <label class="field"><span class="f-l">Fat g</span><input class="inp" id="nf-f" type="number" inputmode="decimal"></label>\n        <label class="field"><span class="f-l">Piece name</span><input class="inp" id="nf-ul" placeholder="Optional, e.g. bar"></label>\n        <label class="field"><span class="f-l">Piece weight g</span><input class="inp" id="nf-ug" type="number" inputmode="decimal" placeholder="Optional"></label>\n      </div>\n      <p class="small" id="nfMsg" role="status" aria-live="polite"></p>\n      <div class="sh-actions"><button type="button" class="btn ghost" data-act="closeSheet">Cancel</button><button type="button" class="btn primary" data-act="addFood">Add food</button></div>');
+  }
+};
+function openSheet(type, data, opener) {
+  sheet = Object.assign({ type }, data || {}), sheetOpener = opener || document.activeElement;
+  const root = $("#sheetRoot"), body = SHEETS[type]();
+  if (body == null) {
+    sheet = null;
+    return;
+  }
+  root.innerHTML = '<div class="sheet-bg" data-act="closeSheet"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="grab" aria-hidden="true"></div><div class="sheet-in" id="sheetIn">'.concat(body, "</div></div>"), root.hidden = !1, document.body.classList.add("locked"), requestAnimationFrame(() => {
+    root.classList.add("open");
+    const t = $("#sheetTitle");
+    t && t.focus({ preventScroll: !0 });
+  });
+}
+function rerenderSheet() {
+  if (!sheet) return;
+  const b = SHEETS[sheet.type]();
+  if (b == null) return closeSheet();
+  $("#sheetIn").innerHTML = b;
+}
+function closeSheet() {
+  const root = $("#sheetRoot");
+  sheet && (sheet = null, root.classList.remove("open"), document.body.classList.remove("locked"), setTimeout(() => {
+    sheet || (root.hidden = !0, root.innerHTML = "");
+  }, 260), renderView(), sheetOpener && document.body.contains(sheetOpener) && sheetOpener.focus({ preventScroll: !0 }));
+}
+document.addEventListener("keydown", (e) => {
+  e.key === "Escape" && sheet && closeSheet();
+});
+const armed = /* @__PURE__ */ new Map();
+function confirmTap(btn, label) {
+  const key = btn.dataset.act;
+  if (armed.get(key) === btn)
+    return armed.delete(key), !0;
+  armed.set(key, btn);
+  const orig = btn.innerHTML;
+  return btn.textContent = label, btn.classList.add("armed"), setTimeout(() => {
+    armed.get(key) === btn && (armed.delete(key), btn.innerHTML = orig, btn.classList.remove("armed"));
+  }, 3500), !1;
+}
+document.addEventListener("input", (e) => {
+  const t = e.target, f = t.dataset && t.dataset.f;
+  if (!f || t.tagName === "SELECT" || t.type === "checkbox") return;
+  const v = t.value;
+  switch (f) {
+    case "itemQty": {
+      const it = state.plans[sheet.k][sheet.mi].items[sheet.ii], fd = food(it.food);
+      it.qty = num(v), $("#itemTiles").innerHTML = macroTiles(itemMac(it));
+      const u = $("#itemQty-u");
+      u && fd && fd.unit && (u.textContent = plural(it.qty || 0, fd.unit.label)), renderView();
+      break;
+    }
+    case "mealName":
+      state.plans[ui.day][sheet.mi].name = v, renderView();
+      break;
+    case "mealNote":
+      state.plans[ui.day][sheet.mi].note = v, renderView();
+      break;
+    case "tgtK":
+      state.targets[ui.day].kcal = num(v), renderView();
+      break;
+    case "tgtP":
+      state.targets[ui.day].protein = num(v), renderView();
+      break;
+    case "swGrams":
+      state.swap.grams = num(v), refreshSwap();
+      break;
+    case "dayW":
+      state.weeks[curWeek()].days[sheet.di].w = num(v), renderView();
+      break;
+    case "dayNote":
+      state.weeks[curWeek()].days[sheet.di].note = v, renderView();
+      break;
+    case "weekName":
+      state.weeks[curWeek()].label = v, renderView();
+      break;
+    case "stepsV":
+      state.activity.days[sheet.i].steps = num(v), renderView();
+      break;
+    case "cardioV":
+      state.activity.days[sheet.i].cardio = num(v), renderView();
+      break;
+    case "goalDaily":
+      state.activity.daily = num(v), renderView();
+      break;
+    case "goalWeekly":
+      state.activity.weekly = num(v), renderView();
+      break;
+    case "goalBurn":
+      state.activity.burn = num(v), renderView();
+      break;
+    case "gTrain":
+      state.grocery.training = Math.min(7, Math.max(0, num(v) || 0)), $("#groOut").innerHTML = groceryBody();
+      break;
+    case "gRest":
+      state.grocery.rest = Math.min(7, Math.max(0, num(v) || 0)), $("#groOut").innerHTML = groceryBody();
+      break;
+    case "libQ":
+      filterLib(v);
+      return;
+    default:
+      return;
+  }
+  scheduleSave();
+}), document.addEventListener("change", (e) => {
+  const t = e.target, f = t.dataset && t.dataset.f;
+  if (f) {
+    if (f === "itemFood") {
+      changeFood(t.value), rerenderSheet(), renderView();
+      const s = $("#sheetIn select");
+      s && s.focus();
+    } else if (f === "swFrom")
+      state.swap.from = t.value, refreshSwap();
+    else if (f === "swTo")
+      state.swap.to = t.value, refreshSwap();
+    else if (f === "keepP")
+      state.keepProtein = t.checked;
+    else if (f === "gChk") {
+      const c = state.grocery.checked || (state.grocery.checked = {});
+      t.checked ? c[t.dataset.id] = !0 : delete c[t.dataset.id], $("#groOut").innerHTML = groceryBody();
+    } else return;
+    scheduleSave();
+  }
+}), document.addEventListener("click", async (e) => {
+  const nb = e.target.closest("[data-tab]");
+  if (nb) {
+    ui.tab = nb.dataset.tab, saveUI(), render(), window.scrollTo(0, 0);
+    return;
+  }
+  const b = e.target.closest("[data-act]");
+  if (!b || b.disabled) return;
+  const d = b.dataset;
+  switch (d.act) {
+    case "closeSheet":
+      closeSheet();
+      return;
+    case "seg":
+      ui[d.name] = d.val, saveUI(), renderView();
+      return;
+    case "bump": {
+      const inp = document.getElementById(d.for);
+      if (!inp) return;
+      const step = +d.step, dec = +d.dec || (String(d.step).split(".")[1] || "").length;
+      let v = num(inp.value);
+      v == null ? v = d.start !== "" ? +d.start : +d.dir > 0 ? step : 0 : v = v + +d.dir * step, v = Math.max(+d.min || 0, v), d.max !== "" && (v = Math.min(+d.max, v)), inp.value = dec ? v.toFixed(dec) : String(Math.round(v)), inp.dispatchEvent(new Event("input", { bubbles: !0 }));
+      return;
+    }
+    case "openItem":
+      openSheet("item", { k: ui.day, mi: +d.mi, ii: +d.ii }, b);
+      return;
+    case "addItem": {
+      const items = state.plans[ui.day][+d.mi].items;
+      items.push({ food: "chicken_breast", qty: 150 }), renderView(), openSheet("item", { k: ui.day, mi: +d.mi, ii: items.length - 1, isNew: !0 }, b);
+      break;
+    }
+    case "itemRemove":
+      state.plans[sheet.k][sheet.mi].items.splice(sheet.ii, 1), closeSheet();
+      break;
+    case "openMeal":
+      openSheet("meal", { mi: +d.mi }, b);
+      return;
+    case "mealDelete":
+      if (!confirmTap(b, "Tap again to remove")) return;
+      state.plans[ui.day].splice(sheet.mi, 1), closeSheet();
+      break;
+    case "addMeal": {
+      const p = state.plans[ui.day];
+      p.push({ name: "Meal ".concat(p.length + 1), note: "", items: [] }), renderView(), openSheet("meal", { mi: p.length - 1 }, b);
+      break;
+    }
+    case "openTargets":
+      openSheet("targets", {}, b);
+      return;
+    case "swFlip": {
+      const s = state.swap, a = food(s.from), z = food(s.to);
+      a && z && z.p && (s.grams = Math.round((s.grams || 0) * a.p / z.p));
+      const tmp = s.from;
+      s.from = s.to, s.to = tmp, renderView();
+      break;
+    }
+    case "pickTo":
+      state.swap.to = d.id, renderView();
+      {
+        const el = $("#sw-to");
+        el && el.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+      break;
+    case "pickWeek":
+      ui.week = +d.wi, saveUI(), renderView();
+      return;
+    case "addWeek":
+      state.weeks.push({ label: "Week ".concat(state.weeks.length + 1), days: DAYS.map(() => ({ h: null, m: null, w: null, note: "" })) }), ui.week = state.weeks.length - 1, saveUI(), renderView();
+      break;
+    case "openWeek":
+      openSheet("week", {}, b);
+      return;
+    case "weekDelete":
+      if (!confirmTap(b, "Tap again to remove")) return;
+      state.weeks.splice(curWeek(), 1), ui.week = null, closeSheet();
+      break;
+    case "openDay":
+      openSheet("day", { di: +d.di }, b);
+      return;
+    case "dayNav":
+      sheet.di = Math.max(0, Math.min(6, sheet.di + +d.dir)), rerenderSheet();
+      return;
+    case "sleepStep": {
+      const day = state.weeks[curWeek()].days[sheet.di], cur = sleepH(day);
+      let mins = cur == null ? +d.dir > 0 ? 7 * 60 : 0 : Math.round(cur * 60) + +d.dir * 15;
+      mins = Math.max(0, Math.min(24 * 60, mins)), day.h = Math.floor(mins / 60), day.m = mins % 60, $("#sleepOut").textContent = hm(mins / 60), renderView();
+      break;
+    }
+    case "openStepsDay":
+      openSheet("stepsDay", { i: +d.i }, b);
+      return;
+    case "stepsNav":
+      sheet.i = Math.max(0, Math.min(6, sheet.i + +d.dir)), rerenderSheet();
+      return;
+    case "openGoals":
+      openSheet("goals", {}, b);
+      return;
+    case "clearAct":
+      if (!confirmTap(b, "Tap again to clear the week")) return;
+      state.activity.days = ACT_DAYS.map(() => ({ steps: null, cardio: null })), renderView();
+      break;
+    case "copyList": {
+      const txt = groceryText();
+      let ok = !1;
+      try {
+        await navigator.clipboard.writeText(txt), ok = !0;
+      } catch (err) {
+      }
+      $("#copyMsg").textContent = ok ? "Copied. Paste it into Notes or a message." : "Copy is blocked here. Long-press the list to copy it instead.";
+      return;
+    }
+    case "clearTicks":
+      state.grocery.checked = {}, $("#groOut").innerHTML = groceryBody();
+      break;
+    case "openFood":
+      openSheet("food", { id: d.id }, b);
+      return;
+    case "foodDelete": {
+      if (["training", "rest"].some((k) => state.plans[k].some((m) => m.items.some((it) => it.food === sheet.id)))) {
+        $("#foodMsg").textContent = "This food is in a meal plan. Remove it from your meals first.";
+        return;
+      }
+      state.customFoods = state.customFoods.filter((f) => f.id !== sheet.id), closeSheet();
+      break;
+    }
+    case "openNewFood":
+      openSheet("newFood", {}, b);
+      return;
+    case "addFood": {
+      const g = (id) => $("#" + id).value.trim(), name = g("nf-name"), k = num(g("nf-k")), p = num(g("nf-p")), c = num(g("nf-c")), f = num(g("nf-f"));
+      if (!name || k == null || p == null || c == null || f == null) {
+        $("#nfMsg").textContent = "Fill in the name, calories, protein, carbs and fat.";
+        return;
+      }
+      const ul = g("nf-ul"), ug = num(g("nf-ug")), nf = { id: "c_" + Date.now().toString(36), name, cat: g("nf-cat"), k, p, c, f, src: "Your entry", custom: !0 };
+      ul && ug && (nf.unit = { label: ul, g: ug }), state.customFoods.push(nf), closeSheet();
+      break;
+    }
+    case "reset": {
+      if (!confirmTap(b, "Tap again to restore")) return;
+      state = defaults(), ui.week = null, renderView();
+      break;
+    }
+    default:
+      return;
+  }
+  scheduleSave();
+});
+try {
+  load();
+} catch (err) {
+  window.__showErr && window.__showErr(err);
+}
+</script>
+<script>
+(function(){
+  function apply(t){
+    document.documentElement.setAttribute('data-theme', t);
+    var bs = document.querySelectorAll('[data-theme-set]');
+    for(var i=0;i<bs.length;i++) bs[i].setAttribute('aria-pressed', bs[i].getAttribute('data-theme-set')===t ? 'true' : 'false');
+    var m = document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute('content', t==='dark' ? '#0C1411' : '#FAFAF7');
+    var tt = document.querySelector('[data-theme-toggle]'); if(tt) tt.setAttribute('aria-label', t==='dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+  apply(document.documentElement.getAttribute('data-theme') || 'dark');
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('[data-theme-set],[data-theme-toggle]'); if(!b) return;
+    var t = b.hasAttribute('data-theme-toggle') ? (document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark') : b.getAttribute('data-theme-set');
+    apply(t); try{ localStorage.setItem('jtan-theme', t); }catch(err){}
+  });
+})();
+</script>
+</body>
+</html>
