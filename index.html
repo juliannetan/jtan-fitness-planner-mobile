@@ -298,6 +298,25 @@ input.sw:checked::after{transform:translateX(20px)}
 .pn{display:flex;gap:8px}
 @media (prefers-reduced-motion:reduce){.sheet,.sheet-bg{transition:none}}
 
+
+/* ---------- saving + data ---------- */
+.save-status[data-kind="saving"] .dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--gold)}
+.save-status[data-kind="error"] .dot{background:var(--warn)}
+.topbar .save-status[data-kind="error"] .st-t{display:inline;color:var(--warn)}
+.save-status.inline{display:inline-flex;color:var(--muted);margin-left:4px;vertical-align:1px}
+.reset-list{display:flex;flex-direction:column;margin:4px 0 12px;border-top:1px solid var(--line)}
+.reset-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.reset-row b{display:block;font-size:14.5px}
+.reset-row .small{display:block;margin-top:1px}
+.reset-row .btn{flex:none}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 12px 12px 16px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:600;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s}
+.toast.on{opacity:1;transform:none}
+.toast button{all:unset;cursor:pointer;color:var(--gold);font-weight:700;padding:6px 10px;border-radius:9px;background:rgba(127,127,127,.18)}
+[data-theme="light"] .toast button{color:#E2C48E}
+.toast button:focus-visible{outline:2px solid var(--gold)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+@media (min-width:900px){ .toast{left:auto;right:32px;bottom:28px;width:auto;min-width:300px} .data-card{max-width:620px} }
+
 .fallback{padding:8px 4px}
 .fallback h2{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.05;margin:0 0 12px}
 .fallback p{color:var(--ink2);max-width:52ch}
@@ -421,6 +440,7 @@ input.sw:checked::after{transform:translateX(20px)}
   </div>
 </div>
 <nav id="tabbar" class="tabbar" aria-label="Sections"></nav>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <div id="sheetRoot" class="sheet-root" hidden></div>
 <script>
 window.__showErr = function(err){
@@ -547,47 +567,79 @@ function itemMac(it) {
 function sumMac(list) {
   return list.reduce((a, b) => ({ g: a.g + b.g, k: a.k + b.k, p: a.p + b.p, c: a.c + b.c, f: a.f + b.f }), { g: 0, k: 0, p: 0, c: 0, f: 0 });
 }
-const mealMac = (m) => sumMac(m.items.map(itemMac)), dayMac = (plan) => sumMac(plan.map(mealMac));
-let dbRef = null, saveTimer = null, storageMode = "none";
-function setStatus(t) {
-  document.querySelectorAll(".save-status").forEach((el) => {
-    el.innerHTML = '<span class="dot" aria-hidden="true"></span><span class="st-t">'.concat(esc(t), "</span>"), el.title = t;
+const mealMac = (m) => sumMac(m.items.map(itemMac)), dayMac = (plan) => sumMac(plan.map(mealMac)), LS_KEY = "jtan-planner", BK_KEY = "jtan-planner-before-reset";
+let dbRef = null, saveTimer = null, dirty = !1;
+function setStatus(t, kind) {
+  window.__st = [t, kind], document.querySelectorAll(".save-status").forEach((el) => {
+    el.innerHTML = '<span class="dot" aria-hidden="true"></span><span class="st-t">'.concat(esc(t), "</span>"), el.title = t, el.dataset.kind = kind || "";
   });
 }
 function persistable() {
   const _a = state, { tab } = _a;
   return __objRest(_a, ["tab"]);
 }
+function writeLocal(ts) {
+  try {
+    return localStorage.setItem(LS_KEY, JSON.stringify({ v: 2, savedAt: ts, data: persistable() })), !0;
+  } catch (e) {
+    return !1;
+  }
+}
+function readLocal() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    const o = JSON.parse(raw);
+    return o && o.data ? { savedAt: o.savedAt || 0, data: o.data } : { savedAt: 0, data: o };
+  } catch (e) {
+    return null;
+  }
+}
 function scheduleSave() {
-  clearTimeout(saveTimer), setStatus("Saving\u2026"), saveTimer = setTimeout(saveNow, 700);
+  dirty = !0, setStatus("Saving\u2026", "saving"), clearTimeout(saveTimer), saveTimer = setTimeout(saveNow, 350);
 }
 async function saveNow() {
-  const data = JSON.stringify(persistable());
-  let ok = !1;
+  if (clearTimeout(saveTimer), !dirty) return;
+  dirty = !1;
+  const ts = Date.now(), okL = writeLocal(ts);
+  let okD = !1;
   if (dbRef)
     try {
-      await dbRef.set({ json: data, savedAt: Date.now() }), ok = !0;
+      await dbRef.set({ json: JSON.stringify(persistable()), savedAt: ts }), okD = !0;
     } catch (e) {
       dbRef = null;
     }
-  try {
-    localStorage.setItem("jtan-planner", data), ok = !0;
-  } catch (e) {
-  }
-  setStatus(ok ? "All changes saved" : "Changes kept for this visit");
+  dirty || (okL || okD ? setStatus("All changes saved", "saved") : setStatus("Not saved: this browser is blocking storage", "error"));
+}
+function flushSave() {
+  if (!dirty) return;
+  dirty = !1, clearTimeout(saveTimer);
+  const ts = Date.now();
+  if (writeLocal(ts), dbRef)
+    try {
+      dbRef.set({ json: JSON.stringify(persistable()), savedAt: ts }).catch(() => {
+      });
+    } catch (e) {
+    }
+  setStatus("All changes saved", "saved");
+}
+window.addEventListener("pagehide", flushSave), document.addEventListener("visibilitychange", () => {
+  document.visibilityState === "hidden" && flushSave();
+});
+function normalize(s) {
+  const d = defaults();
+  if (!s || typeof s != "object") return d;
+  const o = Object.assign(d, s), D = defaults();
+  return o.targets = { training: Object.assign({}, D.targets.training, s.targets && s.targets.training), rest: Object.assign({}, D.targets.rest, s.targets && s.targets.rest) }, (!o.plans || !Array.isArray(o.plans.training) || !Array.isArray(o.plans.rest)) && (o.plans = D.plans), ["training", "rest"].forEach((k) => {
+    o.plans[k] = o.plans[k].filter((m) => m && Array.isArray(m.items)).map((m) => ({ name: m.name || "", note: m.note || "", items: m.items.filter((it) => it && it.food) }));
+  }), Array.isArray(o.weeks) || (o.weeks = D.weeks), o.weeks = o.weeks.filter((w) => w && Array.isArray(w.days) && w.days.length === 7), o.activity = Object.assign({}, D.activity, s.activity), (!Array.isArray(o.activity.days) || o.activity.days.length !== 7) && (o.activity.days = D.activity.days), o.grocery = Object.assign({}, D.grocery, s.grocery), (!o.grocery.checked || typeof o.grocery.checked != "object") && (o.grocery.checked = {}), o.swap = Object.assign({}, D.swap, s.swap), Array.isArray(o.customFoods) || (o.customFoods = []), o.keepProtein = o.keepProtein !== !1, o;
 }
 function merge(saved) {
-  if (!saved || typeof saved != "object") return;
-  const d = defaults();
-  state = Object.assign(d, saved, { tab: state.tab });
+  state = normalize(saved);
 }
 async function load() {
-  try {
-    const raw = localStorage.getItem("jtan-planner");
-    raw && (merge(JSON.parse(raw)), storageMode = "local");
-  } catch (e) {
-  }
-  render(), setStatus(storageMode === "local" ? "All changes saved" : "Ready");
+  const loc = readLocal();
+  loc && (state = normalize(loc.data)), render(), setStatus(loc ? "All changes saved" : "Ready", "saved");
   try {
     if (!window.claude || !window.claude.use) return;
     const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
@@ -595,12 +647,8 @@ async function load() {
     const id = await user.id();
     if (!id) return;
     dbRef = db.collection("data/users/" + id).doc("planner");
-    const snap = await dbRef.get();
-    if (snap.exists) {
-      const d = snap.data();
-      d && d.json && (merge(JSON.parse(d.json)), render());
-    }
-    setStatus("All changes saved");
+    const snap = await dbRef.get(), d = snap.exists ? snap.data() : null, cloudTs = d && d.savedAt || 0, localTs = loc ? loc.savedAt : 0;
+    d && d.json && cloudTs > localTs && !dirty ? (state = normalize(JSON.parse(d.json)), writeLocal(cloudTs), typeof sheet < "u" && sheet && closeSheet(), render()) : loc && localTs >= cloudTs && (dirty = !0, await saveNow()), setStatus("All changes saved", "saved");
   } catch (e) {
     dbRef = null;
   }
@@ -701,7 +749,7 @@ function renderNav() {
 }
 const VIEWS = { meals: viewMeals, swap: viewSwap, body: viewBody, steps: viewSteps, lists: viewLists };
 function renderView() {
-  VIEWS[ui.tab] || (ui.tab = "meals"), $("#view").innerHTML = VIEWS[ui.tab](), drawCharts();
+  VIEWS[ui.tab] || (ui.tab = "meals"), $("#view").innerHTML = VIEWS[ui.tab](), drawCharts(), window.__st && setStatus(window.__st[0], window.__st[1]);
   const ch = $(".chips");
   if (ch && ui.tab === "body") {
     const on = ch.querySelector('[aria-pressed="true"]');
@@ -782,7 +830,7 @@ function viewSteps() {
   }).join(""), '</ul>\n      </section>\n      <section class="card step-chart"><h3 class="card-t">Steps by day</h3><div id="stepChart" class="chart-box"></div></section>\n    </div>\n    <button type="button" class="btn ghost wide" data-act="clearAct">Clear for a new week</button>');
 }
 function viewLists() {
-  return '<div class="pad-x">'.concat(seg("list", [["grocery", "Grocery list"], ["foods", "Food library"]], ui.list), "</div>") + (ui.list === "foods" ? viewFoods() : viewGrocery());
+  return '<div class="pad-x">'.concat(seg("list", [["grocery", "Grocery list"], ["foods", "Food library"]], ui.list), "</div>") + (ui.list === "foods" ? viewFoods() : viewGrocery()) + dataCard();
 }
 function viewGrocery() {
   const g = state.grocery;
@@ -806,7 +854,31 @@ function viewFoods() {
   return Object.keys(CATS).forEach((c) => {
     const items = allFoods().filter((f) => f.cat === c);
     items.length && (html += '<section class="card food-cat" data-cat="'.concat(c, '"><h3 class="card-t">').concat(CATS[c], "</h3><ul>").concat(items.map((f) => '<li data-name="'.concat(esc(f.name.toLowerCase()), '"><button type="button" class="food-row" data-act="openFood" data-id="').concat(f.id, '">\n      <span class="fr-main"><span class="fr-n">').concat(esc(f.name)).concat(f.custom ? ' <span class="tag sm">Yours</span>' : "", '</span><span class="fr-m"><span>P ').concat(fmt(f.p, 1), "</span><span>C ").concat(fmt(f.c, 1), "</span><span>F ").concat(fmt(f.f, 1), '</span></span></span>\n      <span class="fr-k"><b>').concat(fmt(f.k), "</b><span>kcal</span></span></button></li>")).join(""), "</ul></section>"));
-  }), html + '</div><p class="empty" id="libEmpty" hidden>No foods match. Add it as your own food.</p>\n  <section class="card danger-card"><h3 class="card-t">Start over</h3><p class="card-d">Put every meal, target and log back to the original plan. Foods you added are removed too.</p><button type="button" class="btn danger-ghost" data-act="reset">Restore original plan</button></section>';
+  }), html + '</div><p class="empty" id="libEmpty" hidden>No foods match. Add it as your own food.</p>';
+}
+function dataCard() {
+  let hasBk = !1;
+  try {
+    hasBk = !!localStorage.getItem(BK_KEY);
+  } catch (e) {
+  }
+  const row = (scope, title, desc, label) => '<div class="reset-row"><div><b>'.concat(title, '</b><span class="small">').concat(desc, '</span></div><button type="button" class="btn danger-ghost sm" data-act="reset" data-scope="').concat(scope, '">').concat(label, "</button></div>");
+  return '<section class="card data-card" id="data">\n    <h3 class="card-t">Your data</h3>\n    <p class="card-d">Everything you change saves automatically as you go, on this device'.concat(window.claude && window.claude.use ? " and to your Claude account" : "", '. <span class="save-status inline"></span></p>\n    <div class="reset-list">\n      ').concat(row("plans", "Meal plans", "Meals, targets and the swap tool go back to the original plan.", "Reset"), "\n      ").concat(row("logs", "Logs", "Sleep, weight, steps and cardio go back to the original entries.", "Reset"), "\n      ").concat(row("all", "Everything", "The whole planner, including foods you added.", "Reset all"), "\n    </div>\n    ").concat(hasBk ? '<button type="button" class="btn ghost sm" data-act="restoreBackup">Undo my last reset</button>' : "", "\n  </section>");
+}
+let undoSnap = null, toastT = null;
+function showToast(msg, canUndo) {
+  const t = $("#toast");
+  t.innerHTML = "<span>".concat(esc(msg), "</span>").concat(canUndo ? '<button type="button" data-act="undo">Undo</button>' : ""), t.hidden = !1, requestAnimationFrame(() => t.classList.add("on")), clearTimeout(toastT), toastT = setTimeout(hideToast, canUndo ? 8e3 : 2500);
+}
+function hideToast() {
+  const t = $("#toast");
+  t.classList.remove("on"), undoSnap = null, setTimeout(() => {
+    t.classList.contains("on") || (t.hidden = !0);
+  }, 250);
+}
+function withUndo(msg, fn) {
+  const snap = JSON.stringify(persistable());
+  fn(), undoSnap = snap, scheduleSave(), showToast(msg, !0);
 }
 function filterLib(q) {
   q = (q || "").trim().toLowerCase();
@@ -1084,16 +1156,23 @@ document.addEventListener("input", (e) => {
       items.push({ food: "chicken_breast", qty: 150 }), renderView(), openSheet("item", { k: ui.day, mi: +d.mi, ii: items.length - 1, isNew: !0 }, b);
       break;
     }
-    case "itemRemove":
-      state.plans[sheet.k][sheet.mi].items.splice(sheet.ii, 1), closeSheet();
-      break;
+    case "itemRemove": {
+      const it = state.plans[sheet.k][sheet.mi].items[sheet.ii], f = food(it.food), { k, mi, ii } = sheet;
+      withUndo("".concat(f ? f.name : "Food", " removed"), () => {
+        state.plans[k][mi].items.splice(ii, 1), closeSheet();
+      });
+      return;
+    }
     case "openMeal":
       openSheet("meal", { mi: +d.mi }, b);
       return;
-    case "mealDelete":
-      if (!confirmTap(b, "Tap again to remove")) return;
-      state.plans[ui.day].splice(sheet.mi, 1), closeSheet();
-      break;
+    case "mealDelete": {
+      const mi = sheet.mi, nm = state.plans[ui.day][mi].name || "Meal";
+      withUndo("".concat(nm, " removed"), () => {
+        state.plans[ui.day].splice(mi, 1), closeSheet();
+      });
+      return;
+    }
     case "addMeal": {
       const p = state.plans[ui.day];
       p.push({ name: "Meal ".concat(p.length + 1), note: "", items: [] }), renderView(), openSheet("meal", { mi: p.length - 1 }, b);
@@ -1125,10 +1204,13 @@ document.addEventListener("input", (e) => {
     case "openWeek":
       openSheet("week", {}, b);
       return;
-    case "weekDelete":
-      if (!confirmTap(b, "Tap again to remove")) return;
-      state.weeks.splice(curWeek(), 1), ui.week = null, closeSheet();
-      break;
+    case "weekDelete": {
+      const wi = curWeek(), nm = state.weeks[wi].label || "Week";
+      withUndo("".concat(nm, " removed"), () => {
+        state.weeks.splice(wi, 1), ui.week = null, closeSheet();
+      });
+      return;
+    }
     case "openDay":
       openSheet("day", { di: +d.di }, b);
       return;
@@ -1151,9 +1233,10 @@ document.addEventListener("input", (e) => {
       openSheet("goals", {}, b);
       return;
     case "clearAct":
-      if (!confirmTap(b, "Tap again to clear the week")) return;
-      state.activity.days = ACT_DAYS.map(() => ({ steps: null, cardio: null })), renderView();
-      break;
+      withUndo("Week cleared", () => {
+        state.activity.days = ACT_DAYS.map(() => ({ steps: null, cardio: null })), renderView();
+      });
+      return;
     case "copyList": {
       const txt = groceryText();
       let ok = !1;
@@ -1165,8 +1248,10 @@ document.addEventListener("input", (e) => {
       return;
     }
     case "clearTicks":
-      state.grocery.checked = {}, $("#groOut").innerHTML = groceryBody();
-      break;
+      withUndo("Ticks cleared", () => {
+        state.grocery.checked = {}, $("#groOut").innerHTML = groceryBody();
+      });
+      return;
     case "openFood":
       openSheet("food", { id: d.id }, b);
       return;
@@ -1175,8 +1260,11 @@ document.addEventListener("input", (e) => {
         $("#foodMsg").textContent = "This food is in a meal plan. Remove it from your meals first.";
         return;
       }
-      state.customFoods = state.customFoods.filter((f) => f.id !== sheet.id), closeSheet();
-      break;
+      const id = sheet.id, nm = food(id).name;
+      withUndo("".concat(nm, " deleted"), () => {
+        state.customFoods = state.customFoods.filter((f) => f.id !== id), closeSheet();
+      });
+      return;
     }
     case "openNewFood":
       openSheet("newFood", {}, b);
@@ -1192,10 +1280,32 @@ document.addEventListener("input", (e) => {
       break;
     }
     case "reset": {
-      if (!confirmTap(b, "Tap again to restore")) return;
-      state = defaults(), ui.week = null, renderView();
-      break;
+      if (!confirmTap(b, "Tap again to confirm")) return;
+      const scope = d.scope, D = defaults();
+      try {
+        localStorage.setItem(BK_KEY, JSON.stringify(persistable()));
+      } catch (err) {
+      }
+      withUndo(scope === "plans" ? "Meal plans reset" : scope === "logs" ? "Logs reset" : "Everything reset", () => {
+        scope === "plans" ? (state.plans = D.plans, state.targets = D.targets, state.swap = D.swap, state.keepProtein = !0) : scope === "logs" ? (state.weeks = D.weeks, state.activity = D.activity) : state = D, ui.week = null, saveUI(), renderView();
+      });
+      return;
     }
+    case "restoreBackup": {
+      let bk = null;
+      try {
+        bk = JSON.parse(localStorage.getItem(BK_KEY));
+      } catch (err) {
+      }
+      if (!bk) return;
+      withUndo("Data from before the reset is back", () => {
+        state = normalize(bk), ui.week = null, renderView();
+      });
+      return;
+    }
+    case "undo":
+      undoSnap && (state = normalize(JSON.parse(undoSnap)), undoSnap = null, ui.week = Math.min(ui.week == null ? 1e9 : ui.week, state.weeks.length - 1), render(), scheduleSave(), showToast("Restored", !1));
+      return;
     default:
       return;
   }
