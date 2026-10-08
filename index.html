@@ -552,6 +552,7 @@ const BASE_FOODS = [
   { id: "english_muffin", name: "Whole wheat English muffin", cat: "carb", k: 203, p: 8.8, c: 40.4, f: 2.1, src: "USDA, ~66 g each", unit: { label: "muffin", g: 66 } },
   { id: "granola", name: "Granola", cat: "carb", k: 471, p: 10, c: 64, f: 20, src: "USDA" },
   { id: "maple", name: "Maple syrup", cat: "carb", k: 260, p: 0, c: 67, f: 0.1, src: "USDA" },
+  { id: "rice_noodles", name: "Rice noodles", cat: "carb", k: 108, p: 1.8, c: 24, f: 0.2, src: "USDA, cooked" },
   { id: "oats", name: "Rolled oats (dry weight)", cat: "carb", k: 379, p: 13.2, c: 67.7, f: 6.5, src: "USDA, dry" },
   { id: "rice", name: "White rice", cat: "carb", k: 130, p: 2.7, c: 28.2, f: 0.3, src: "USDA, cooked" },
   { id: "rice_cake", name: "Rice cake, plain", cat: "carb", k: 387, p: 8.2, c: 81.5, f: 2.8, src: "USDA", unit: { label: "cake", g: 9 } },
@@ -565,6 +566,8 @@ const BASE_FOODS = [
   { id: "peanut_butter", name: "Peanut butter", cat: "fat", k: 588, p: 25, c: 20, f: 50, src: "USDA, 1 tbsp \u2248 16 g" },
   { id: "walnuts", name: "Walnuts", cat: "fat", k: 654, p: 15.2, c: 13.7, f: 65.2, src: "USDA" },
   { id: "feta", name: "Feta cheese", cat: "fat", k: 264, p: 14.2, c: 4.1, f: 21.3, src: "USDA" },
+  { id: "sesame_oil", name: "Sesame oil", cat: "fat", k: 884, p: 0, c: 0, f: 100, src: "USDA, 1 tsp \u2248 4.5 g" },
+  { id: "cheddar", name: "Cheddar cheese", cat: "fat", k: 403, p: 22.9, c: 3.1, f: 33.3, src: "USDA" },
   { id: "chia", name: "Chia seeds", cat: "fat", k: 486, p: 16.5, c: 42.1, f: 30.7, src: "USDA" },
   { id: "avocado", name: "Avocado", cat: "fat", k: 160, p: 2, c: 8.5, f: 14.7, src: "USDA" },
   { id: "guac", name: "Guacamole", cat: "fat", k: 155, p: 2, c: 8.5, f: 14, src: "Typical label" },
@@ -574,6 +577,7 @@ const BASE_FOODS = [
   { id: "bell_pepper", name: "Red bell pepper", cat: "veg", k: 31, p: 1, c: 6, f: 0.3, src: "USDA, raw" },
   { id: "edamame", name: "Edamame, shelled", cat: "veg", k: 121, p: 11.9, c: 8.9, f: 5.2, src: "USDA, cooked" },
   { id: "marinara", name: "Marinara sauce", cat: "veg", k: 50, p: 1.4, c: 8, f: 1.5, src: "Typical label" },
+  { id: "bok_choy", name: "Bok choy", cat: "veg", k: 13, p: 1.5, c: 2.2, f: 0.2, src: "USDA, raw" },
   { id: "sauerkraut", name: "Sauerkraut", cat: "veg", k: 19, p: 0.9, c: 4.3, f: 0.1, src: "USDA" },
   { id: "kimchi", name: "Kimchi", cat: "veg", k: 15, p: 1.1, c: 2.4, f: 0.5, src: "USDA" },
   { id: "pickle", name: "Dill pickle, medium", cat: "veg", k: 12, p: 0.5, c: 2.4, f: 0.2, src: "USDA, ~65 g each", unit: { label: "pickle", g: 65 } },
@@ -585,9 +589,12 @@ const BASE_FOODS = [
   { id: "berries", name: "Frozen mixed berries", cat: "fruit", k: 50, p: 0.7, c: 12, f: 0.4, src: "USDA, unsweetened" },
   { id: "blueberries", name: "Blueberries", cat: "fruit", k: 57, p: 0.7, c: 14.5, f: 0.3, src: "USDA" },
   { id: "banana", name: "Banana, medium", cat: "fruit", k: 89, p: 1.1, c: 22.8, f: 0.3, src: "USDA, ~118 g each", unit: { label: "banana", g: 118 } },
+  { id: "strawberries", name: "Strawberries", cat: "fruit", k: 32, p: 0.7, c: 7.7, f: 0.3, src: "USDA" },
   { id: "mango", name: "Mango", cat: "fruit", k: 60, p: 0.8, c: 15, f: 0.4, src: "USDA" },
   { id: "apple", name: "Apple, medium", cat: "fruit", k: 52, p: 0.3, c: 13.8, f: 0.2, src: "USDA, ~182 g each", unit: { label: "apple", g: 182 } },
-  { id: "pineapple", name: "Pineapple", cat: "fruit", k: 50, p: 0.5, c: 13.1, f: 0.1, src: "USDA" }
+  { id: "pineapple", name: "Pineapple", cat: "fruit", k: 50, p: 0.5, c: 13.1, f: 0.1, src: "USDA" },
+  { id: "soy_sauce", name: "Soy sauce", cat: "other", k: 53, p: 8.1, c: 4.9, f: 0.6, src: "USDA, 1 tbsp \u2248 16 g" },
+  { id: "teriyaki", name: "Teriyaki sauce", cat: "other", k: 89, p: 5.9, c: 15.6, f: 0, src: "USDA, 1 tbsp \u2248 18 g" }
 ], CATS = { protein: "Protein", carb: "Carbs", fat: "Fats", veg: "Vegetables", fruit: "Fruit", other: "Other" }, DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], ACT_DAYS = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 function M(name, note, items) {
   return { name, note, items: items.map(([food2, qty]) => ({ food: food2, qty })) };
@@ -653,7 +660,7 @@ function GS() {
 function defaults() {
   return {
     v: 1,
-    planVersion: 7,
+    planVersion: 8,
     tab: "training",
     keepProtein: !0,
     profile: { sex: "f", lb: 120, ft: 5, inch: 3, age: 30, act: 1.4, wpw: 5, burn: 275, goal: 250 },
@@ -661,18 +668,18 @@ function defaults() {
     customFoods: [],
     plans: {
       training: [
-        M("Breakfast burrito", "Scramble the egg whites with spinach, add beans and feta, wrap in two tortillas", [["tortilla", 2], ["egg_white", 150], ["spinach", 40], ["feta", 20], ["black_beans", 80]]),
-        M("Turkey quinoa bowl", "Brown the turkey with taco or cumin seasoning, serve over quinoa", [["ground_turkey", 90], ["quinoa", 200], ["bell_pepper", 80], ["edamame", 50]]),
-        M("Pre-workout", "60\u201390 min before lifting. Toast the muffin, spread peanut butter, drizzle maple", [["english_muffin", 1], ["peanut_butter", 16], ["apple", 1], ["maple", 10]]),
-        M("Shrimp pasta", "Within 2 hours of lifting. Saut\xE9 the shrimp, toss with marinara and broccoli", [["pasta", 190], ["shrimp", 100], ["marinara", 120], ["broccoli", 150]]),
-        M("Evening", "Skyr bowl with mango, granola and walnuts", [["skyr", 150], ["mango", 120], ["granola", 30], ["walnuts", 10]])
+        M("Berry skyr bowl", "Top the skyr with the berries and granola, drizzle honey", [["skyr", 200], ["strawberries", 100], ["blueberries", 80], ["granola", 40], ["honey", 10]]),
+        M("Chicken teriyaki bowl", "Pan-fry bite-size chicken 6\u20138 min, add teriyaki for the last minute. Steam the broccoli, finish with sesame oil", [["chicken_thigh", 120], ["rice", 240], ["broccoli", 120], ["teriyaki", 20], ["sesame_oil", 3]]),
+        M("Pre-workout", "60\u201390 min before lifting. Peanut butter and banana slices on the rice cakes", [["banana", 1], ["rice_cake", 2], ["peanut_butter", 16]]),
+        M("Korean beef bowl", "Brown the beef, stir in soy and honey. Serve on rice with wilted spinach, cucumber, kimchi and a fried egg", [["ground_beef", 120], ["rice", 250], ["soy_sauce", 15], ["honey", 7], ["spinach", 60], ["cucumber", 0.5], ["kimchi", 60], ["egg", 1]]),
+        M("Evening", "", [["string_cheese", 2], ["strawberries", 150]])
       ],
       rest: [
-        M("Breakfast sandwich", "Egg whites and spinach on a toasted muffin with the cheese melted on top", [["english_muffin", 1], ["egg_white", 150], ["string_cheese", 1], ["spinach", 30], ["mango", 120]]),
-        M("Tuna stuffed potato", "Mix the tuna with skyr, pepper and a squeeze of lemon, pile into the potato", [["potato", 330], ["tuna", 100], ["skyr", 50], ["bell_pepper", 60]]),
-        M("Afternoon", "", [["apple", 1], ["peanut_butter", 32], ["string_cheese", 1]]),
-        M("Beef & broccoli bowl", "Slice the steak thin and stir-fry with the broccoli and a splash of soy sauce", [["beef_flank", 110], ["quinoa", 180], ["broccoli", 150], ["edamame", 50]]),
-        M("Evening", "", [["skyr", 150], ["walnuts", 20], ["maple", 10]])
+        M("Veggie cheese omelette", "Whisk the eggs and whites, cook the spinach and pepper first, fold in the cheddar. Toast on the side", [["egg", 2], ["egg_white", 100], ["spinach", 40], ["bell_pepper", 50], ["cheddar", 20], ["sourdough", 1], ["strawberries", 100]]),
+        M("Turkey stir-fry noodles", "Brown the turkey, add pepper and bok choy for 2\u20133 min, toss with the noodles, soy and sesame oil", [["ground_turkey", 100], ["rice_noodles", 180], ["bell_pepper", 60], ["bok_choy", 100], ["soy_sauce", 15], ["sesame_oil", 5]]),
+        M("Afternoon", "", [["skyr", 170], ["blueberries", 100], ["granola", 20]]),
+        M("Chicken fried rice", "Use cold leftover rice. Cook the chicken, push aside, scramble the egg, then add rice, edamame, broccoli and soy", [["chicken_breast", 110], ["rice", 150], ["egg", 1], ["edamame", 50], ["broccoli", 80], ["soy_sauce", 15], ["sesame_oil", 5]]),
+        M("Evening", "", [["banana", 1], ["peanut_butter", 8]])
       ]
     },
     train: trainDefaults(),
@@ -689,7 +696,7 @@ function defaults() {
       days: [[8450, 280], [6200, 260], [7100, null], [9300, 300], [8800, 285], [7650, null], [null, null]].map(([s, c]) => ({ steps: s, cardio: c }))
     },
     grocery: { training: 5, rest: 2, checked: {} },
-    swap: { from: "ground_turkey", grams: 100, to: "shrimp" }
+    swap: { from: "chicken_thigh", grams: 120, to: "chicken_breast" }
   };
 }
 let state = defaults();
@@ -774,7 +781,7 @@ function normalize(s) {
     o.plans[k] = o.plans[k].filter((m) => m && Array.isArray(m.items)).map((m) => ({ name: m.name || "", note: m.note || "", items: m.items.filter((it) => it && it.food) }));
   }), Array.isArray(o.weeks) || (o.weeks = D.weeks), o.weeks = o.weeks.filter((w) => w && Array.isArray(w.days) && w.days.length === 7), o.activity = Object.assign({}, D.activity, s.activity), (!Array.isArray(o.activity.days) || o.activity.days.length !== 7) && (o.activity.days = D.activity.days), o.grocery = Object.assign({}, D.grocery, s.grocery), (!o.grocery.checked || typeof o.grocery.checked != "object") && (o.grocery.checked = {}), o.swap = Object.assign({}, D.swap, s.swap), Array.isArray(o.customFoods) || (o.customFoods = []), o.keepProtein = o.keepProtein !== !1, o.profile = Object.assign({}, D.profile, s.profile);
   const t = s.train && typeof s.train == "object" ? s.train : {};
-  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, delete o.__v4, delete o.__v5, delete o.__v6, delete o.__v7, (s.planVersion || 1) === 3) {
+  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, delete o.__v4, delete o.__v5, delete o.__v6, delete o.__v7, delete o.__v8, (s.planVersion || 1) === 3) {
     if (o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()])), o.profile = Object.assign({}, D.profile, s.profile, { act: { 1.45: 1.3, 1.55: 1.4, 1.6: 1.4, 1.7: 1.5, 1.75: 1.5 }[s.profile && s.profile.act] || 1.4, wpw: 5, burn: 275 }), o.targets.rest && o.targets.rest.kcal === 1930) {
       o.targets.rest.kcal = 1890;
       const af = o.plans.rest.find((m) => m.name === "Afternoon"), oat = af && af.items.find((i) => i.food === "oats" && i.qty === 40);
@@ -803,12 +810,19 @@ function normalize(s) {
       o[k] = D[k];
     }), o.planVersion = 7, o.__v7 = !0;
   }
-  if ((s.planVersion || 1) < 3) {
+  if ((s.planVersion || 1) < 8 && !o.__v7) {
+    try {
+      localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 8 })));
+    } catch (e) {
+    }
+    o.plans = D.plans, o.swap = D.swap, o.__v8 = !0;
+  }
+  if (o.planVersion = 8, (s.planVersion || 1) < 3) {
     try {
       s.plans && localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 6 })));
     } catch (e) {
     }
-    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 7, o.__migrated = !1, o.__v5 = !1, o.__v6 = !1, o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()]));
+    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 8, o.__migrated = !1, o.__v5 = !1, o.__v6 = !1, o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()]));
   }
   return o;
 }
@@ -1648,7 +1662,7 @@ document.addEventListener("input", (e) => {
       } catch (err) {
       }
       if (!bk) return;
-      bk.planVersion = 7, withUndo("Your previous data is back", () => {
+      bk.planVersion = 8, withUndo("Your previous data is back", () => {
         state = normalize(bk), ui.week = null, renderView();
       });
       return;
@@ -1662,8 +1676,12 @@ document.addEventListener("input", (e) => {
   scheduleSave();
 });
 function afterLoad() {
-  const v7 = state.__v7;
-  if (delete state.__v7, v7) {
+  const v7 = state.__v7, v8 = state.__v8;
+  if (delete state.__v7, delete state.__v8, v8 && !v7) {
+    delete state.__v4, delete state.__v5, delete state.__v6, delete state.__migrated, scheduleSave(), showToast("New meal plans with foods you like", !0, "restoreBackup");
+    return;
+  }
+  if (v7) {
     delete state.__v4, delete state.__v5, delete state.__v6, delete state.__migrated, scheduleSave(), showToast("New meal plans and data loaded", !0, "restoreBackup");
     return;
   }
