@@ -575,62 +575,65 @@ function M(name, note, items) {
 function wk(label, rows) {
   return { label, days: rows.map(([h, m, w]) => ({ h, m, w, note: "" })) };
 }
+const slug = (n) => n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 function trainDefaults() {
-  const E = (n, s, lo, hi, rest, tip) => ({ n, s, lo, hi, rest, tip }), mk = (id, name, day, focus, list) => ({ id, name, day, focus, ex: list.map((e, i) => Object.assign({ id: id + i }, e)) });
+  const E = (n, s, lo, hi, rest, tip) => ({ n, s, lo, hi, rest, tip }), mk = (id, name, day, focus, list) => ({ id, name, day, focus, ex: list.map((e) => Object.assign({ id: id + "-" + slug(e.n) }, e)) });
   return { cur: {}, last: {}, done: [], plan: [
-    mk("ua", "Upper A", "Mon", "Chest, back, shoulders and arms, heavier sets", [
-      E("Barbell bench press", 4, 6, 8, "2\u20133 min", "Pin your shoulder blades back, touch the lower chest, press up and slightly back."),
-      E("Chest-supported row", 4, 6, 8, "2 min", "Drive the elbows toward your hips and pause a beat at the top."),
-      E("Seated dumbbell shoulder press", 3, 8, 10, "2 min", "Stop just short of lockout to keep tension on the shoulders."),
-      E("Lat pulldown", 3, 10, 12, "90 s", "Lead with the elbows and pull to the upper chest without leaning back."),
-      E("Cable lateral raise", 3, 12, 15, "60 s", "Raise to shoulder height, leading with the elbow."),
-      E("Incline dumbbell curl", 3, 10, 12, "60 s", "Let the arms hang behind you for a full stretch."),
-      E("Overhead cable triceps extension", 3, 10, 12, "60 s", "Keep the elbows pointed forward and get a deep stretch.")
+    mk("ua", "Upper A", "Mon", "Back and chest, heavier sets, plus abs", [
+      E("Dumbbell bench press", 4, 6, 10, "2\u20133 min", "Flat bench. Shoulder blades pinned back, lower to mid-chest, press up and slightly in."),
+      E("One-arm dumbbell row", 4, 8, 12, "90 s", "Reps are per arm. Hand and knee on the bench, pull the dumbbell toward your hip and pause."),
+      E("Seated dumbbell shoulder press", 3, 8, 12, "2 min", "Bench fully upright. Stop just short of lockout."),
+      E("Dumbbell pullover", 3, 10, 12, "90 s", "Lie on the bench holding one dumbbell, arms slightly bent, lower it behind your head until the lats stretch."),
+      E("Dumbbell lateral raise", 3, 12, 20, "60 s", "Raise to shoulder height leading with the elbows. Lower for 3 seconds."),
+      E("Incline dumbbell curl", 2, 10, 12, "60 s", "Bench at about 60\xB0. Let the arms hang behind you for a full stretch."),
+      E("Dumbbell skull crusher", 2, 10, 15, "60 s", "Lying flat, lower the dumbbells beside your head, elbows pointed up."),
+      E("Dumbbell dead bug", 3, 8, 12, "45 s", "Reps are per side. Lower back pressed into the floor, dumbbell held over your chest, extend the opposite leg slowly.")
     ]),
-    mk("la", "Lower A", "Tue", "Quads, glutes, hamstrings and calves, squat focus", [
-      E("Back squat", 4, 6, 8, "3 min", "Brace hard and sit down between your hips to at least parallel."),
-      E("Romanian deadlift", 3, 8, 10, "2 min", "Push the hips back with soft knees until the hamstrings stretch."),
-      E("Leg press", 3, 10, 12, "2 min", "Lower until your hips are about to tuck under."),
-      E("Seated leg curl", 3, 10, 12, "90 s", "Lean forward slightly and control the way up."),
-      E("Standing calf raise", 4, 10, 15, "60 s", "Pause for a second in the bottom stretch."),
-      E("Hanging knee raise", 3, 12, 15, "60 s", "Curl the pelvis up rather than swinging the legs.")
+    mk("la", "Lower A", "Tue", "Quads and glutes, squat focus, plus abs", [
+      E("Dumbbell front squat", 4, 8, 12, "2\u20133 min", "Rest a dumbbell on each shoulder, elbows high. Sit down to at least parallel."),
+      E("Dumbbell hip thrust", 3, 10, 15, "2 min", "Upper back on the bench, dumbbells strapped across your hips. Pause and squeeze at the top. Log one dumbbell's weight."),
+      E("Dumbbell Romanian deadlift", 3, 8, 12, "2 min", "Push the hips back with soft knees until the hamstrings stretch. Lower for 3 seconds."),
+      E("Bulgarian split squat", 3, 8, 12, "90 s", "Reps are per leg. Back foot on the bench, lean forward slightly to load the glutes."),
+      E("Single-leg calf raise", 3, 10, 20, "60 s", "Hold one dumbbell, stand on a step, pause in the bottom stretch."),
+      E("Dumbbell crunch", 3, 10, 15, "60 s", "On the floor, dumbbell held on your chest. Curl the ribs toward the hips, don't pull with the neck.")
     ]),
-    mk("ub", "Upper B", "Thu", "Back width, upper chest, shoulders and arms, more volume", [
-      E("Pull-up or assisted pull-up", 4, 6, 10, "2 min", "Start from a full hang and pull your chest toward the bar."),
-      E("Incline dumbbell press", 4, 8, 10, "2 min", "Bench at about 30\xB0, lower into a deep chest stretch."),
-      E("Seated cable row", 3, 10, 12, "90 s", "Sit tall and squeeze the shoulder blades together."),
-      E("Cable or machine fly", 3, 12, 15, "60 s", "Keep a slight bend in the elbows and squeeze at the middle."),
-      E("Dumbbell lateral raise", 4, 12, 15, "60 s", "Raise to shoulder height, leading with the elbows."),
-      E("Hammer curl", 3, 10, 12, "60 s", "Keep the elbows pinned at your sides."),
-      E("Triceps pushdown", 3, 12, 15, "60 s", "Elbows at your sides, fully straighten every rep.")
+    mk("ub", "Upper B", "Thu", "Back width and upper chest, more volume, plus obliques", [
+      E("Incline dumbbell press", 4, 8, 12, "2 min", "Bench at about 30\xB0. Lower into a deep chest stretch."),
+      E("Chest-supported dumbbell row", 4, 10, 12, "90 s", "Bench at about 30\xB0, face down. Pull with elbows wide for the upper back."),
+      E("One-arm dumbbell row", 3, 10, 12, "90 s", "Reps are per arm. Elbow tucked close to your side this time, for the lats."),
+      E("Arnold press", 3, 10, 12, "90 s", "Start palms facing you, rotate them out as you press."),
+      E("Rear delt fly", 3, 12, 20, "60 s", "Chest on the incline bench, lead with the elbows and pause at the back."),
+      E("Hammer curl", 2, 10, 12, "60 s", "Elbows pinned at your sides."),
+      E("Overhead dumbbell triceps extension", 2, 10, 15, "60 s", "Hold one dumbbell with both hands behind your head, elbows forward."),
+      E("Dumbbell Russian twist", 3, 10, 15, "45 s", "Reps are per side. Lean back slightly, rotate from the ribs, feet down if needed.")
     ]),
-    mk("lb", "Lower B", "Fri", "Hamstrings, glutes, quads and calves, hinge focus", [
-      E("Trap-bar or conventional deadlift", 3, 5, 6, "3 min", "Brace, push the floor away and keep the bar close."),
-      E("Bulgarian split squat", 3, 8, 10, "90 s", "Reps are per leg. Lean forward slightly for more glutes."),
-      E("Hip thrust", 3, 8, 12, "2 min", "Tuck the chin and pause with a hard squeeze at the top."),
-      E("Leg extension", 3, 12, 15, "60 s", "Pause at the top of every rep."),
-      E("Seated calf raise", 4, 12, 15, "60 s", "Get a full stretch at the bottom."),
-      E("Cable crunch", 3, 10, 15, "60 s", "Round the spine and pull the ribs toward the hips.")
+    mk("lb", "Lower B", "Fri", "Glutes and hamstrings, hinge focus, plus lower abs", [
+      E("Dumbbell hip thrust", 4, 8, 12, "2 min", "Your heaviest glute lift of the week. Strapped dumbbells, chin tucked, 2-second pause at the top."),
+      E("Single-leg Romanian deadlift", 3, 8, 12, "90 s", "Reps are per leg. Dumbbell in the opposite hand, hips square, reach it toward the floor."),
+      E("Deficit reverse lunge", 3, 8, 12, "90 s", "Reps are per leg. Stand on a low step or plate and step back long for a deep glute stretch."),
+      E("Lying dumbbell leg curl", 3, 10, 15, "60 s", "Face down on the bench, dumbbell squeezed between your feet. Curl slowly."),
+      E("Dumbbell sumo squat", 3, 12, 15, "90 s", "Wide stance, toes out, hold one dumbbell by the end between your legs. Squeeze the glutes at the top."),
+      E("Reverse crunch", 3, 10, 15, "60 s", "Lie on the bench holding behind your head, curl the hips up off the bench rather than swinging the legs.")
     ]),
     GS()
   ] };
 }
 function GS() {
   const E = (n, s, lo, hi, rest, tip) => ({ n, s, lo, hi, rest, tip });
-  return { id: "gs", name: "Glutes & shoulders", day: "Sat", focus: "Optional fifth day: glutes, shoulders and arms, lighter weights and higher reps", ex: [
-    E("Hip thrust", 4, 10, 12, "2 min", "Lighter than Friday. Pause two seconds at the top of every rep."),
-    E("Dumbbell Romanian deadlift", 3, 10, 12, "90 s", "Slow on the way down, feel the stretch in the hamstrings and glutes."),
-    E("Cable glute kickback", 3, 12, 15, "60 s", "Reps are per leg. Keep the hips square and squeeze at the top."),
-    E("Hip abduction machine", 3, 15, 20, "60 s", "Lean forward slightly to target the upper glutes."),
-    E("Machine shoulder press", 3, 10, 12, "90 s", "Stop just short of lockout."),
-    E("Cable lateral raise", 3, 15, 20, "45 s", "Light weight, slow lowering."),
-    E("Rear delt fly", 3, 15, 20, "45 s", "Lead with the elbows and pause at the back.")
-  ].map((e, i) => Object.assign({ id: "gs" + i }, e)) };
+  return { id: "gs", name: "Glutes, back & abs", day: "Sat", focus: "Optional fifth day: extra glutes, back and abs, higher reps", ex: [
+    E("Single-leg hip thrust", 3, 10, 15, "90 s", "Reps are per leg. Upper back on the bench, one dumbbell on the working hip."),
+    E("B-stance dumbbell hip thrust", 3, 10, 12, "90 s", "Reps are per leg. Strapped dumbbells, one foot forward doing most of the work."),
+    E("Dumbbell lateral lunge", 3, 10, 12, "60 s", "Reps are per side. Sit back into the hip, keep the other leg straight."),
+    E("Dumbbell pullover", 3, 12, 15, "60 s", "Lighter than Monday. Big stretch at the bottom."),
+    E("Chest-supported dumbbell row", 3, 12, 15, "60 s", "Lighter than Thursday. Squeeze for a full second at the top."),
+    E("Side plank hip dip", 3, 10, 15, "45 s", "Reps are per side. Lower the hip toward the floor and lift it high."),
+    E("Bench leg raise", 3, 10, 15, "45 s", "Lie on the bench holding behind your head, lift the legs and curl the hips up.")
+  ].map((e) => Object.assign({ id: "gs-" + slug(e.n) }, e)) };
 }
 function defaults() {
   return {
     v: 1,
-    planVersion: 4,
+    planVersion: 6,
     tab: "training",
     keepProtein: !0,
     profile: { sex: "f", lb: 115, ft: 5, inch: 2, age: 35, act: 1.4, wpw: 5, burn: 275, goal: 250 },
@@ -752,7 +755,7 @@ function normalize(s) {
     o.plans[k] = o.plans[k].filter((m) => m && Array.isArray(m.items)).map((m) => ({ name: m.name || "", note: m.note || "", items: m.items.filter((it) => it && it.food) }));
   }), Array.isArray(o.weeks) || (o.weeks = D.weeks), o.weeks = o.weeks.filter((w) => w && Array.isArray(w.days) && w.days.length === 7), o.activity = Object.assign({}, D.activity, s.activity), (!Array.isArray(o.activity.days) || o.activity.days.length !== 7) && (o.activity.days = D.activity.days), o.grocery = Object.assign({}, D.grocery, s.grocery), (!o.grocery.checked || typeof o.grocery.checked != "object") && (o.grocery.checked = {}), o.swap = Object.assign({}, D.swap, s.swap), Array.isArray(o.customFoods) || (o.customFoods = []), o.keepProtein = o.keepProtein !== !1, o.profile = Object.assign({}, D.profile, s.profile);
   const t = s.train && typeof s.train == "object" ? s.train : {};
-  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, delete o.__v4, (s.planVersion || 1) === 3) {
+  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, delete o.__v4, delete o.__v5, delete o.__v6, (s.planVersion || 1) === 3) {
     if (o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()])), o.profile = Object.assign({}, D.profile, s.profile, { act: { 1.45: 1.3, 1.55: 1.4, 1.6: 1.4, 1.7: 1.5, 1.75: 1.5 }[s.profile && s.profile.act] || 1.4, wpw: 5, burn: 275 }), o.targets.rest && o.targets.rest.kcal === 1930) {
       o.targets.rest.kcal = 1890;
       const af = o.plans.rest.find((m) => m.name === "Afternoon"), oat = af && af.items.find((i) => i.food === "oats" && i.qty === 40);
@@ -760,12 +763,24 @@ function normalize(s) {
     }
     o.planVersion = 4, o.__v4 = !0;
   }
+  if ((s.planVersion || 1) < 5 && (o.train.plan = D.train.plan, o.train.cur = {}, o.planVersion = 5, o.__v5 = !0), (s.planVersion || 1) < 6) {
+    const oldPlan = Array.isArray(t.plan) ? t.plan : [], last = {}, byWk = {}, byName = {};
+    oldPlan.forEach((w) => (w.ex || []).forEach((e) => {
+      const L = o.train.last[e.id];
+      if (!L) return;
+      const k = slug(e.n || "");
+      byWk[w.id + "-" + k] = L, byName[k] || (byName[k] = L);
+    })), D.train.plan.forEach((nw) => nw.ex.forEach((ne) => {
+      const L = byWk[ne.id] || byName[slug(ne.n)];
+      L && !o.train.last[ne.id] && (last[ne.id] = L);
+    })), o.train.plan = D.train.plan, o.train.cur = {}, o.train.last = Object.assign({}, o.train.last, last), o.planVersion = 6, o.__v6 = !o.__v5;
+  }
   if ((s.planVersion || 1) < 3) {
     try {
-      s.plans && localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 4 })));
+      s.plans && localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 6 })));
     } catch (e) {
     }
-    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 4, o.__migrated = !0, o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()]));
+    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 6, o.__migrated = !0, o.__v5 = !1, o.__v6 = !1, o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()]));
   }
   return o;
 }
@@ -993,11 +1008,11 @@ function viewTrain() {
   }).join(""), '</div>\n      <p class="card-d">').concat(thisWeek, " of ").concat(P.length, ' workouts done this week. Lifting days use your Training day meals; the other days use Rest day meals.</p>\n    </section>\n    <div class="chips" role="group" aria-label="Workouts">').concat(P.map((x) => '<button type="button" class="chip" data-act="pickWk" data-id="'.concat(x.id, '" aria-pressed="').concat(x.id === w.id, '">').concat(esc(x.name), "</button>")).join(""), '</div>\n    <div class="train-grid">\n    <section class="card week-card">\n      <header class="week-h"><div><h3>').concat(esc(w.name), '</h3><p class="meal-m"><span>').concat(esc(w.focus), '</span></p><p class="meal-m"><span>').concat(w.ex.length, " exercises</span><span>").concat(totalSets, " sets</span><span>about ").concat(Math.round(totalSets * 2.6 / 5) * 5, ' min</span></p></div></header>\n      <ul class="rows">').concat(w.ex.map((ex) => {
     const n = loggedCount(ex), last = state.train.last[ex.id], top = last && last.sets.length ? last.sets.reduce((a, b) => (b.w || 0) > (a.w || 0) ? b : a) : null;
     return '<li><button type="button" class="row ex-row '.concat(n >= ex.s ? "complete" : "", '" data-act="openEx" data-id="').concat(ex.id, '">\n          <span class="ex-main"><span class="ex-n">').concat(esc(ex.n), '</span><span class="ex-m"><span>').concat(ex.s, " \xD7 ").concat(ex.lo, "\u2013").concat(ex.hi, "</span><span>rest ").concat(esc(ex.rest), "</span>").concat(top ? "<span>last ".concat(fmt(top.w), " lb \xD7 ").concat(top.r, "</span>") : "", '</span></span>\n          <span class="ex-p">').concat(n >= ex.s ? svg("check", 18) : "".concat(n, "/").concat(ex.s), "</span>").concat(svg("chev", 18), "</button></li>");
-  }).join(""), '</ul>\n      <div class="wk-foot"><p class="small">').concat(logged, " of ").concat(totalSets, ' sets logged</p><button type="button" class="btn primary" data-act="finishWk">Finish workout</button></div>\n    </section>\n    <section class="card guide">\n      <h3 class="card-t">How to grow on this plan</h3>\n      <p><b>Progress every week.</b> Each exercise has a rep range, like 6\u20138. Use a weight you can lift for the bottom of the range with one or two reps left in the tank. When you hit the top of the range on every set, add weight next time: 5 lb for upper body, 10 lb for lower body.</p>\n      <p><b>Warm up.</b> Five minutes of easy cardio, then two or three lighter sets of your first exercise before the work sets.</p>\n      <p><b>Recover.</b> Keep a rest day after Lower A, aim for 7\u20139 hours of sleep, and take an easier week every 6\u20138 weeks by cutting sets in half.</p>\n      <p><b>The fifth day is a bonus.</b> Do Glutes &amp; shoulders on weeks you feel recovered. If your sleep, energy or lifts slip, skip it and keep the four main days.</p>\n      <p><b>Any days work</b> as long as the order stays Upper A, Lower A, Upper B, Lower B with a rest day in the middle.</p>\n    </section>\n    </div>');
+  }).join(""), '</ul>\n      <div class="wk-foot"><p class="small">').concat(logged, " of ").concat(totalSets, ' sets logged</p><button type="button" class="btn primary" data-act="finishWk">Finish workout</button></div>\n    </section>\n    <section class="card guide">\n      <h3 class="card-t">How to grow on this plan</h3>\n      <p><b>Progress every week.</b> Each exercise has a rep range, like 8\u201312. Pick a weight you can lift for the bottom of the range with one or two reps left in the tank. When you hit the top of the range on every set, add 5 lb per dumbbell next time.</p>\n      <p><b>When 55 lb gets easy,</b> keep the legs growing without heavier weights: add reps up to 20, lower each rep over 3 seconds, pause at the bottom, or switch to the single-leg version. Log the weight of one dumbbell, even when they\'re strapped together.</p>\n      <p><b>Warm up.</b> Five minutes of easy cardio, then two or three lighter sets of your first exercise before the work sets.</p>\n      <p><b>Recover.</b> Keep a rest day after Lower A, aim for 7\u20139 hours of sleep, and take an easier week every 6\u20138 weeks by cutting sets in half.</p>\n      <p><b>The fifth day is a bonus.</b> Do Glutes, back &amp; abs on weeks you feel recovered. If your sleep, energy or lifts slip, skip it and keep the four main days.</p>\n      <p><b>Any days work</b> as long as the order stays Upper A, Lower A, Upper B, Lower B with a rest day in the middle.</p>\n    </section>\n    </div>');
 }
 function exSheetSets(ex) {
   const sets = setsOf(ex), up = ex.id[0] !== "l", last = state.train.last[ex.id];
-  return sets.map((st, i) => '<div class="set-line"><span class="set-n">'.concat(i + 1, "</span>").concat(stepBox("sw-" + i, "setW", st.w, up ? 5 : 10, { label: "Set ".concat(i + 1, " weight"), size: "xs", unit: "lb", start: last && last.sets[i] && last.sets[i].w || i > 0 && sets[i - 1].w || "" })).concat(stepBox("sr-" + i, "setR", st.r, 1, { label: "Set ".concat(i + 1, " reps"), size: "xs", unit: "reps", start: ex.lo }), "</div>")).join("");
+  return sets.map((st, i) => '<div class="set-line"><span class="set-n">'.concat(i + 1, "</span>").concat(stepBox("sw-" + i, "setW", st.w, 5, { label: "Set ".concat(i + 1, " weight per dumbbell"), size: "xs", unit: "lb", max: 55, start: last && last.sets[i] && last.sets[i].w || i > 0 && sets[i - 1].w || "" })).concat(stepBox("sr-" + i, "setR", st.r, 1, { label: "Set ".concat(i + 1, " reps"), size: "xs", unit: "reps", start: ex.lo }), "</div>")).join("");
 }
 function viewSwap() {
   const s = state.swap, P = allFoods().filter((f) => f.cat === "protein"), from = food(s.from) || P[0], to = food(s.to) || P[1], opts = (sel) => P.map((f) => '<option value="'.concat(f.id, '" ').concat(f.id === sel ? "selected" : "", ">").concat(esc(f.name), "</option>")).join("");
@@ -1195,12 +1210,12 @@ const SHEETS = {
     let tip = "";
     if (last && last.sets.length) {
       const allTop = last.sets.length >= ex.s && last.sets.every((x) => (x.r || 0) >= ex.hi), top = Math.max(...last.sets.map((x) => x.w || 0));
-      tip = allTop ? "You hit ".concat(ex.hi, " reps on every set last time. Go up to ").concat(fmt(top + (up ? 5 : 10)), " lb today.") : "Beat last time by one rep on at least one set, or match it with cleaner form.";
+      tip = allTop ? top + 5 <= 55 ? "You hit ".concat(ex.hi, " reps on every set last time. Go up to ").concat(fmt(top + 5), " lb per dumbbell today.") : "You're at the 55 lb maximum. Make it harder instead: add reps (up to 20), lower each rep over 3 seconds, or pause at the hardest point." : "Beat last time by one rep on at least one set, or match it with cleaner form.";
     }
     return "".concat(head(esc(ex.n), esc(w.name)), '\n      <p class="card-d">').concat(esc(ex.tip), '</p>\n      <div class="ex-target"><span><b>').concat(ex.s, " sets</b> of ").concat(ex.lo, "\u2013").concat(ex.hi, " reps</span><span>Rest ").concat(esc(ex.rest), "</span></div>\n      ").concat(last ? '<p class="small">Last time, '.concat(niceDate(last.date), ": ").concat(last.sets.map((x) => {
       var _a;
       return "".concat(fmt(x.w), "\xD7").concat((_a = x.r) != null ? _a : "\u2014");
-    }).join(", "), "</p>") : "", "\n      ").concat(tip ? '<p class="notice">'.concat(tip, "</p>") : "", '\n      <div class="set-head"><span></span><span>Weight</span><span>Reps</span></div>\n      <div id="setLines">').concat(exSheetSets(ex), "</div>\n      ").concat(last ? '<button type="button" class="btn ghost sm" data-act="copyLast">Fill in last time\'s numbers</button>' : "", '\n      <details class="edit-ex"><summary>Change this exercise</summary>\n        <label class="field"><span class="f-l">Name</span><input class="inp" value="').concat(esc(ex.n), '" data-f="exName"></label>\n        <div class="grid3f">\n          <div class="field"><span class="f-l">Sets</span>').concat(stepBox("exS", "exNum", ex.s, 1, { min: 1, max: 8, label: "Sets", size: "xs" }), '</div>\n          <div class="field"><span class="f-l">Min reps</span>').concat(stepBox("exL", "exNum", ex.lo, 1, { min: 1, label: "Min reps", size: "xs" }), '</div>\n          <div class="field"><span class="f-l">Max reps</span>').concat(stepBox("exH", "exNum", ex.hi, 1, { min: 1, label: "Max reps", size: "xs" }), '</div>\n        </div>\n      </details>\n      <div class="sh-actions"><span class="small">').concat(loggedCount(ex), " of ").concat(ex.s, ' sets logged</span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+    }).join(", "), "</p>") : "", "\n      ").concat(tip ? '<p class="notice">'.concat(tip, "</p>") : "", '\n      <div class="set-head"><span></span><span>Each dumbbell</span><span>Reps</span></div>\n      <div id="setLines">').concat(exSheetSets(ex), "</div>\n      ").concat(last ? '<button type="button" class="btn ghost sm" data-act="copyLast">Fill in last time\'s numbers</button>' : "", '\n      <details class="edit-ex"><summary>Change this exercise</summary>\n        <label class="field"><span class="f-l">Name</span><input class="inp" value="').concat(esc(ex.n), '" data-f="exName"></label>\n        <div class="grid3f">\n          <div class="field"><span class="f-l">Sets</span>').concat(stepBox("exS", "exNum", ex.s, 1, { min: 1, max: 8, label: "Sets", size: "xs" }), '</div>\n          <div class="field"><span class="f-l">Min reps</span>').concat(stepBox("exL", "exNum", ex.lo, 1, { min: 1, label: "Min reps", size: "xs" }), '</div>\n          <div class="field"><span class="f-l">Max reps</span>').concat(stepBox("exH", "exNum", ex.hi, 1, { min: 1, label: "Max reps", size: "xs" }), '</div>\n        </div>\n      </details>\n      <div class="sh-actions"><span class="small">').concat(loggedCount(ex), " of ").concat(ex.s, ' sets logged</span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
   },
   day() {
     const w = state.weeks[curWeek()];
@@ -1605,7 +1620,7 @@ document.addEventListener("input", (e) => {
       } catch (err) {
       }
       if (!bk) return;
-      bk.planVersion = 4, withUndo("Your previous data is back", () => {
+      bk.planVersion = 6, withUndo("Your previous data is back", () => {
         state = normalize(bk), ui.week = null, renderView();
       });
       return;
@@ -1619,7 +1634,8 @@ document.addEventListener("input", (e) => {
   scheduleSave();
 });
 function afterLoad() {
-  state.__v4 && (delete state.__v4, scheduleSave(), showToast("Added an optional 5th workout and updated your targets", !1)), state.__migrated && (delete state.__migrated, scheduleSave(), showToast("Plans updated for 5'2\", 115 lb", !0, "restoreBackup"));
+  const v6 = state.__v6, v5 = state.__v5, v4 = state.__v4;
+  delete state.__v4, delete state.__v5, delete state.__v6, v6 && !state.__migrated ? (scheduleSave(), showToast("More glutes, back and abs added to your workouts", !1)) : v5 && !state.__migrated ? (scheduleSave(), showToast("Workouts rebuilt for your dumbbells and bench", !1)) : v4 && !state.__migrated && (scheduleSave(), showToast("Added an optional 5th workout and updated your targets", !1)), state.__migrated && (delete state.__migrated, scheduleSave(), showToast("Plans updated for 5'2\", 115 lb", !0, "restoreBackup"));
 }
 try {
   load().then(afterLoad);
