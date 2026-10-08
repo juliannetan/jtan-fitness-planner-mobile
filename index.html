@@ -538,10 +538,20 @@ const BASE_FOODS = [
   { id: "egg_white", name: "Egg whites", cat: "protein", k: 52, p: 10.9, c: 0.7, f: 0.2, src: "USDA" },
   { id: "cottage", name: "Cottage cheese, 2%", cat: "protein", k: 81, p: 10.5, c: 4.8, f: 2.3, src: "USDA" },
   { id: "milk", name: "Milk, 2%", cat: "protein", k: 50, p: 3.3, c: 4.8, f: 2, src: "USDA, 100 g \u2248 100 ml" },
+  { id: "skyr", name: "Skyr, plain nonfat", cat: "protein", k: 63, p: 11, c: 4, f: 0.2, src: "Typical label" },
+  { id: "string_cheese", name: "Mozzarella string cheese", cat: "protein", k: 254, p: 24.3, c: 2.8, f: 15.9, src: "USDA part-skim, 28 g stick", unit: { label: "stick", g: 28 } },
   { id: "greek_yogurt", name: "Greek yogurt, nonfat plain", cat: "protein", k: 59, p: 10.2, c: 3.6, f: 0.4, src: "USDA" },
   { id: "whey_iso", name: "Whey isolate", cat: "protein", k: 367, p: 83.3, c: 3.3, f: 1.7, src: "Typical label, 30 g scoop", unit: { label: "scoop", g: 30 } },
   { id: "tofu", name: "Tofu, firm", cat: "protein", k: 144, p: 17.3, c: 2.8, f: 8.7, src: "USDA" },
   // carbs
+  { id: "quinoa", name: "Quinoa", cat: "carb", k: 120, p: 4.4, c: 21.3, f: 1.9, src: "USDA, cooked" },
+  { id: "pasta", name: "Pasta", cat: "carb", k: 158, p: 5.8, c: 30.9, f: 0.9, src: "USDA, cooked" },
+  { id: "potato", name: "Potato, baked with skin", cat: "carb", k: 93, p: 2.5, c: 21.2, f: 0.1, src: "USDA" },
+  { id: "black_beans", name: "Black beans", cat: "carb", k: 132, p: 8.9, c: 23.7, f: 0.5, src: "USDA, cooked" },
+  { id: "tortilla", name: "Whole wheat tortilla", cat: "carb", k: 289, p: 8.9, c: 48.9, f: 6.7, src: "Typical label, 45 g", unit: { label: "tortilla", g: 45 } },
+  { id: "english_muffin", name: "Whole wheat English muffin", cat: "carb", k: 203, p: 8.8, c: 40.4, f: 2.1, src: "USDA, ~66 g each", unit: { label: "muffin", g: 66 } },
+  { id: "granola", name: "Granola", cat: "carb", k: 471, p: 10, c: 64, f: 20, src: "USDA" },
+  { id: "maple", name: "Maple syrup", cat: "carb", k: 260, p: 0, c: 67, f: 0.1, src: "USDA" },
   { id: "oats", name: "Rolled oats (dry weight)", cat: "carb", k: 379, p: 13.2, c: 67.7, f: 6.5, src: "USDA, dry" },
   { id: "rice", name: "White rice", cat: "carb", k: 130, p: 2.7, c: 28.2, f: 0.3, src: "USDA, cooked" },
   { id: "rice_cake", name: "Rice cake, plain", cat: "carb", k: 387, p: 8.2, c: 81.5, f: 2.8, src: "USDA", unit: { label: "cake", g: 9 } },
@@ -552,10 +562,18 @@ const BASE_FOODS = [
   // fats
   { id: "almond_butter", name: "Almond butter", cat: "fat", k: 614, p: 21, c: 18.8, f: 55.5, src: "USDA, 1 tbsp \u2248 16 g" },
   { id: "olive_oil", name: "Olive oil", cat: "fat", k: 884, p: 0, c: 0, f: 100, src: "USDA, 1 tbsp \u2248 14 g" },
+  { id: "peanut_butter", name: "Peanut butter", cat: "fat", k: 588, p: 25, c: 20, f: 50, src: "USDA, 1 tbsp \u2248 16 g" },
+  { id: "walnuts", name: "Walnuts", cat: "fat", k: 654, p: 15.2, c: 13.7, f: 65.2, src: "USDA" },
+  { id: "feta", name: "Feta cheese", cat: "fat", k: 264, p: 14.2, c: 4.1, f: 21.3, src: "USDA" },
   { id: "chia", name: "Chia seeds", cat: "fat", k: 486, p: 16.5, c: 42.1, f: 30.7, src: "USDA" },
   { id: "avocado", name: "Avocado", cat: "fat", k: 160, p: 2, c: 8.5, f: 14.7, src: "USDA" },
   { id: "guac", name: "Guacamole", cat: "fat", k: 155, p: 2, c: 8.5, f: 14, src: "Typical label" },
   // veg
+  { id: "spinach", name: "Spinach", cat: "veg", k: 23, p: 2.9, c: 3.6, f: 0.4, src: "USDA, raw" },
+  { id: "broccoli", name: "Broccoli", cat: "veg", k: 35, p: 2.4, c: 7.2, f: 0.4, src: "USDA, cooked" },
+  { id: "bell_pepper", name: "Red bell pepper", cat: "veg", k: 31, p: 1, c: 6, f: 0.3, src: "USDA, raw" },
+  { id: "edamame", name: "Edamame, shelled", cat: "veg", k: 121, p: 11.9, c: 8.9, f: 5.2, src: "USDA, cooked" },
+  { id: "marinara", name: "Marinara sauce", cat: "veg", k: 50, p: 1.4, c: 8, f: 1.5, src: "Typical label" },
   { id: "sauerkraut", name: "Sauerkraut", cat: "veg", k: 19, p: 0.9, c: 4.3, f: 0.1, src: "USDA" },
   { id: "kimchi", name: "Kimchi", cat: "veg", k: 15, p: 1.1, c: 2.4, f: 0.5, src: "USDA" },
   { id: "pickle", name: "Dill pickle, medium", cat: "veg", k: 12, p: 0.5, c: 2.4, f: 0.2, src: "USDA, ~65 g each", unit: { label: "pickle", g: 65 } },
@@ -567,6 +585,8 @@ const BASE_FOODS = [
   { id: "berries", name: "Frozen mixed berries", cat: "fruit", k: 50, p: 0.7, c: 12, f: 0.4, src: "USDA, unsweetened" },
   { id: "blueberries", name: "Blueberries", cat: "fruit", k: 57, p: 0.7, c: 14.5, f: 0.3, src: "USDA" },
   { id: "banana", name: "Banana, medium", cat: "fruit", k: 89, p: 1.1, c: 22.8, f: 0.3, src: "USDA, ~118 g each", unit: { label: "banana", g: 118 } },
+  { id: "mango", name: "Mango", cat: "fruit", k: 60, p: 0.8, c: 15, f: 0.4, src: "USDA" },
+  { id: "apple", name: "Apple, medium", cat: "fruit", k: 52, p: 0.3, c: 13.8, f: 0.2, src: "USDA, ~182 g each", unit: { label: "apple", g: 182 } },
   { id: "pineapple", name: "Pineapple", cat: "fruit", k: 50, p: 0.5, c: 13.1, f: 0.1, src: "USDA" }
 ], CATS = { protein: "Protein", carb: "Carbs", fat: "Fats", veg: "Vegetables", fruit: "Fruit", other: "Other" }, DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], ACT_DAYS = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 function M(name, note, items) {
@@ -633,44 +653,43 @@ function GS() {
 function defaults() {
   return {
     v: 1,
-    planVersion: 6,
+    planVersion: 7,
     tab: "training",
     keepProtein: !0,
-    profile: { sex: "f", lb: 115, ft: 5, inch: 2, age: 35, act: 1.4, wpw: 5, burn: 275, goal: 250 },
-    targets: { training: { kcal: 2160, protein: 115 }, rest: { kcal: 1890, protein: 115 } },
+    profile: { sex: "f", lb: 120, ft: 5, inch: 3, age: 30, act: 1.4, wpw: 5, burn: 275, goal: 250 },
+    targets: { training: { kcal: 2250, protein: 120 }, rest: { kcal: 1980, protein: 120 } },
     customFoods: [],
     plans: {
       training: [
-        M("Breakfast", "Overnight oats: mix everything the night before", [["oats", 70], ["milk", 150], ["whey_iso", 1], ["chia", 10], ["berries", 100], ["almond_butter", 10]]),
-        M("Lunch", "", [["rice", 190], ["chicken_thigh", 100], ["sauerkraut", 100], ["avocado", 40]]),
-        M("Pre-workout", "60\u201390 min before lifting. Spread the almond butter and banana on the cakes, then honey and a pinch of salt", [["rice_cake", 2], ["almond_butter", 16], ["banana", 1], ["honey", 7]]),
-        M("Post-workout dinner", "Within 2 hours of lifting. Roast the yams in the olive oil", [["yam", 250], ["chicken_breast", 100], ["slaw", 130], ["salsa", 60], ["olive_oil", 5], ["pineapple", 80]]),
-        M("Evening", "Stir the oats and berries into the cottage cheese", [["cottage", 100], ["blueberries", 80], ["oats", 10], ["honey", 7]])
+        M("Breakfast burrito", "Scramble the egg whites with spinach, add beans and feta, wrap in two tortillas", [["tortilla", 2], ["egg_white", 150], ["spinach", 40], ["feta", 20], ["black_beans", 80]]),
+        M("Turkey quinoa bowl", "Brown the turkey with taco or cumin seasoning, serve over quinoa", [["ground_turkey", 90], ["quinoa", 200], ["bell_pepper", 80], ["edamame", 50]]),
+        M("Pre-workout", "60\u201390 min before lifting. Toast the muffin, spread peanut butter, drizzle maple", [["english_muffin", 1], ["peanut_butter", 16], ["apple", 1], ["maple", 10]]),
+        M("Shrimp pasta", "Within 2 hours of lifting. Saut\xE9 the shrimp, toss with marinara and broccoli", [["pasta", 190], ["shrimp", 100], ["marinara", 120], ["broccoli", 150]]),
+        M("Evening", "Skyr bowl with mango, granola and walnuts", [["skyr", 150], ["mango", 120], ["granola", 30], ["walnuts", 10]])
       ],
       rest: [
-        M("Breakfast", "", [["sourdough", 1], ["egg", 2], ["avocado", 50], ["kimchi", 100], ["blueberries", 100]]),
-        M("Lunch", "", [["rice", 170], ["chicken_thigh", 100], ["sauerkraut", 100], ["olive_oil", 5]]),
-        M("Afternoon", "", [["greek_yogurt", 170], ["berries", 100], ["almond_butter", 10], ["oats", 30]]),
-        M("Dinner", "Salmon twice a week covers your omega-3s", [["yam", 200], ["salmon", 110], ["slaw", 130], ["salsa", 60], ["guac", 30]]),
-        M("Evening", "", [["cottage", 100], ["pineapple", 100]])
+        M("Breakfast sandwich", "Egg whites and spinach on a toasted muffin with the cheese melted on top", [["english_muffin", 1], ["egg_white", 150], ["string_cheese", 1], ["spinach", 30], ["mango", 120]]),
+        M("Tuna stuffed potato", "Mix the tuna with skyr, pepper and a squeeze of lemon, pile into the potato", [["potato", 330], ["tuna", 100], ["skyr", 50], ["bell_pepper", 60]]),
+        M("Afternoon", "", [["apple", 1], ["peanut_butter", 32], ["string_cheese", 1]]),
+        M("Beef & broccoli bowl", "Slice the steak thin and stir-fry with the broccoli and a splash of soy sauce", [["beef_flank", 110], ["quinoa", 180], ["broccoli", 150], ["edamame", 50]]),
+        M("Evening", "", [["skyr", 150], ["walnuts", 20], ["maple", 10]])
       ]
     },
     train: trainDefaults(),
     weeks: [
-      wk("Week 1", [[9, 0, 156.2], [9, 0, 156.4], [8, 0, 157.4], [7, 0, 156.8], [8, 0, 157], [9, 0, 156.2], [9, 0, 152.2]]),
-      wk("Week 2", [[8, 0, 155.2], [8, 0, 156.6], [8, 0, 155.4], [6, 0, 156.2], [7, 0, 154.6], [6, 0, 155.2], [8, 0, 157.2]]),
-      wk("Week 3", [[7, 0, 154.8], [8, 0, 155.4], [6, 30, 154.4], [7, 0, 154], [8, 0, 152.6], [7, 0, 153], [9, 0, 155.8]]),
-      wk("Week 4", [[8, 0, 153.6], [8, 0, 153.8], [6, 0, 153.2], [8, 0, 153.4], [8, 0, 153.2], [8, 0, 154.2], [7, 0, 154.6]]),
-      wk("Week 5", [[8, 0, 155.6], [7, 0, 155.8], [6, 0, 155.6], [9, 0, 154.8], [8, 0, 153.4], [9, 0, 152.8], [8, 0, 153.6]])
+      wk("Week 1", [[7, 30, 119.4], [7, 0, 119.8], [8, 0, 120.1], [6, 45, 119.5], [7, 15, 119.2], [8, 30, 119.6], [8, 0, 119.9]]),
+      wk("Week 2", [[7, 15, 119.7], [7, 45, 120.2], [6, 30, 119.8], [7, 30, 120.3], [7, 0, 119.6], [8, 15, 119.9], [8, 45, 120.1]]),
+      wk("Week 3", [[7, 30, 120], [7, 0, 120.4], [7, 45, 120.6], [7, 15, 119.9], [6, 45, 120.1], [8, 0, 120.3], [8, 30, 120.4]]),
+      wk("Week 4", [[7, 45, 120.3], [7, 30, 120.8], [7, 0, 120.4], [8, 0, 120.7], [7, 15, 120.2], [8, 15, 120.6], [8, 0, 120.5]])
     ],
     activity: {
-      daily: 1e4,
-      weekly: 7e4,
-      burn: 1900,
-      days: [[28275, 2807], [33632, 380], [39209, 1233], [34297, 2e3], [1570, null], [2440, null], [null, null]].map(([s, c]) => ({ steps: s, cardio: c }))
+      daily: 8e3,
+      weekly: 56e3,
+      burn: 1375,
+      days: [[8450, 280], [6200, 260], [7100, null], [9300, 300], [8800, 285], [7650, null], [null, null]].map(([s, c]) => ({ steps: s, cardio: c }))
     },
-    grocery: { training: 4, rest: 3, checked: {} },
-    swap: { from: "chicken_breast", grams: 90, to: "beef_flank" }
+    grocery: { training: 5, rest: 2, checked: {} },
+    swap: { from: "ground_turkey", grams: 100, to: "shrimp" }
   };
 }
 let state = defaults();
@@ -755,7 +774,7 @@ function normalize(s) {
     o.plans[k] = o.plans[k].filter((m) => m && Array.isArray(m.items)).map((m) => ({ name: m.name || "", note: m.note || "", items: m.items.filter((it) => it && it.food) }));
   }), Array.isArray(o.weeks) || (o.weeks = D.weeks), o.weeks = o.weeks.filter((w) => w && Array.isArray(w.days) && w.days.length === 7), o.activity = Object.assign({}, D.activity, s.activity), (!Array.isArray(o.activity.days) || o.activity.days.length !== 7) && (o.activity.days = D.activity.days), o.grocery = Object.assign({}, D.grocery, s.grocery), (!o.grocery.checked || typeof o.grocery.checked != "object") && (o.grocery.checked = {}), o.swap = Object.assign({}, D.swap, s.swap), Array.isArray(o.customFoods) || (o.customFoods = []), o.keepProtein = o.keepProtein !== !1, o.profile = Object.assign({}, D.profile, s.profile);
   const t = s.train && typeof s.train == "object" ? s.train : {};
-  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, delete o.__v4, delete o.__v5, delete o.__v6, (s.planVersion || 1) === 3) {
+  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, delete o.__v4, delete o.__v5, delete o.__v6, delete o.__v7, (s.planVersion || 1) === 3) {
     if (o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()])), o.profile = Object.assign({}, D.profile, s.profile, { act: { 1.45: 1.3, 1.55: 1.4, 1.6: 1.4, 1.7: 1.5, 1.75: 1.5 }[s.profile && s.profile.act] || 1.4, wpw: 5, burn: 275 }), o.targets.rest && o.targets.rest.kcal === 1930) {
       o.targets.rest.kcal = 1890;
       const af = o.plans.rest.find((m) => m.name === "Afternoon"), oat = af && af.items.find((i) => i.food === "oats" && i.qty === 40);
@@ -775,12 +794,21 @@ function normalize(s) {
       L && !o.train.last[ne.id] && (last[ne.id] = L);
     })), o.train.plan = D.train.plan, o.train.cur = {}, o.train.last = Object.assign({}, o.train.last, last), o.planVersion = 6, o.__v6 = !o.__v5;
   }
+  if ((s.planVersion || 1) < 7) {
+    try {
+      localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 7 })));
+    } catch (e) {
+    }
+    ["profile", "targets", "plans", "weeks", "activity", "grocery", "swap"].forEach((k) => {
+      o[k] = D[k];
+    }), o.planVersion = 7, o.__v7 = !0;
+  }
   if ((s.planVersion || 1) < 3) {
     try {
       s.plans && localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 6 })));
     } catch (e) {
     }
-    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 6, o.__migrated = !0, o.__v5 = !1, o.__v6 = !1, o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()]));
+    o.plans = D.plans, o.targets = D.targets, o.profile = D.profile, o.planVersion = 7, o.__migrated = !1, o.__v5 = !1, o.__v6 = !1, o.train.plan.some((w) => w.id === "gs") || (o.train.plan = o.train.plan.concat([GS()]));
   }
   return o;
 }
@@ -1620,7 +1648,7 @@ document.addEventListener("input", (e) => {
       } catch (err) {
       }
       if (!bk) return;
-      bk.planVersion = 6, withUndo("Your previous data is back", () => {
+      bk.planVersion = 7, withUndo("Your previous data is back", () => {
         state = normalize(bk), ui.week = null, renderView();
       });
       return;
@@ -1634,6 +1662,11 @@ document.addEventListener("input", (e) => {
   scheduleSave();
 });
 function afterLoad() {
+  const v7 = state.__v7;
+  if (delete state.__v7, v7) {
+    delete state.__v4, delete state.__v5, delete state.__v6, delete state.__migrated, scheduleSave(), showToast("New meal plans and data loaded", !0, "restoreBackup");
+    return;
+  }
   const v6 = state.__v6, v5 = state.__v5, v4 = state.__v4;
   delete state.__v4, delete state.__v5, delete state.__v6, v6 && !state.__migrated ? (scheduleSave(), showToast("More glutes, back and abs added to your workouts", !1)) : v5 && !state.__migrated ? (scheduleSave(), showToast("Workouts rebuilt for your dumbbells and bench", !1)) : v4 && !state.__migrated && (scheduleSave(), showToast("Added an optional 5th workout and updated your targets", !1)), state.__migrated && (delete state.__migrated, scheduleSave(), showToast("Plans updated for 5'2\", 115 lb", !0, "restoreBackup"));
 }
