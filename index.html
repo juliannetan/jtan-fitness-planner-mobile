@@ -201,7 +201,7 @@ input.sw:checked::after{transform:translateX(20px)}
 .opt.on{background:var(--gold-soft)}
 
 /* ---------- body ---------- */
-#swapOut,#groOut,.body-grid,.body-log{display:flex;flex-direction:column;gap:14px}
+#swapOut,#groOut,.body-grid,.body-log,.train-grid{display:flex;flex-direction:column;gap:14px}
 .week-h .link{margin-right:10px}
 .stats4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;min-width:0}
@@ -299,6 +299,67 @@ input.sw:checked::after{transform:translateX(20px)}
 @media (prefers-reduced-motion:reduce){.sheet,.sheet-bg{transition:none}}
 
 
+
+/* ---------- targets + train ---------- */
+.sec{font-family:var(--serif);font-size:20px;font-weight:600;margin:6px 0 12px;padding-top:12px;border-top:1px solid var(--line)}
+.sh-head+.sec{border-top:none;padding-top:0}
+.stepbox.md{gap:6px}
+.stepbox.md .stp{width:38px;height:38px;font-size:19px}
+.stepbox.md .sb-mid{height:44px;padding:0 6px;border-radius:12px;gap:3px}
+.stepbox.md .sb-in{font-size:22px}
+.stepbox.md .sb-unit{font-size:12px}
+.stepbox.xs{gap:5px;flex:1;min-width:0}
+.stepbox.xs .stp{width:34px;height:34px;font-size:17px}
+.stepbox.xs .sb-mid{height:40px;padding:0 6px;border-radius:11px;gap:3px}
+.stepbox.xs .sb-in{font-size:20px}
+.stepbox.xs .sb-unit{font-size:11px}
+.grid3f{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 8px}
+.grid3f .stepbox.xs .stp{width:30px;height:30px}
+.rec{background:var(--gold-soft);border-radius:14px;padding:14px;margin:0 0 12px}
+.rec-top{font-size:13.5px;color:var(--ink2);margin-bottom:10px}
+.rec-top b{color:var(--ink)}
+.rec-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.rec-grid div{background:var(--surface);border-radius:12px;padding:9px 8px;text-align:center}
+.rec-grid span{display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+.rec-grid b{display:block;font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.1}
+.rec-grid small{font-size:11px;color:var(--muted)}
+.wk-strip-card{padding:12px 10px 4px}
+.wk-strip-card .card-d{padding:0 6px;margin:8px 0 8px}
+.wk-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.ws-d{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:12px;text-align:center}
+.ws-d.today{background:var(--surface2)}
+.ws-l{font-size:11.5px;font-weight:700;color:var(--muted)}
+.ws-d.today .ws-l{color:var(--gold)}
+.ws-c{width:26px;height:26px;border-radius:50%;border:1.5px dashed var(--line);display:grid;place-items:center;color:var(--on-gold)}
+.ws-d.done .ws-c{background:var(--pc);border:none;color:#fff}
+.ws-n{font-size:10.5px;line-height:1.2;color:var(--ink2);font-weight:600}
+.ex-row{grid-template-columns:minmax(0,1fr) auto auto;gap:10px}
+.ex-main{display:flex;flex-direction:column;min-width:0}
+.ex-n{font-weight:600}
+.ex-m{display:flex;flex-wrap:wrap;gap:0 10px;font-size:12.5px;color:var(--muted)}
+.ex-p{font-size:13px;font-weight:700;color:var(--muted);min-width:30px;text-align:right}
+.ex-row.complete .ex-p{color:var(--pc)}
+.ex-row.complete .ex-n{color:var(--ink2)}
+.week-card .wk-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.week-card .wk-foot .small{margin:0}
+.guide p{font-size:14px;color:var(--ink2);margin:8px 0 0;line-height:1.5}
+.guide p b{color:var(--ink)}
+.ex-target{display:flex;justify-content:space-between;gap:12px;background:var(--surface2);border-radius:12px;padding:10px 12px;font-size:13.5px;margin:0 0 8px}
+.set-head{display:grid;grid-template-columns:22px 1fr 1fr;gap:8px;font-size:12px;font-weight:600;color:var(--muted);margin:12px 0 6px;text-align:center}
+.set-line{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px}
+.set-n{font-weight:700;color:var(--muted);text-align:center}
+.edit-ex{margin:12px 0 4px;border-top:1px solid var(--line);padding-top:10px}
+.edit-ex summary{cursor:pointer;color:var(--gold);font-weight:600;font-size:14px;padding:6px 0;list-style:none}
+.edit-ex summary::-webkit-details-marker{display:none}
+.edit-ex[open] summary{margin-bottom:10px}
+.tabbar .nav-b{font-size:10.5px}
+@media (min-width:900px){
+  .wk-strip-card{padding:16px 16px 6px}
+  .ws-n{font-size:12px}
+  .train-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+  .guide{position:sticky;top:24px}
+}
+
 /* ---------- saving + data ---------- */
 .save-status[data-kind="saving"] .dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--gold)}
 .save-status[data-kind="error"] .dot{background:var(--warn)}
@@ -311,8 +372,7 @@ input.sw:checked::after{transform:translateX(20px)}
 .reset-row .btn{flex:none}
 .toast{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 12px 12px 16px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:600;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s}
 .toast.on{opacity:1;transform:none}
-.toast button{all:unset;cursor:pointer;color:var(--gold);font-weight:700;padding:6px 10px;border-radius:9px;background:rgba(127,127,127,.18)}
-[data-theme="light"] .toast button{color:#E2C48E}
+.toast button{all:unset;cursor:pointer;color:var(--on-gold);font-weight:700;padding:7px 12px;border-radius:9px;background:var(--gold)}
 .toast button:focus-visible{outline:2px solid var(--gold)}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 @media (min-width:900px){ .toast{left:auto;right:32px;bottom:28px;width:auto;min-width:300px} .data-card{max-width:620px} }
@@ -476,6 +536,8 @@ const BASE_FOODS = [
   { id: "tuna", name: "Tuna, canned in water", cat: "protein", k: 116, p: 25.5, c: 0, f: 0.8, src: "USDA, drained" },
   { id: "egg", name: "Egg, large", cat: "protein", k: 155, p: 12.6, c: 1.1, f: 10.6, src: "USDA, hard-boiled", unit: { label: "egg", g: 50 } },
   { id: "egg_white", name: "Egg whites", cat: "protein", k: 52, p: 10.9, c: 0.7, f: 0.2, src: "USDA" },
+  { id: "cottage", name: "Cottage cheese, 2%", cat: "protein", k: 81, p: 10.5, c: 4.8, f: 2.3, src: "USDA" },
+  { id: "milk", name: "Milk, 2%", cat: "protein", k: 50, p: 3.3, c: 4.8, f: 2, src: "USDA, 100 g \u2248 100 ml" },
   { id: "greek_yogurt", name: "Greek yogurt, nonfat plain", cat: "protein", k: 59, p: 10.2, c: 3.6, f: 0.4, src: "USDA" },
   { id: "whey_iso", name: "Whey isolate", cat: "protein", k: 367, p: 83.3, c: 3.3, f: 1.7, src: "Typical label, 30 g scoop", unit: { label: "scoop", g: 30 } },
   { id: "tofu", name: "Tofu, firm", cat: "protein", k: 144, p: 17.3, c: 2.8, f: 8.7, src: "USDA" },
@@ -489,6 +551,7 @@ const BASE_FOODS = [
   { id: "honey", name: "Honey", cat: "carb", k: 304, p: 0.3, c: 82.4, f: 0, src: "USDA" },
   // fats
   { id: "almond_butter", name: "Almond butter", cat: "fat", k: 614, p: 21, c: 18.8, f: 55.5, src: "USDA, 1 tbsp \u2248 16 g" },
+  { id: "olive_oil", name: "Olive oil", cat: "fat", k: 884, p: 0, c: 0, f: 100, src: "USDA, 1 tbsp \u2248 14 g" },
   { id: "chia", name: "Chia seeds", cat: "fat", k: 486, p: 16.5, c: 42.1, f: 30.7, src: "USDA" },
   { id: "avocado", name: "Avocado", cat: "fat", k: 160, p: 2, c: 8.5, f: 14.7, src: "USDA" },
   { id: "guac", name: "Guacamole", cat: "fat", k: 155, p: 2, c: 8.5, f: 14, src: "Typical label" },
@@ -512,29 +575,71 @@ function M(name, note, items) {
 function wk(label, rows) {
   return { label, days: rows.map(([h, m, w]) => ({ h, m, w, note: "" })) };
 }
+function trainDefaults() {
+  const E = (n, s, lo, hi, rest, tip) => ({ n, s, lo, hi, rest, tip }), mk = (id, name, day, focus, list) => ({ id, name, day, focus, ex: list.map((e, i) => Object.assign({ id: id + i }, e)) });
+  return { cur: {}, last: {}, done: [], plan: [
+    mk("ua", "Upper A", "Mon", "Chest, back, shoulders and arms, heavier sets", [
+      E("Barbell bench press", 4, 6, 8, "2\u20133 min", "Pin your shoulder blades back, touch the lower chest, press up and slightly back."),
+      E("Chest-supported row", 4, 6, 8, "2 min", "Drive the elbows toward your hips and pause a beat at the top."),
+      E("Seated dumbbell shoulder press", 3, 8, 10, "2 min", "Stop just short of lockout to keep tension on the shoulders."),
+      E("Lat pulldown", 3, 10, 12, "90 s", "Lead with the elbows and pull to the upper chest without leaning back."),
+      E("Cable lateral raise", 3, 12, 15, "60 s", "Raise to shoulder height, leading with the elbow."),
+      E("Incline dumbbell curl", 3, 10, 12, "60 s", "Let the arms hang behind you for a full stretch."),
+      E("Overhead cable triceps extension", 3, 10, 12, "60 s", "Keep the elbows pointed forward and get a deep stretch.")
+    ]),
+    mk("la", "Lower A", "Tue", "Quads, glutes, hamstrings and calves, squat focus", [
+      E("Back squat", 4, 6, 8, "3 min", "Brace hard and sit down between your hips to at least parallel."),
+      E("Romanian deadlift", 3, 8, 10, "2 min", "Push the hips back with soft knees until the hamstrings stretch."),
+      E("Leg press", 3, 10, 12, "2 min", "Lower until your hips are about to tuck under."),
+      E("Seated leg curl", 3, 10, 12, "90 s", "Lean forward slightly and control the way up."),
+      E("Standing calf raise", 4, 10, 15, "60 s", "Pause for a second in the bottom stretch."),
+      E("Hanging knee raise", 3, 12, 15, "60 s", "Curl the pelvis up rather than swinging the legs.")
+    ]),
+    mk("ub", "Upper B", "Thu", "Back width, upper chest, shoulders and arms, more volume", [
+      E("Pull-up or assisted pull-up", 4, 6, 10, "2 min", "Start from a full hang and pull your chest toward the bar."),
+      E("Incline dumbbell press", 4, 8, 10, "2 min", "Bench at about 30\xB0, lower into a deep chest stretch."),
+      E("Seated cable row", 3, 10, 12, "90 s", "Sit tall and squeeze the shoulder blades together."),
+      E("Cable or machine fly", 3, 12, 15, "60 s", "Keep a slight bend in the elbows and squeeze at the middle."),
+      E("Dumbbell lateral raise", 4, 12, 15, "60 s", "Raise to shoulder height, leading with the elbows."),
+      E("Hammer curl", 3, 10, 12, "60 s", "Keep the elbows pinned at your sides."),
+      E("Triceps pushdown", 3, 12, 15, "60 s", "Elbows at your sides, fully straighten every rep.")
+    ]),
+    mk("lb", "Lower B", "Fri", "Hamstrings, glutes, quads and calves, hinge focus", [
+      E("Trap-bar or conventional deadlift", 3, 5, 6, "3 min", "Brace, push the floor away and keep the bar close."),
+      E("Bulgarian split squat", 3, 8, 10, "90 s", "Reps are per leg. Lean forward slightly for more glutes."),
+      E("Hip thrust", 3, 8, 12, "2 min", "Tuck the chin and pause with a hard squeeze at the top."),
+      E("Leg extension", 3, 12, 15, "60 s", "Pause at the top of every rep."),
+      E("Seated calf raise", 4, 12, 15, "60 s", "Get a full stretch at the bottom."),
+      E("Cable crunch", 3, 10, 15, "60 s", "Round the spine and pull the ribs toward the hips.")
+    ])
+  ] };
+}
 function defaults() {
   return {
     v: 1,
+    planVersion: 2,
     tab: "training",
     keepProtein: !0,
-    targets: { training: { kcal: 2600, protein: 160 }, rest: { kcal: 2350, protein: 160 } },
+    profile: { sex: "m", lb: 115, ft: 5, inch: 7, age: 25, act: 1.6, goal: 250 },
+    targets: { training: { kcal: 2690, protein: 125 }, rest: { kcal: 2460, protein: 125 } },
     customFoods: [],
     plans: {
       training: [
-        M("Meal 1", "Make overnight oats", [["oats", 40], ["whey_iso", 1], ["almond_butter", 20], ["chia", 10], ["berries", 100]]),
-        M("Meal 2", "", [["rice", 160], ["chicken_thigh", 160], ["sauerkraut", 100]]),
-        M("Meal 3", "Pre-workout. Spread 1.5 tbsp almond butter and banana on each cake, drizzle honey and pink salt", [["rice_cake", 3], ["almond_butter", 72], ["pickle", 2], ["banana", 1], ["honey", 7]]),
-        M("Meal 4", "Post-workout meal", [["yam", 230], ["chicken_thigh", 160], ["slaw", 130], ["salsa", 60], ["pineapple", 70]]),
-        M("Snack", "", [["hummus", 120], ["cucumber", 2]])
+        M("Breakfast", "Overnight oats: mix everything the night before", [["oats", 80], ["milk", 200], ["whey_iso", 1], ["chia", 10], ["berries", 100], ["almond_butter", 16]]),
+        M("Lunch", "", [["rice", 250], ["chicken_thigh", 100], ["sauerkraut", 100], ["avocado", 50]]),
+        M("Pre-workout", "60\u201390 min before lifting. Spread \xBD tbsp almond butter and banana on each cake, then honey and a pinch of salt", [["rice_cake", 3], ["almond_butter", 24], ["banana", 1], ["honey", 10]]),
+        M("Post-workout dinner", "Within 2 hours of lifting. Roast the yams in the olive oil", [["yam", 300], ["chicken_breast", 100], ["slaw", 130], ["salsa", 60], ["olive_oil", 7], ["pineapple", 100]]),
+        M("Evening", "Stir the oats and berries into the cottage cheese", [["cottage", 120], ["blueberries", 100], ["oats", 40], ["honey", 10]])
       ],
       rest: [
-        M("Meal 1", "", [["sourdough", 1], ["egg", 2], ["avocado", 60], ["kimchi", 100], ["blueberries", 80]]),
-        M("Meal 2", "", [["rice", 140], ["chicken_thigh", 160], ["sauerkraut", 100]]),
-        M("Meal 3", "100 g shredded chicken per cake, topped with tomato and cucumber", [["rice_cake", 2], ["chicken_breast", 200], ["tomato", 100], ["cucumber", 0.5]]),
-        M("Meal 4", "Make a salad and add taco seasoning", [["yam", 170], ["chicken_breast", 170], ["guac", 50], ["slaw", 130], ["salsa", 60]]),
-        M("Meal 5", "", [["greek_yogurt", 140], ["whey_iso", 1], ["almond_butter", 20], ["berries", 100]])
+        M("Breakfast", "", [["sourdough", 2], ["egg", 3], ["avocado", 60], ["kimchi", 100], ["blueberries", 100]]),
+        M("Lunch", "", [["rice", 230], ["chicken_thigh", 110], ["sauerkraut", 100], ["olive_oil", 5]]),
+        M("Afternoon", "", [["greek_yogurt", 150], ["berries", 100], ["almond_butter", 16], ["oats", 50]]),
+        M("Dinner", "Salmon twice a week covers your omega-3s", [["yam", 250], ["salmon", 130], ["slaw", 130], ["salsa", 60], ["guac", 40]]),
+        M("Evening", "", [["cottage", 120], ["pineapple", 120]])
       ]
     },
+    train: trainDefaults(),
     weeks: [
       wk("Week 1", [[9, 0, 156.2], [9, 0, 156.4], [8, 0, 157.4], [7, 0, 156.8], [8, 0, 157], [9, 0, 156.2], [9, 0, 152.2]]),
       wk("Week 2", [[8, 0, 155.2], [8, 0, 156.6], [8, 0, 155.4], [6, 0, 156.2], [7, 0, 154.6], [6, 0, 155.2], [8, 0, 157.2]]),
@@ -630,9 +735,18 @@ function normalize(s) {
   const d = defaults();
   if (!s || typeof s != "object") return d;
   const o = Object.assign(d, s), D = defaults();
-  return o.targets = { training: Object.assign({}, D.targets.training, s.targets && s.targets.training), rest: Object.assign({}, D.targets.rest, s.targets && s.targets.rest) }, (!o.plans || !Array.isArray(o.plans.training) || !Array.isArray(o.plans.rest)) && (o.plans = D.plans), ["training", "rest"].forEach((k) => {
+  o.targets = { training: Object.assign({}, D.targets.training, s.targets && s.targets.training), rest: Object.assign({}, D.targets.rest, s.targets && s.targets.rest) }, (!o.plans || !Array.isArray(o.plans.training) || !Array.isArray(o.plans.rest)) && (o.plans = D.plans), ["training", "rest"].forEach((k) => {
     o.plans[k] = o.plans[k].filter((m) => m && Array.isArray(m.items)).map((m) => ({ name: m.name || "", note: m.note || "", items: m.items.filter((it) => it && it.food) }));
-  }), Array.isArray(o.weeks) || (o.weeks = D.weeks), o.weeks = o.weeks.filter((w) => w && Array.isArray(w.days) && w.days.length === 7), o.activity = Object.assign({}, D.activity, s.activity), (!Array.isArray(o.activity.days) || o.activity.days.length !== 7) && (o.activity.days = D.activity.days), o.grocery = Object.assign({}, D.grocery, s.grocery), (!o.grocery.checked || typeof o.grocery.checked != "object") && (o.grocery.checked = {}), o.swap = Object.assign({}, D.swap, s.swap), Array.isArray(o.customFoods) || (o.customFoods = []), o.keepProtein = o.keepProtein !== !1, o;
+  }), Array.isArray(o.weeks) || (o.weeks = D.weeks), o.weeks = o.weeks.filter((w) => w && Array.isArray(w.days) && w.days.length === 7), o.activity = Object.assign({}, D.activity, s.activity), (!Array.isArray(o.activity.days) || o.activity.days.length !== 7) && (o.activity.days = D.activity.days), o.grocery = Object.assign({}, D.grocery, s.grocery), (!o.grocery.checked || typeof o.grocery.checked != "object") && (o.grocery.checked = {}), o.swap = Object.assign({}, D.swap, s.swap), Array.isArray(o.customFoods) || (o.customFoods = []), o.keepProtein = o.keepProtein !== !1, o.profile = Object.assign({}, D.profile, s.profile);
+  const t = s.train && typeof s.train == "object" ? s.train : {};
+  if (o.train = { plan: Array.isArray(t.plan) && t.plan.length ? t.plan : D.train.plan, cur: t.cur || {}, last: t.last || {}, done: Array.isArray(t.done) ? t.done : [] }, delete o.__migrated, (s.planVersion || 1) < 2) {
+    try {
+      s.plans && localStorage.setItem(BK_KEY, JSON.stringify(Object.assign({}, s, { planVersion: 2 })));
+    } catch (e) {
+    }
+    o.plans = D.plans, o.targets = D.targets, o.planVersion = 2, o.__migrated = !0;
+  }
+  return o;
 }
 function merge(saved) {
   state = normalize(saved);
@@ -707,6 +821,8 @@ const IC = {
   swap: '<path d="M4 8h15l-4-4M20 16H5l4 4"/>',
   body: '<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M8 10a5.5 5.5 0 0 1 8 0"/><path d="M12 10.5l1.6-2.2"/>',
   steps: '<path d="M3 12h4l3-7 4 14 3-7h4"/>',
+  train: '<path d="M6.5 7v10M17.5 7v10M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
   lists: '<path d="M10 6h10M10 12h10M10 18h10"/><path d="M4 6l1.2 1.2L7.5 5M4 12l1.2 1.2L7.5 11M4 18l1.2 1.2L7.5 17"/>',
   chev: '<path d="M9.5 6l6 6-6 6"/>',
   more: '<circle cx="5.5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.4" fill="currentColor" stroke="none"/>',
@@ -720,6 +836,7 @@ const IC = {
   search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>'
 }, svg = (n, s = 22) => '<svg width="'.concat(s, '" height="').concat(s, '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">').concat(IC[n], "</svg>"), TABS = [
   { id: "meals", s: "Meals", l: "Meal plans", icon: "meals" },
+  { id: "train", s: "Train", l: "Workouts", icon: "train" },
   { id: "swap", s: "Swap", l: "Protein swap", icon: "swap" },
   { id: "body", s: "Body", l: "Sleep & weight", icon: "body" },
   { id: "steps", s: "Steps", l: "Steps & cardio", icon: "steps" },
@@ -747,7 +864,7 @@ function renderNav() {
   const t = TABS.find((x) => x.id === ui.tab);
   $("#screenTitle").textContent = t ? t.l : "";
 }
-const VIEWS = { meals: viewMeals, swap: viewSwap, body: viewBody, steps: viewSteps, lists: viewLists };
+const VIEWS = { train: viewTrain, meals: viewMeals, swap: viewSwap, body: viewBody, steps: viewSteps, lists: viewLists };
 function renderView() {
   VIEWS[ui.tab] || (ui.tab = "meals"), $("#view").innerHTML = VIEWS[ui.tab](), drawCharts(), window.__st && setStatus(window.__st[0], window.__st[1]);
   const ch = $(".chips");
@@ -790,6 +907,76 @@ function changeFood(newId) {
   } else (!old || !!old.unit != !!nw.unit) && (it.qty = nw.unit ? 1 : 100);
 }
 const macroTiles = (m, per) => '<div class="tile"><b>'.concat(fmt(m.k), '</b><span>kcal</span></div><div class="tile"><b>').concat(fmt(m.p, 1), '</b><span>g protein</span></div><div class="tile"><b>').concat(fmt(m.c, 1), '</b><span>g carbs</span></div><div class="tile"><b>').concat(fmt(m.f, 1), "</b><span>g fat</span></div>");
+function recCalc(p) {
+  const kg = (p.lb || 0) * 0.4536, cm = ((p.ft || 0) * 12 + (p.inch || 0)) * 2.54, bmr = 10 * kg + 6.25 * cm - 5 * (p.age || 0) + (p.sex === "f" ? -161 : 5), maint = bmr * (+p.act || 1.6), avg = maint + (+p.goal || 0), r10 = (x) => Math.round(x / 10) * 10;
+  return { bmr, maint, training: r10(avg + 100), rest: r10(avg - 133), protein: Math.round((p.lb || 0) * 1.1 / 5) * 5, avg };
+}
+function recHTML(r) {
+  return '<div class="rec-top"><span>Maintenance is about <b>'.concat(fmt(Math.round(r.maint / 10) * 10), " kcal</b>. A weekly average of ").concat(fmt(Math.round(r.avg / 10) * 10), " kcal puts you in a ").concat(state.profile.goal > 0 ? "surplus" : "steady state", '.</span></div>\n    <div class="rec-grid"><div><span>Training days</span><b>').concat(fmt(r.training), "</b><small>kcal</small></div><div><span>Rest days</span><b>").concat(fmt(r.rest), "</b><small>kcal</small></div><div><span>Protein</span><b>").concat(fmt(r.protein), "</b><small>g a day</small></div></div>");
+}
+function fitPlan(k) {
+  const T = state.targets[k].kcal;
+  if (!T) return;
+  const plan = state.plans[k], C = dayMac(plan).k, carbs = [];
+  plan.forEach((m) => m.items.forEach((it) => {
+    const f = food(it.food);
+    f && f.cat === "carb" && it.qty > 0 && carbs.push(it);
+  }));
+  const S = carbs.reduce((a, it) => a + itemMac(it).k, 0);
+  if (!S) return;
+  const fct = Math.max(0.3, Math.min(3, (S + T - C) / S));
+  carbs.forEach((it) => {
+    const f = food(it.food);
+    it.qty = f.unit ? roundTo(it.qty * fct, 0.5) : roundTo(it.qty * fct, 5);
+  });
+}
+const DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+function isoDate(d) {
+  return d = d || /* @__PURE__ */ new Date(), "".concat(d.getFullYear(), "-").concat(String(d.getMonth() + 1).padStart(2, "0"), "-").concat(String(d.getDate()).padStart(2, "0"));
+}
+function weekStart() {
+  const d = /* @__PURE__ */ new Date();
+  return d.setHours(0, 0, 0, 0), d.setDate(d.getDate() - (d.getDay() + 6) % 7), d;
+}
+function niceDate(s) {
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+function curWk() {
+  const P = state.train.plan;
+  if (ui.wk && P.find((w) => w.id === ui.wk)) return P.find((w) => w.id === ui.wk);
+  const today = DOW[((/* @__PURE__ */ new Date()).getDay() + 6) % 7], idx = DOW.indexOf(today);
+  for (let i = 0; i < 7; i++) {
+    const d = DOW[(idx + i) % 7], w = P.find((x) => x.day === d);
+    if (w) return w;
+  }
+  return P[0];
+}
+function setsOf(ex) {
+  const c = state.train.cur[ex.id] || [], out = [];
+  for (let i = 0; i < ex.s; i++) out.push(c[i] || { w: null, r: null });
+  return out;
+}
+const loggedCount = (ex) => setsOf(ex).filter((x) => x.r != null).length;
+function viewTrain() {
+  const P = state.train.plan, w = curWk(), ws = weekStart(), today = isoDate(), doneDates = {};
+  state.train.done.forEach((d) => {
+    const [y, m, dd] = d.date.split("-").map(Number), dt = new Date(y, m - 1, dd);
+    dt >= ws && (doneDates[(dt.getDay() + 6) % 7] = d.id);
+  });
+  const thisWeek = Object.keys(doneDates).length, totalSets = w.ex.reduce((a, e) => a + e.s, 0), logged = w.ex.reduce((a, e) => a + loggedCount(e), 0);
+  return '<section class="card wk-strip-card">\n      <div class="wk-strip">'.concat(DOW.map((d, i) => {
+    const pw = P.find((x) => x.day === d), dn = doneDates[i], isToday = i === ((/* @__PURE__ */ new Date()).getDay() + 6) % 7, dw = dn ? P.find((x) => x.id === dn) : null;
+    return '<div class="ws-d '.concat(isToday ? "today" : "", " ").concat(dn ? "done" : "", '"><span class="ws-l">').concat(d, '</span><span class="ws-c">').concat(dn ? svg("check", 16) : "", '</span><span class="ws-n">').concat(esc(dw ? dw.name : pw ? pw.name : "Rest"), "</span></div>");
+  }).join(""), '</div>\n      <p class="card-d">').concat(thisWeek, ' of 4 workouts done this week. Lifting days use your Training day meals; the other days use Rest day meals.</p>\n    </section>\n    <div class="chips" role="group" aria-label="Workouts">').concat(P.map((x) => '<button type="button" class="chip" data-act="pickWk" data-id="'.concat(x.id, '" aria-pressed="').concat(x.id === w.id, '">').concat(esc(x.name), "</button>")).join(""), '</div>\n    <div class="train-grid">\n    <section class="card week-card">\n      <header class="week-h"><div><h3>').concat(esc(w.name), '</h3><p class="meal-m"><span>').concat(esc(w.focus), '</span></p><p class="meal-m"><span>').concat(w.ex.length, " exercises</span><span>").concat(totalSets, " sets</span><span>about ").concat(Math.round(totalSets * 2.6 / 5) * 5, ' min</span></p></div></header>\n      <ul class="rows">').concat(w.ex.map((ex) => {
+    const n = loggedCount(ex), last = state.train.last[ex.id], top = last && last.sets.length ? last.sets.reduce((a, b) => (b.w || 0) > (a.w || 0) ? b : a) : null;
+    return '<li><button type="button" class="row ex-row '.concat(n >= ex.s ? "complete" : "", '" data-act="openEx" data-id="').concat(ex.id, '">\n          <span class="ex-main"><span class="ex-n">').concat(esc(ex.n), '</span><span class="ex-m"><span>').concat(ex.s, " \xD7 ").concat(ex.lo, "\u2013").concat(ex.hi, "</span><span>rest ").concat(esc(ex.rest), "</span>").concat(top ? "<span>last ".concat(fmt(top.w), " lb \xD7 ").concat(top.r, "</span>") : "", '</span></span>\n          <span class="ex-p">').concat(n >= ex.s ? svg("check", 18) : "".concat(n, "/").concat(ex.s), "</span>").concat(svg("chev", 18), "</button></li>");
+  }).join(""), '</ul>\n      <div class="wk-foot"><p class="small">').concat(logged, " of ").concat(totalSets, ' sets logged</p><button type="button" class="btn primary" data-act="finishWk">Finish workout</button></div>\n    </section>\n    <section class="card guide">\n      <h3 class="card-t">How to grow on this plan</h3>\n      <p><b>Progress every week.</b> Each exercise has a rep range, like 6\u20138. Use a weight you can lift for the bottom of the range with one or two reps left in the tank. When you hit the top of the range on every set, add weight next time: 5 lb for upper body, 10 lb for lower body.</p>\n      <p><b>Warm up.</b> Five minutes of easy cardio, then two or three lighter sets of your first exercise before the work sets.</p>\n      <p><b>Recover.</b> Keep a rest day after Lower A, aim for 7\u20139 hours of sleep, and take an easier week every 6\u20138 weeks by cutting sets in half.</p>\n      <p><b>Any 4 days work</b> as long as the order stays Upper A, Lower A, Upper B, Lower B with at least one rest day in the middle.</p>\n    </section>\n    </div>');
+}
+function exSheetSets(ex) {
+  const sets = setsOf(ex), up = ex.id[0] === "u", last = state.train.last[ex.id];
+  return sets.map((st, i) => '<div class="set-line"><span class="set-n">'.concat(i + 1, "</span>").concat(stepBox("sw-" + i, "setW", st.w, up ? 5 : 10, { label: "Set ".concat(i + 1, " weight"), size: "xs", unit: "lb", start: last && last.sets[i] && last.sets[i].w || i > 0 && sets[i - 1].w || "" })).concat(stepBox("sr-" + i, "setR", st.r, 1, { label: "Set ".concat(i + 1, " reps"), size: "xs", unit: "reps", start: ex.lo }), "</div>")).join("");
+}
 function viewSwap() {
   const s = state.swap, P = allFoods().filter((f) => f.cat === "protein"), from = food(s.from) || P[0], to = food(s.to) || P[1], opts = (sel) => P.map((f) => '<option value="'.concat(f.id, '" ').concat(f.id === sel ? "selected" : "", ">").concat(esc(f.name), "</option>")).join("");
   return '<p class="lede pad-x">Find how much of another protein to cook so you get the same protein, or the same calories.</p>\n  <div class="swap-grid">\n    <section class="card swap-card"><label class="f-l" for="sw-from">Instead of</label>\n      <select id="sw-from" class="inp" data-f="swFrom">'.concat(opts(from.id), "</select>\n      ").concat(stepBox("swGrams", "swGrams", s.grams, 5, { unit: "g cooked", label: "Cooked grams", size: "lg" }), '\n    </section>\n    <button type="button" class="flip" data-act="swFlip" aria-label="Switch the two proteins" title="Switch the two proteins">').concat(svg("swap", 20), '</button>\n    <section class="card swap-card"><label class="f-l" for="sw-to">Eat</label>\n      <select id="sw-to" class="inp" data-f="swTo">').concat(opts(to.id), '</select>\n      <p class="hint">Or tap any option below.</p>\n    </section>\n  </div>\n  <div id="swapOut">').concat(swapOut(from, to, s.grams), "</div>");
@@ -866,9 +1053,9 @@ function dataCard() {
   return '<section class="card data-card" id="data">\n    <h3 class="card-t">Your data</h3>\n    <p class="card-d">Everything you change saves automatically as you go, on this device'.concat(window.claude && window.claude.use ? " and to your Claude account" : "", '. <span class="save-status inline"></span></p>\n    <div class="reset-list">\n      ').concat(row("plans", "Meal plans", "Meals, targets and the swap tool go back to the original plan.", "Reset"), "\n      ").concat(row("logs", "Logs", "Sleep, weight, steps and cardio go back to the original entries.", "Reset"), "\n      ").concat(row("all", "Everything", "The whole planner, including foods you added.", "Reset all"), "\n    </div>\n    ").concat(hasBk ? '<button type="button" class="btn ghost sm" data-act="restoreBackup">Undo my last reset</button>' : "", "\n  </section>");
 }
 let undoSnap = null, toastT = null;
-function showToast(msg, canUndo) {
+function showToast(msg, canUndo, act) {
   const t = $("#toast");
-  t.innerHTML = "<span>".concat(esc(msg), "</span>").concat(canUndo ? '<button type="button" data-act="undo">Undo</button>' : ""), t.hidden = !1, requestAnimationFrame(() => t.classList.add("on")), clearTimeout(toastT), toastT = setTimeout(hideToast, canUndo ? 8e3 : 2500);
+  t.innerHTML = "<span>".concat(esc(msg), "</span>").concat(canUndo ? '<button type="button" data-act="'.concat(act || "undo", '">Undo</button>') : ""), t.hidden = !1, requestAnimationFrame(() => t.classList.add("on")), clearTimeout(toastT), toastT = setTimeout(hideToast, canUndo ? 8e3 : 2500);
 }
 function hideToast() {
   const t = $("#toast");
@@ -879,6 +1066,13 @@ function hideToast() {
 function withUndo(msg, fn) {
   const snap = JSON.stringify(persistable());
   fn(), undoSnap = snap, scheduleSave(), showToast(msg, !0);
+}
+function findEx(id) {
+  for (const w of state.train.plan) {
+    const e = w.ex.find((x) => x.id === id);
+    if (e) return e;
+  }
+  return null;
 }
 function filterLib(q) {
   q = (q || "").trim().toLowerCase();
@@ -969,8 +1163,22 @@ const SHEETS = {
     return m ? "".concat(head("Edit meal", ui.day === "training" ? "Training day" : "Rest day"), '\n      <label class="field"><span class="f-l">Name</span><input class="inp" value="').concat(esc(m.name), '" data-f="mealName"></label>\n      <label class="field"><span class="f-l">Prep note</span><textarea class="inp" rows="3" data-f="mealNote" placeholder="How to make it">').concat(esc(m.note), '</textarea></label>\n      <div class="sh-actions"><button type="button" class="btn danger-ghost" data-act="mealDelete">Remove meal</button><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>') : null;
   },
   targets() {
-    const t = state.targets[ui.day];
-    return "".concat(head("Daily targets", ui.day === "training" ? "Training day" : "Rest day"), '\n      <div class="field"><span class="f-l">Calories</span>').concat(stepBox("tgtK", "tgtK", t.kcal, 50, { unit: "kcal", label: "Calorie target", size: "lg" }), '</div>\n      <div class="field"><span class="f-l">Protein</span>').concat(stepBox("tgtP", "tgtP", t.protein, 5, { unit: "g", label: "Protein target", size: "lg" }), '</div>\n      <label class="field switch-row"><span><b>Keep protein when swapping</b><span class="small">Switching one protein for another adjusts the amount so protein stays the same.</span></span><input type="checkbox" class="sw" data-f="keepP" ').concat(state.keepProtein ? "checked" : "", '></label>\n      <div class="sh-actions"><span></span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+    const p = state.profile, r = recCalc(p), T = state.targets, opt = (v, cur, l) => '<option value="'.concat(v, '" ').concat(String(v) === String(cur) ? "selected" : "", ">").concat(l, "</option>");
+    return "".concat(head("Calories & protein", "Targets"), '\n      <h4 class="sec">Your details</h4>\n      <div class="field"><span class="f-l">Sex</span><div class="seg">').concat([["m", "Male"], ["f", "Female"]].map(([v, l]) => '<button type="button" data-act="profSex" data-val="'.concat(v, '" aria-pressed="').concat(p.sex === v, '">').concat(l, "</button>")).join(""), '</div></div>\n      <div class="grid2f">\n        <div class="field"><span class="f-l">Body weight</span>').concat(stepBox("pW", "prof", p.lb, 1, { unit: "lb", label: "Body weight", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Age</span>').concat(stepBox("pA", "prof", p.age, 1, { label: "Age", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Height, feet</span>').concat(stepBox("pF", "prof", p.ft, 1, { min: 3, max: 7, unit: "ft", label: "Height feet", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Height, inches</span>').concat(stepBox("pI", "prof", p.inch, 1, { min: 0, max: 11, unit: "in", label: "Height inches", size: "md" }), '</div>\n      </div>\n      <label class="field"><span class="f-l">Daily activity outside workouts</span><select class="inp" data-f="profAct">\n        ').concat(opt(1.45, p.act, "Mostly sitting, under 7,000 steps")).concat(opt(1.6, p.act, "On my feet a lot, 7,000\u201312,000 steps")).concat(opt(1.75, p.act, "Very active, 12,000+ steps or a physical job"), '</select></label>\n      <label class="field"><span class="f-l">Goal</span><select class="inp" data-f="profGoal">\n        ').concat(opt(250, p.goal, "Clean bulk, +250 kcal (about \xBD lb a week)")).concat(opt(400, p.goal, "Faster bulk, +400 kcal")).concat(opt(0, p.goal, "Maintain and recomp"), '</select></label>\n      <div class="rec" id="recBox">').concat(recHTML(r), '</div>\n      <button type="button" class="btn primary wide" data-act="useRec">Use these targets</button>\n      <h4 class="sec">Targets in use</h4>\n      <div class="grid2f">\n        <div class="field"><span class="f-l">Training day kcal</span>').concat(stepBox("tTK", "tgt", T.training.kcal, 50, { label: "Training day calories", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Training day protein</span>').concat(stepBox("tTP", "tgt", T.training.protein, 5, { unit: "g", label: "Training day protein", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Rest day kcal</span>').concat(stepBox("tRK", "tgt", T.rest.kcal, 50, { label: "Rest day calories", size: "md" }), '</div>\n        <div class="field"><span class="f-l">Rest day protein</span>').concat(stepBox("tRP", "tgt", T.rest.protein, 5, { unit: "g", label: "Rest day protein", size: "md" }), '</div>\n      </div>\n      <div class="field"><button type="button" class="btn ghost wide" data-act="fitPlans">Fit both meal plans to these targets</button>\n        <p class="hint">Scales rice, oats, yams and other carbs up or down. Protein and fats stay the same.</p></div>\n      <label class="field switch-row"><span><b>Keep protein when swapping</b><span class="small">Switching one protein for another adjusts the amount so protein stays the same.</span></span><input type="checkbox" class="sw" data-f="keepP" ').concat(state.keepProtein ? "checked" : "", '></label>\n      <div class="sh-actions"><span></span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
+  },
+  ex() {
+    const w = state.train.plan.find((x) => x.ex.some((e) => e.id === sheet.id));
+    if (!w) return null;
+    const ex = w.ex.find((e) => e.id === sheet.id), last = state.train.last[ex.id], up = ex.id[0] === "u";
+    let tip = "";
+    if (last && last.sets.length) {
+      const allTop = last.sets.length >= ex.s && last.sets.every((x) => (x.r || 0) >= ex.hi), top = Math.max(...last.sets.map((x) => x.w || 0));
+      tip = allTop ? "You hit ".concat(ex.hi, " reps on every set last time. Go up to ").concat(fmt(top + (up ? 5 : 10)), " lb today.") : "Beat last time by one rep on at least one set, or match it with cleaner form.";
+    }
+    return "".concat(head(esc(ex.n), esc(w.name)), '\n      <p class="card-d">').concat(esc(ex.tip), '</p>\n      <div class="ex-target"><span><b>').concat(ex.s, " sets</b> of ").concat(ex.lo, "\u2013").concat(ex.hi, " reps</span><span>Rest ").concat(esc(ex.rest), "</span></div>\n      ").concat(last ? '<p class="small">Last time, '.concat(niceDate(last.date), ": ").concat(last.sets.map((x) => {
+      var _a;
+      return "".concat(fmt(x.w), "\xD7").concat((_a = x.r) != null ? _a : "\u2014");
+    }).join(", "), "</p>") : "", "\n      ").concat(tip ? '<p class="notice">'.concat(tip, "</p>") : "", '\n      <div class="set-head"><span></span><span>Weight</span><span>Reps</span></div>\n      <div id="setLines">').concat(exSheetSets(ex), "</div>\n      ").concat(last ? '<button type="button" class="btn ghost sm" data-act="copyLast">Fill in last time\'s numbers</button>' : "", '\n      <details class="edit-ex"><summary>Change this exercise</summary>\n        <label class="field"><span class="f-l">Name</span><input class="inp" value="').concat(esc(ex.n), '" data-f="exName"></label>\n        <div class="grid3f">\n          <div class="field"><span class="f-l">Sets</span>').concat(stepBox("exS", "exNum", ex.s, 1, { min: 1, max: 8, label: "Sets", size: "xs" }), '</div>\n          <div class="field"><span class="f-l">Min reps</span>').concat(stepBox("exL", "exNum", ex.lo, 1, { min: 1, label: "Min reps", size: "xs" }), '</div>\n          <div class="field"><span class="f-l">Max reps</span>').concat(stepBox("exH", "exNum", ex.hi, 1, { min: 1, label: "Max reps", size: "xs" }), '</div>\n        </div>\n      </details>\n      <div class="sh-actions"><span class="small">').concat(loggedCount(ex), " of ").concat(ex.s, ' sets logged</span><button type="button" class="btn primary" data-act="closeSheet">Done</button></div>');
   },
   day() {
     const w = state.weeks[curWeek()];
@@ -1059,12 +1267,42 @@ document.addEventListener("input", (e) => {
     case "mealNote":
       state.plans[ui.day][sheet.mi].note = v, renderView();
       break;
-    case "tgtK":
-      state.targets[ui.day].kcal = num(v), renderView();
+    case "tgt": {
+      const m = { tTK: ["training", "kcal"], tTP: ["training", "protein"], tRK: ["rest", "kcal"], tRP: ["rest", "protein"] }[t.id];
+      state.targets[m[0]][m[1]] = num(v), renderView();
       break;
-    case "tgtP":
-      state.targets[ui.day].protein = num(v), renderView();
+    }
+    case "prof": {
+      const m = { pW: "lb", pA: "age", pF: "ft", pI: "inch" }[t.id];
+      state.profile[m] = num(v), $("#recBox").innerHTML = recHTML(recCalc(state.profile));
       break;
+    }
+    case "setW":
+    case "setR": {
+      const ex = findEx(sheet.id), i = +t.id.split("-")[1], c = state.train.cur[ex.id] || (state.train.cur[ex.id] = []);
+      for (; c.length <= i; ) c.push({ w: null, r: null });
+      if (c[i][f === "setW" ? "w" : "r"] = num(v), f === "setW") {
+        for (let j = i + 1; j < ex.s; j++)
+          if (!c[j] || c[j].w == null) {
+            for (; c.length <= j; ) c.push({ w: null, r: null });
+            c[j].w = num(v);
+            const el = document.getElementById("sw-" + j);
+            el && (el.value = v);
+          }
+      }
+      const sm = $("#sheetIn .sh-actions .small");
+      sm && (sm.textContent = "".concat(loggedCount(ex), " of ").concat(ex.s, " sets logged")), renderView();
+      break;
+    }
+    case "exName":
+      findEx(sheet.id).n = v, renderView();
+      break;
+    case "exNum": {
+      const ex = findEx(sheet.id), k = { exS: "s", exL: "lo", exH: "hi" }[t.id], n = num(v);
+      if (n == null) return;
+      ex[k] = Math.max(1, Math.round(n)), k === "s" && ($("#setLines").innerHTML = exSheetSets(ex)), renderView();
+      break;
+    }
     case "swGrams":
       state.swap.grams = num(v), refreshSwap();
       break;
@@ -1118,6 +1356,10 @@ document.addEventListener("input", (e) => {
       state.swap.to = t.value, refreshSwap();
     else if (f === "keepP")
       state.keepProtein = t.checked;
+    else if (f === "profAct")
+      state.profile.act = +t.value, $("#recBox").innerHTML = recHTML(recCalc(state.profile));
+    else if (f === "profGoal")
+      state.profile.goal = +t.value, $("#recBox").innerHTML = recHTML(recCalc(state.profile));
     else if (f === "gChk") {
       const c = state.grocery.checked || (state.grocery.checked = {});
       t.checked ? c[t.dataset.id] = !0 : delete c[t.dataset.id], $("#groOut").innerHTML = groceryBody();
@@ -1181,6 +1423,49 @@ document.addEventListener("input", (e) => {
     case "openTargets":
       openSheet("targets", {}, b);
       return;
+    case "profSex":
+      state.profile.sex = d.val, b.parentNode.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)), $("#recBox").innerHTML = recHTML(recCalc(state.profile));
+      break;
+    case "useRec": {
+      const r = recCalc(state.profile);
+      withUndo("Targets updated", () => {
+        state.targets.training = { kcal: r.training, protein: r.protein }, state.targets.rest = { kcal: r.rest, protein: r.protein }, rerenderSheet(), renderView();
+      });
+      return;
+    }
+    case "fitPlans":
+      withUndo("Meal plans fitted to your targets", () => {
+        fitPlan("training"), fitPlan("rest"), renderView();
+      });
+      return;
+    case "pickWk":
+      ui.wk = d.id, saveUI(), renderView();
+      return;
+    case "openEx":
+      openSheet("ex", { id: d.id }, b);
+      return;
+    case "copyLast": {
+      const ex = findEx(sheet.id), last = state.train.last[ex.id];
+      if (!last) return;
+      state.train.cur[ex.id] = last.sets.slice(0, ex.s).map((x) => ({ w: x.w, r: x.r })), rerenderSheet(), renderView();
+      break;
+    }
+    case "finishWk": {
+      const w = curWk(), logged = w.ex.filter((e2) => loggedCount(e2) > 0);
+      if (!logged.length) {
+        showToast("Log at least one set first", !1);
+        return;
+      }
+      withUndo("".concat(w.name, " saved"), () => {
+        const day = isoDate();
+        logged.forEach((e2) => {
+          state.train.last[e2.id] = { date: day, sets: setsOf(e2).filter((x) => x.r != null) }, delete state.train.cur[e2.id];
+        }), state.train.done = state.train.done.filter((x) => !(x.id === w.id && x.date === day)).concat([{ id: w.id, date: day }]).slice(-120);
+        const i = state.train.plan.indexOf(w);
+        ui.wk = state.train.plan[(i + 1) % state.train.plan.length].id, saveUI(), renderView(), window.scrollTo(0, 0);
+      });
+      return;
+    }
     case "swFlip": {
       const s = state.swap, a = food(s.from), z = food(s.to);
       a && z && z.p && (s.grams = Math.round((s.grams || 0) * a.p / z.p));
@@ -1298,7 +1583,7 @@ document.addEventListener("input", (e) => {
       } catch (err) {
       }
       if (!bk) return;
-      withUndo("Data from before the reset is back", () => {
+      bk.planVersion = 2, withUndo("Your previous data is back", () => {
         state = normalize(bk), ui.week = null, renderView();
       });
       return;
@@ -1311,8 +1596,11 @@ document.addEventListener("input", (e) => {
   }
   scheduleSave();
 });
+function afterLoad() {
+  state.__migrated && (delete state.__migrated, scheduleSave(), showToast("New clean-bulk meal plans are in", !0, "restoreBackup"));
+}
 try {
-  load();
+  load().then(afterLoad);
 } catch (err) {
   window.__showErr && window.__showErr(err);
 }
